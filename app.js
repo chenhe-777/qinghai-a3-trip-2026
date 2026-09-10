@@ -1,0 +1,668 @@
+(() => {
+  "use strict";
+
+  const data = window.TRIP_DATA;
+  const setupError = document.querySelector("#setup-error");
+  const workspace = document.querySelector("#workspace");
+  const asArray = (value) => Array.isArray(value) ? value : [];
+  const escapeHtml = (input) => String(input ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+  const showValue = (value, fallback = "未获取") => escapeHtml(value || fallback);
+
+  if (!data || !data.trip || !Array.isArray(data.days) || !Array.isArray(data.places) || !Array.isArray(data.meals) || !Array.isArray(data.checks)) {
+    workspace.hidden = true;
+    setupError.hidden = false;
+    return;
+  }
+
+  const storageKey = `travel-planner:${data.trip.id || "trip"}:chronological-v1`;
+  const defaultMealSelections = Object.fromEntries(data.meals.map((meal) => [meal.id, {
+    primary: meal.selected?.primary || "",
+    backup2: meal.selected?.backup2 || "",
+    backup3: meal.selected?.backup3 || ""
+  }]));
+
+  let stored = {};
+  try {
+    stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
+  } catch (_error) {
+    stored = {};
+  }
+
+  const state = {
+    activeDayId: data.days.some((day) => day.id === stored.activeDayId) ? stored.activeDayId : (data.days[0]?.id || ""),
+    mealSelections: {},
+    checks: { ...(stored.checks || {}) }
+  };
+
+  data.meals.forEach((meal) => {
+    const validIds = new Set(asArray(meal.candidates).map((candidate) => candidate.id));
+    const selection = { ...defaultMealSelections[meal.id], ...(stored.mealSelections?.[meal.id] || {}) };
+    Object.keys(selection).forEach((rank) => {
+      if (!validIds.has(selection[rank])) selection[rank] = "";
+    });
+    state.mealSelections[meal.id] = selection;
+  });
+
+  const saveState = () => {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+  };
+
+  const getDay = () => data.days.find((day) => day.id === state.activeDayId) || data.days[0];
+  const getRoute = (day) => {
+    const routes = asArray(day?.routes);
+    return routes.find((route) => route.id === day?.selectedRouteId) || routes[0] || null;
+  };
+  const getMealCandidate = (meal, candidateId) => asArray(meal.candidates).find((candidate) => candidate.id === candidateId);
+
+  const renderBindings = () => {
+    document.querySelectorAll("[data-bind]").forEach((element) => {
+      const key = element.dataset.bind;
+      element.textContent = data.trip[key] || "待确认";
+    });
+
+    const fixedEvents = document.querySelector("#fixed-events");
+    fixedEvents.innerHTML = asArray(data.trip.fixedEvents).map((item) => `<span>${showValue(item)}</span>`).join("");
+  };
+
+  const renderMode = () => {
+    document.querySelectorAll("[data-stage]").forEach((item) => {
+      item.classList.toggle("is-active", item.dataset.stage === "choice");
+    });
+  };
+
+  const renderDayTabs = () => {
+    const tabs = document.querySelector("#day-tabs");
+    tabs.innerHTML = data.days.map((day, index) => `
+      <button type="button" role="tab" data-action="select-day" data-day-id="${escapeHtml(day.id)}" aria-selected="${day.id === state.activeDayId}">
+        <small>DAY ${String(index + 1).padStart(2, "0")}</small>
+        <b>${showValue(day.label, "未命名日期")}</b>
+        <span>${showValue(day.date, "日期待确认")}</span>
+      </button>
+    `).join("");
+  };
+
+  const renderSources = (sources, title = "资料依据") => {
+    const items = asArray(sources);
+    if (!items.length) return "";
+    return `
+      <details class="source-drawer">
+        <summary>${escapeHtml(title)} <span>${items.length} 条</span></summary>
+        <div class="source-list">
+          ${items.map((source) => `
+            <div class="source-item">
+              ${source.url
+                ? `<a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${showValue(source.label, "来源")}</a>`
+                : `<b>${showValue(source.label, "来源")}</b>`}
+              <p>${showValue(source.role, "用途未注明")}</p>
+            </div>
+          `).join("")}
+        </div>
+      </details>
+    `;
+  };
+
+  const renderBookingOption = (option) => `
+    <article class="booking-option">
+      <span class="booking-level">${showValue(option.level, "候选")}</span>
+      <h4>${showValue(option.title)}</h4>
+      <p class="booking-route">${showValue(option.route)}</p>
+      <dl>
+        <div><dt>为什么</dt><dd>${showValue(option.reason)}</dd></div>
+        <div class="is-caution"><dt>注意</dt><dd>${showValue(option.caution)}</dd></div>
+      </dl>
+      ${renderSources(option.sources, "航班资料")}
+    </article>
+  `;
+
+  const renderHotelNight = (hotel) => `
+    <article class="hotel-night">
+      <header><span>${showValue(hotel.date)}</span><div><b>${showValue(hotel.city)}</b><p>${showValue(hotel.role)}</p></div></header>
+      <div class="hotel-choices">
+        <section><small>${showValue(hotel.primary?.area, "首选片区")}</small><h4>${showValue(hotel.primary?.name)}</h4><p>${showValue(hotel.primary?.facts)}</p><em>${showValue(hotel.primary?.why)}</em></section>
+        <section><small>${showValue(hotel.backup?.area, "备选片区")}</small><h4>${showValue(hotel.backup?.name)}</h4><p>${showValue(hotel.backup?.facts)}</p><em>${showValue(hotel.backup?.why)}</em></section>
+      </div>
+      ${renderSources(hotel.sources, "住宿资料")}
+    </article>
+  `;
+
+  const renderBookingPlan = () => {
+    const container = document.querySelector("#booking-content");
+    const plan = data.trip.bookingPlan;
+    if (!container || !plan) return;
+    const flights = plan.lockedFlights || { constraint: plan.flight?.constraint, outbound: plan.flight?.outboundOptions, return: plan.flight?.returnOptions };
+    const hotels = asArray(plan.areaPlans).length ? plan.areaPlans : plan.hotels;
+    container.innerHTML = `
+      <div class="booking-status"><span>${showValue(plan.status)}</span><b>${showValue(plan.headline)}</b></div>
+      <section class="booking-block">
+        <div class="booking-block-heading"><span>01</span><div><h3>航班边界</h3><p>${showValue(flights.constraint)}</p></div></div>
+        <h4 class="booking-subtitle">去程</h4>
+        <div class="booking-options is-locked">${asArray(flights.outbound).map(renderBookingOption).join("")}</div>
+        <h4 class="booking-subtitle">返程</h4>
+        <div class="booking-options is-locked">${asArray(flights.return).map(renderBookingOption).join("")}</div>
+      </section>
+      <section class="booking-block">
+        <div class="booking-block-heading"><span>02</span><div><h3>每晚先住哪个片区</h3><p>每晚先给“最好住这里”和“实在不行住这里”两个位置，再把相应酒店放在片区下面。</p></div></div>
+        <div class="hotel-list">${asArray(hotels).map(renderHotelNight).join("")}</div>
+      </section>
+      <section class="hotel-search-rules">
+        <p class="micro-label">下单筛选法</p>
+        <h3>同一套条件搜索，避免被首页低价误导</h3>
+        <ol>${asArray(plan.searchRules).map((rule) => `<li>${showValue(rule)}</li>`).join("")}</ol>
+      </section>
+    `;
+  };
+
+  const normalizeMapPoints = (points) => asArray(points).filter((point) => Number.isFinite(point?.x) && Number.isFinite(point?.y));
+
+  const renderRouteMap = (route) => {
+    const routeMap = route?.map || {};
+    const points = normalizeMapPoints(routeMap.points);
+    if (points.length < 2) return "";
+    const line = points.map((point) => `${point.x},${point.y}`).join(" ");
+    return `
+      <figure class="route-map">
+        <figcaption><b>${showValue(routeMap.title, "今日路线关系")}</b><span>${showValue(routeMap.note, "位置为简化示意，出发前仍需实时导航。")}</span></figcaption>
+        <svg viewBox="0 0 100 68" role="img" aria-label="${showValue(routeMap.title, "路线关系示意")}">
+          <defs>
+            <marker id="route-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z"></path></marker>
+          </defs>
+          <path class="map-contour contour-a" d="M-4 15 C12 5, 25 28, 43 15 S72 3, 104 19"></path>
+          <path class="map-contour contour-b" d="M-4 55 C18 39, 29 61, 48 46 S76 37, 104 52"></path>
+          <polyline class="route-line" points="${line}" marker-end="url(#route-arrow)"></polyline>
+          ${points.map((point, index) => `
+            <g class="map-point${index === 0 || index === points.length - 1 ? " is-end" : ""}">
+              <circle cx="${point.x}" cy="${point.y}" r="${index === 0 || index === points.length - 1 ? 3.2 : 2.5}"></circle>
+              <text x="${point.x}" y="${point.y < 15 ? point.y + 9 : point.y - 6}" text-anchor="middle">${showValue(point.label, `节点 ${index + 1}`)}</text>
+            </g>
+          `).join("")}
+        </svg>
+        <p class="map-note">关系示意 · 非实时导航</p>
+      </figure>
+    `;
+  };
+
+  const renderRouteOverview = (day, route) => {
+    if (!route) return "";
+    return `
+      <section class="day-overview" aria-labelledby="day-overview-title">
+        <div class="overview-copy">
+          <p class="micro-label">TODAY AT A GLANCE</p>
+          <h3 id="day-overview-title">${showValue(route.name)}</h3>
+          <ol class="route-order">${asArray(route.order).map((stop) => `<li>${showValue(stop)}</li>`).join("")}</ol>
+          <dl class="overview-facts">
+            <div><dt>为什么这样排</dt><dd>${showValue(route.reason)}</dd></div>
+            <div><dt>今天会看到什么</dt><dd>${showValue(route.experience)}</dd></div>
+            <div><dt>总强度</dt><dd>${showValue(route.totalTime)}</dd></div>
+            <div class="is-caution"><dt>主动放弃</dt><dd>${showValue(route.tradeoff)}</dd></div>
+          </dl>
+          ${renderSources(route.sources, "路线判断依据")}
+        </div>
+        ${renderRouteMap(route)}
+      </section>
+    `;
+  };
+
+  const renderPlacePhoto = (place) => {
+    const image = place.image || {};
+    if (!image.src) return '<div class="place-photo-frame is-broken"><span>实景参考待补</span></div>';
+    return `
+      <figure class="place-photo">
+        <div class="place-photo-frame">
+          <img src="${escapeHtml(image.src)}" alt="${showValue(image.alt, `${place.name}实景参考`)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+        </div>
+        ${image.caption ? `<figcaption>${showValue(image.caption)}</figcaption>` : ""}
+      </figure>
+    `;
+  };
+
+  const renderPlaceModule = (place) => `
+    <section class="decision-module scenic-module">
+      <div class="module-copy">
+        <p class="module-label">本段怎么玩</p>
+        <h4>${showValue(place.name)}</h4>
+        <p class="module-intro">${showValue(place.why)}</p>
+        <div class="choice-stack" aria-label="可选择的玩法">
+          ${asArray(place.highlights).length
+            ? asArray(place.highlights).map((item, index) => `<div><span>${String(index + 1).padStart(2, "0")}</span><p>${showValue(item)}</p></div>`).join("")
+            : '<div><span>01</span><p>具体玩法待补</p></div>'}
+        </div>
+        <dl class="module-facts">
+          <div><dt>建议停留</dt><dd>${showValue(place.duration)}</dd></div>
+          <div><dt>怎么走</dt><dd>${showValue(place.role)}</dd></div>
+        </dl>
+        <div class="caution-line"><b>景点注意</b><p>${showValue(place.limits)}</p></div>
+        ${renderSources(place.sources, "景点资料")}
+      </div>
+      ${renderPlacePhoto(place)}
+    </section>
+  `;
+
+  const rankLabels = { primary: "首选", backup2: "备选 2", backup3: "备选 3" };
+  const candidateRank = (meal, candidateId) => Object.keys(rankLabels).find((rank) => state.mealSelections[meal.id]?.[rank] === candidateId) || "";
+
+  const renderPlatform = (name, platform = {}) => {
+    const values = [platform.score, platform.reviews, platform.list, platform.rank, platform.years, platform.price, platform.hours];
+    if (!values.some(Boolean)) return "";
+    return `
+      <div class="platform-card">
+        <b>${escapeHtml(name)}</b>
+        <dl>
+          <div><dt>评分</dt><dd>${showValue(platform.score, "未显示")}</dd></div>
+          <div><dt>评价</dt><dd>${showValue(platform.reviews, "未显示")}</dd></div>
+          <div><dt>榜单</dt><dd>${showValue(platform.list, "未显示")}</dd></div>
+          <div><dt>排名</dt><dd>${showValue(platform.rank, "未显示")}</dd></div>
+          <div><dt>收录</dt><dd>${showValue(platform.years, "未显示")}</dd></div>
+          <div><dt>平台人均</dt><dd>${showValue(platform.price, "未显示")}</dd></div>
+          <div><dt>平台营业</dt><dd>${showValue(platform.hours, "未显示")}</dd></div>
+        </dl>
+      </div>
+    `;
+  };
+
+  const renderRestaurant = (meal, candidate, index) => {
+    const rank = candidateRank(meal, candidate.id);
+    const base = candidate.base || {};
+    const platforms = candidate.platforms || {};
+    const classicDishes = asArray(candidate.classicDishes);
+    return `
+      <article class="restaurant-option${rank ? " is-ranked" : ""}">
+        <div class="restaurant-number">${rank ? escapeHtml(rankLabels[rank]) : `选项 ${index + 1}`}</div>
+        <h5>${showValue(candidate.name)}</h5>
+        <p class="restaurant-feature">${showValue(candidate.category, "餐饮类别待核")} · ${showValue(candidate.feature, "特色待核")}</p>
+        ${classicDishes.length ? `<p class="dish-line"><b>建议菜：</b>${classicDishes.map(showValue).join("、")}</p>` : ""}
+        <dl class="restaurant-basics">
+          <div><dt>位置</dt><dd>${showValue(base.location)}</dd></div>
+          <div><dt>用时</dt><dd>${showValue(base.duration)}</dd></div>
+          <div><dt>人均</dt><dd>${showValue(base.price)}</dd></div>
+          <div><dt>营业</dt><dd>${showValue(base.hours)}</dd></div>
+        </dl>
+        <details class="restaurant-details">
+          <summary>展开路线关系、风险与平台数据</summary>
+          <div class="restaurant-logic">
+            <p><b>为什么顺路：</b>${showValue(candidate.routeRelation)}</p>
+            <p><b>风险：</b>${showValue(candidate.risk)}</p>
+            <p><b>何时启用：</b>${showValue(candidate.condition)}</p>
+            <p><b>餐次去重：</b>${showValue(candidate.repetition)}</p>
+          </div>
+          ${renderPlatform("高德", platforms.amap)}
+          ${renderPlatform("大众点评", platforms.dianping)}
+          ${renderSources(candidate.sources, "门店与推荐来源")}
+        </details>
+        <div class="rank-actions" aria-label="餐厅排序">
+          ${Object.entries(rankLabels).map(([rankKey, rankLabel]) => `<button type="button" data-action="rank-meal" data-meal-id="${escapeHtml(meal.id)}" data-candidate-id="${escapeHtml(candidate.id)}" data-rank="${rankKey}" aria-pressed="${rank === rankKey}">${escapeHtml(rankLabel)}</button>`).join("")}
+        </div>
+      </article>
+    `;
+  };
+
+  const renderMealRanking = (meal) => {
+    const selection = state.mealSelections[meal.id] || {};
+    const ranked = Object.entries(rankLabels).map(([rank, label]) => {
+      const candidate = getMealCandidate(meal, selection[rank]);
+      return candidate ? `<span><b>${label}</b>${showValue(candidate.name)}</span>` : "";
+    }).filter(Boolean);
+    return ranked.length
+      ? `<div class="ranking-summary">${ranked.join("")}</div>`
+      : '<p class="ranking-empty">暂未排序。比较完后可把任意餐厅标成首选、备选 2 或备选 3。</p>';
+  };
+
+  const renderMealModule = (meal) => {
+    const candidates = meal.safetyLocked ? [] : asArray(meal.candidates);
+    return `
+      <section class="decision-module meal-module">
+        <div class="meal-heading">
+          <div><p class="module-label">本段吃什么</p><h4>${showValue(meal.label)}</h4></div>
+          <span>${candidates.length ? `${candidates.length} 个可比较选项` : "当前采用兜底策略"}</span>
+        </div>
+        <p class="module-intro">${showValue(meal.note, "本餐边界待补")}</p>
+        ${meal.strategy ? `<div class="strategy-box"><b>${showValue(meal.strategy.title, "本餐策略")}</b><p>${showValue(meal.strategy.detail)}</p></div>` : ""}
+        ${candidates.length ? `${renderMealRanking(meal)}<div class="restaurant-grid">${candidates.map((candidate, index) => renderRestaurant(meal, candidate, index)).join("")}</div>` : ""}
+        ${meal.manualNeed ? `<div class="manual-gap"><b>仍需补的资料</b><p>${showValue(meal.manualNeed)}</p></div>` : ""}
+        ${renderSources(meal.sources, "本餐资料")}
+      </section>
+    `;
+  };
+
+  const parseStartTime = (time) => {
+    const match = String(time || "").match(/(\d{1,2}):(\d{2})/);
+    return match ? Number(match[1]) * 60 + Number(match[2]) : 9999;
+  };
+
+  const mealSlot = (meal) => {
+    if (meal.label.includes("早餐")) return "breakfast";
+    if (meal.label.includes("午餐")) return "lunch";
+    return "dinner";
+  };
+
+  const mealStepScore = (meal, item) => {
+    const text = `${item.action || ""} ${item.from || ""} ${item.to || ""}`;
+    const slot = mealSlot(meal);
+    if (slot === "breakfast") return (text.includes("早餐") ? 20 : 0) + (text.includes("早间加餐") ? 12 : 0);
+    if (slot === "lunch") {
+      if (text.includes("次日路餐")) return 0;
+      if (text.includes("打包午餐")) return 3;
+      return (text.includes("午餐") ? 20 : 0) + (text.includes("路餐") ? 18 : 0) + (text.includes("简餐") ? 16 : 0);
+    }
+    return (text.includes("晚餐") ? 20 : 0) + (text.includes("晚饭") ? 18 : 0);
+  };
+
+  const syntheticMealTiming = (day, meal) => {
+    const slot = mealSlot(meal);
+    const special = {
+      "day-1:breakfast": { sort: 480, time: "随去程航班", action: "取车前早餐" },
+      "day-1:lunch": { sort: 810, time: "最晚 13:30", action: "取车前午餐" },
+      "day-6:lunch": { sort: 620, time: "10:15 左右", action: "安检后早午餐" },
+      "day-6:dinner": { sort: 1140, time: "随返程航班", action: "返程晚餐" }
+    };
+    return special[`${day.id}:${slot}`] || {
+      sort: slot === "breakfast" ? 450 : slot === "lunch" ? 750 : 1140,
+      time: slot === "breakfast" ? "07:30 左右" : slot === "lunch" ? "12:30 左右" : "19:00 左右",
+      action: slot === "breakfast" ? "早餐" : slot === "lunch" ? "午餐" : "晚餐"
+    };
+  };
+
+  const meaningfulTokens = (name) => {
+    const normalized = String(name || "").replace(/[\s·｜—()（）/]/g, "").replace(/景区|观景区|合规|正式|短线|天空之镜/g, "");
+    const ignored = new Set(["青海", "西宁", "德令", "令哈", "茫崖", "观景", "路线", "当天"]);
+    const tokens = new Set();
+    for (let size = 4; size >= 2; size -= 1) {
+      for (let index = 0; index <= normalized.length - size; index += 1) {
+        const token = normalized.slice(index, index + size);
+        if (!ignored.has(token)) tokens.add(token);
+      }
+    }
+    return [...tokens];
+  };
+
+  const activityText = (item) => `${item.action || ""} ${item.from || ""} ${item.to || ""} ${item.navigation || ""}`;
+
+  const assignPlaces = (day, route) => {
+    const timeline = asArray(day.timeline);
+    const assignments = new Map();
+    asArray(route?.placeIds).map((id) => data.places.find((place) => place.id === id)).filter(Boolean).forEach((place) => {
+      const tokens = meaningfulTokens(place.name);
+      let bestIndex = -1;
+      let bestScore = 0;
+      timeline.forEach((item, index) => {
+        const text = activityText(item);
+        let score = tokens.reduce((total, token) => total + (text.includes(token) ? token.length : 0), 0);
+        if (/游览|观景|日落|湖岸|外观|短停/.test(item.action || "")) score += 3;
+        if (score > bestScore) {
+          bestIndex = index;
+          bestScore = score;
+        }
+      });
+      if (bestIndex >= 0 && bestScore > 0) {
+        const current = assignments.get(bestIndex) || [];
+        current.push(place);
+        assignments.set(bestIndex, current);
+      }
+    });
+    return assignments;
+  };
+
+  const assignFallbacks = (day, placeAssignments) => {
+    const assignments = new Map();
+    asArray(day.fallbacks).forEach((fallback) => {
+      const fallbackText = `${fallback.trigger || ""} ${fallback.drop || ""} ${fallback.switchTo || ""}`;
+      let targetIndex = -1;
+      let score = 0;
+      placeAssignments.forEach((places, index) => {
+        const localScore = places.flatMap((place) => meaningfulTokens(place.name)).reduce((total, token) => total + (fallbackText.includes(token) ? token.length : 0), 0);
+        if (localScore > score) {
+          score = localScore;
+          targetIndex = index;
+        }
+      });
+      if (targetIndex < 0) targetIndex = Math.max(0, asArray(day.timeline).findIndex((item) => /游览|观景|日落|湖岸/.test(item.action || "")));
+      const current = assignments.get(targetIndex) || [];
+      current.push(fallback);
+      assignments.set(targetIndex, current);
+    });
+    return assignments;
+  };
+
+  const buildEvents = (day, route) => {
+    const timeline = asArray(day.timeline);
+    const events = timeline.map((item, index) => ({
+      kind: "activity",
+      item,
+      sourceIndex: index,
+      sort: parseStartTime(item.time),
+      meals: []
+    }));
+
+    data.meals.filter((meal) => meal.dayId === day.id).forEach((meal) => {
+      const scored = timeline.map((item, index) => ({ index, score: mealStepScore(meal, item) })).sort((a, b) => b.score - a.score);
+      if (scored[0]?.score > 0) {
+        events[scored[0].index].meals.push(meal);
+      } else {
+        const timing = syntheticMealTiming(day, meal);
+        events.push({ kind: "meal", meal, sort: timing.sort, time: timing.time, action: timing.action });
+      }
+    });
+
+    const placeAssignments = assignPlaces(day, route);
+    const fallbackAssignments = assignFallbacks(day, placeAssignments);
+    events.forEach((event) => {
+      if (event.kind !== "activity") return;
+      event.places = placeAssignments.get(event.sourceIndex) || [];
+      event.fallbacks = fallbackAssignments.get(event.sourceIndex) || [];
+    });
+    return events.sort((a, b) => a.sort - b.sort);
+  };
+
+  const renderChecks = (day) => {
+    const checks = data.checks.filter((check) => !check.dayId || check.dayId === day.id);
+    if (!checks.length) return "";
+    return `
+      <article class="preflight-card">
+        <div class="timeline-time"><span>行前</span><small>T-7 → 当天</small></div>
+        <details class="preflight-body">
+          <summary>
+            <span class="micro-label">BEFORE THIS DAY</span>
+            <span><b>先确认这些，再开始当天时间线</b><small>${checks.length} 项行前核验 · 点击展开</small></span>
+          </summary>
+          <div class="preflight-content">
+            <p>这里集中放出发前就要完成的核验；勾选只保存在本机，不代表页面替你完成预约。</p>
+            <div class="check-list">
+              ${checks.map((check) => `
+                <label class="check-item${state.checks[check.id] || check.done ? " is-done" : ""}">
+                  <input type="checkbox" data-action="toggle-check" data-check-id="${escapeHtml(check.id)}" ${state.checks[check.id] || check.done ? "checked" : ""}>
+                  <span><b>${showValue(check.title)}</b><small>${showValue(check.when, "时间待确认")}</small><p>${showValue(check.verify)}</p></span>
+                </label>
+              `).join("")}
+            </div>
+          </div>
+        </details>
+      </article>
+    `;
+  };
+
+  const activityType = (event) => {
+    const text = `${event.item?.action || ""} ${event.action || ""}`;
+    if (event.kind === "meal" || event.meals?.length) return "meal";
+    if (event.places?.length) return "scenic";
+    if (/取车|还车|验车/.test(text)) return "key";
+    if (/前往|驶向|直奔|补满油/.test(text)) return "drive";
+    return "activity";
+  };
+
+  const typeLabels = { meal: "用餐", scenic: "游玩", key: "关键节点", drive: "行车", activity: "安排" };
+
+  const renderFallback = (fallback) => `
+    <div class="fallback-box">
+      <div><b>当日总 Plan B</b><span>触发：${showValue(fallback.trigger)}</span></div>
+      <dl>
+        <div><dt>放弃</dt><dd>${showValue(fallback.drop)}</dd></div>
+        <div><dt>立即改成</dt><dd>${showValue(fallback.switchTo)}</dd></div>
+        <div><dt>后续影响</dt><dd>${showValue(fallback.nextNode)}</dd></div>
+      </dl>
+    </div>
+  `;
+
+  const renderPlainChoices = (item) => `
+    <section class="plain-choice-panel">
+      <p class="module-label">本段有哪些选择</p>
+      <div class="plain-choice-grid">
+        <div><b>按计划</b><p>${showValue(item.navigation, item.action)}</p></div>
+        <div><b>触发时切换</b><p>${showValue(item.switchCondition, "暂无额外切换条件")}</p></div>
+      </div>
+    </section>
+  `;
+
+  const renderActivityEvent = (event, index) => {
+    const item = event.item;
+    const type = activityType(event);
+    const hasDecisionModule = event.places.length || event.meals.length;
+    return `
+      <article class="timeline-event type-${type}">
+        <div class="timeline-time"><span>${showValue(item.time, "待排")}</span><small>${String(index + 1).padStart(2, "0")}</small></div>
+        <div class="activity-card">
+          <header class="activity-heading">
+            <div><span class="type-badge">${typeLabels[type]}</span><h3>${showValue(item.action)}</h3></div>
+            <p>${showValue(item.doorToDoor, "用时待确认")}</p>
+          </header>
+          <div class="movement-strip">
+            <span><small>从</small>${showValue(item.from)}</span>
+            <i aria-hidden="true">→</i>
+            <span><small>到</small>${showValue(item.to)}</span>
+            <em>${showValue(item.transport, "交通待确认")}</em>
+          </div>
+          <section class="action-brief">
+            <p class="module-label">这一段具体做什么</p>
+            <dl>
+              <div><dt>导航到</dt><dd>${showValue(item.navigation)}</dd></div>
+              <div><dt>路程 / 用时</dt><dd>${showValue(item.doorToDoor)}</dd></div>
+            </dl>
+          </section>
+          ${event.places.map(renderPlaceModule).join("")}
+          ${event.meals.map(renderMealModule).join("")}
+          ${hasDecisionModule ? "" : renderPlainChoices(item)}
+          <div class="event-cautions">
+            <div><b>硬截止</b><p>${showValue(item.deadline)}</p></div>
+            <div><b>临场怎么改</b><p>${showValue(item.switchCondition)}</p></div>
+          </div>
+          ${event.fallbacks.map(renderFallback).join("")}
+        </div>
+      </article>
+    `;
+  };
+
+  const renderSyntheticMealEvent = (event, index) => `
+    <article class="timeline-event type-meal is-synthetic">
+      <div class="timeline-time"><span>${showValue(event.time)}</span><small>${String(index + 1).padStart(2, "0")}</small></div>
+      <div class="activity-card">
+        <header class="activity-heading">
+          <div><span class="type-badge">用餐</span><h3>${showValue(event.action)}</h3></div>
+          <p>时间随航班或前后节点调整</p>
+        </header>
+        ${renderMealModule(event.meal)}
+      </div>
+    </article>
+  `;
+
+  const bindImageFallbacks = () => {
+    document.querySelectorAll(".place-photo img").forEach((image) => {
+      image.addEventListener("error", () => {
+        const frame = image.closest(".place-photo-frame");
+        if (frame) {
+          frame.classList.add("is-broken");
+          frame.innerHTML = "<span>图片暂时无法加载</span>";
+        }
+      }, { once: true });
+    });
+  };
+
+  const renderItinerary = () => {
+    const container = document.querySelector("#itinerary-content");
+    const day = getDay();
+    if (!day) {
+      container.innerHTML = '<div class="empty-state">尚未添加日期。</div>';
+      return;
+    }
+    const route = getRoute(day);
+    const events = buildEvents(day, route);
+    container.innerHTML = `
+      <article class="day-plan">
+        <header class="day-plan-header">
+          <div><p class="micro-label">${showValue(day.date)}</p><h2>${showValue(day.label)}</h2></div>
+          <p>${showValue(day.note)}</p>
+        </header>
+        ${renderRouteOverview(day, route)}
+        <div class="timeline" aria-label="${showValue(day.label)}完整时间线">
+          ${renderChecks(day)}
+          ${events.map((event, index) => event.kind === "meal" ? renderSyntheticMealEvent(event, index) : renderActivityEvent(event, index)).join("")}
+        </div>
+      </article>
+    `;
+    bindImageFallbacks();
+  };
+
+  const renderAll = () => {
+    renderBindings();
+    renderMode();
+    renderBookingPlan();
+    renderDayTabs();
+    renderItinerary();
+  };
+
+  const toast = document.querySelector("#toast");
+  let toastTimer;
+  const showToast = (message) => {
+    toast.textContent = message;
+    toast.classList.add("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 2200);
+  };
+
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-action]");
+    if (!button) return;
+
+    if (button.dataset.action === "select-day") {
+      state.activeDayId = button.dataset.dayId;
+      saveState();
+      renderAll();
+      document.querySelector("#itinerary")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    if (button.dataset.action === "rank-meal") {
+      const { mealId, candidateId, rank } = button.dataset;
+      const selection = { ...(state.mealSelections[mealId] || {}) };
+      const wasSelected = selection[rank] === candidateId;
+      Object.keys(rankLabels).forEach((key) => {
+        if (selection[key] === candidateId) selection[key] = "";
+      });
+      if (!wasSelected) selection[rank] = candidateId;
+      state.mealSelections[mealId] = selection;
+      saveState();
+      const meal = data.meals.find((item) => item.id === mealId);
+      const candidate = getMealCandidate(meal, candidateId);
+      renderAll();
+      showToast(wasSelected ? `已取消“${candidate?.name || "该餐厅"}”的${rankLabels[rank]}` : `已设为${rankLabels[rank]}：${candidate?.name || "该餐厅"}`);
+    }
+  });
+
+  document.addEventListener("change", (event) => {
+    const input = event.target.closest('input[data-action="toggle-check"]');
+    if (!input) return;
+    state.checks[input.dataset.checkId] = input.checked;
+    saveState();
+    input.closest(".check-item")?.classList.toggle("is-done", input.checked);
+  });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key === storageKey) window.location.reload();
+  });
+
+  window.TRIP_WORKSPACE = { data, state, render: renderAll };
+  renderAll();
+})();
