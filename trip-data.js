@@ -15,7 +15,7 @@ window.TRIP_DATA = {
       "9/28 是最高强度长驾日；9/29 必须在日落前完成托素湖",
       "10/2 12:00 从西宁起飞；原 14:00 还车订单必须提前修改"
     ],
-    updatedAt: "2026-09-05",
+    updatedAt: "2026-09-11",
     bookingPlan: {
       status: "待选择并下单｜以下均为攻略候选，不代表已有库存或已预订",
       headline: "航班先按两端到离时刻锁定；住宿先选片区，再在片区内选酒店",
@@ -698,6 +698,9 @@ window.TRIP_DATA = {
     { id: "check-route", dayId: "day-1", title: "A3 路线与两端航班时刻边界已锁", when: "航班号补入前", verify: "9/27 14:00 左右抵达茫崖；10/2 12:00 左右从西宁起飞。出票后用准确航班号重算 30 分钟级时间线", done: true },
     { id: "check-rental", dayId: "day-1", title: "修改还车时间并复核租车边界", when: "现在", verify: "把 10/2 14:00 还车改为 09:00—09:30；并确认落地留车、里程、轮胎 / 玻璃、非铺装路免责、救援、备用胎与 4 人行李空间", done: false },
     { id: "check-hotels", dayId: "", title: "按首选 / 备选片区锁定五晚可退住宿", when: "现在", verify: "花土沟、大柴旦、德令哈、茶卡、西宁；先选片区，再比较 4 位成人 / 2 间双床、早餐、停车、供氧和退改", done: false },
+    { id: "check-altitude-medicine", dayId: "", title: "提前网上下单抗高反药品", when: "现在", verify: "先向医生或药师确认适用药物、禁忌和服用时点，再完成下单；收货后核对数量与有效期", done: false },
+    { id: "check-energy-gel", dayId: "", title: "带上能量胶", when: "出发前采购，9/26 装车前复核", verify: "按 4 人的实际需要准备并检查保质期；装入随车补给包，长驾日放在方便取用的位置", done: false },
+    { id: "check-jack-wine", dayId: "", title: "带上给杰克的酒", when: "9/26 整理行李时", verify: "确认已经装箱；按实际酒精度、容量和承运航司规则核对携带或托运要求，并做好防碎防漏", done: false },
     { id: "check-weather", dayId: "", title: "T-7 天气、道路与国庆管制总复核", when: "2026-09-20", verify: "查茫崖、冷湖、大柴旦、德令哈、茶卡、青海湖、西宁的大风、沙尘、降雪、结冰、施工和 10/1 交通管制", done: false },
     { id: "check-scenic", dayId: "", title: "T-3 逐景区电话复核", when: "2026-09-24", verify: "确认翡翠湖、黑独山、星之谷、托素湖、柏树山、茶卡和二郎剑的入口、营业、停止入园、景交、停车与无人机边界", done: false },
     { id: "check-day2", dayId: "day-2", title: "实算黑独山长驾与补给节点", when: "9/24 与 9/28 06:00", verify: "分别导航花土沟→正式入口→大柴旦；截图施工 / 管制，记录正规加油站、厕所、救援电话和最晚离场", done: false },
