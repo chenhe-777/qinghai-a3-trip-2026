@@ -13,6 +13,9 @@
     "'": "&#039;"
   }[char]));
   const showValue = (value, fallback = "未获取") => escapeHtml(value || fallback);
+  const formatMoney = (value) => Number.isFinite(value)
+    ? `¥${new Intl.NumberFormat("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)}`
+    : "未获取";
 
   if (!data || !data.trip || !Array.isArray(data.days) || !Array.isArray(data.places) || !Array.isArray(data.meals) || !Array.isArray(data.checks)) {
     workspace.hidden = true;
@@ -133,6 +136,25 @@
     `;
   };
 
+  const renderBudget = (budget) => {
+    if (!budget) return "";
+    const categories = asArray(budget.categories);
+    const lodging = asArray(budget.lodging);
+    return `
+      <section class="budget-summary" aria-labelledby="budget-title">
+        <div class="budget-heading">
+          <div><p class="micro-label">${showValue(budget.label, "费用统计")}</p><h3 id="budget-title">${showValue(budget.basis, "人均口径")}</h3></div>
+          <div class="budget-total"><small>当前人均</small><strong>${formatMoney(budget.perPersonTotal)}</strong></div>
+        </div>
+        <div class="budget-categories">
+          ${categories.map((item) => `<div><span>${showValue(item.label)}</span><b>${formatMoney(item.amount)}</b></div>`).join("")}
+        </div>
+        ${lodging.length ? `<details class="budget-breakdown"><summary>查看五晚住宿人均明细 <span>${lodging.length} 晚</span></summary><div>${lodging.map((item) => `<p><span>${showValue(item.date)} · ${showValue(item.label)}</span><b>${formatMoney(item.amount)}</b></p>`).join("")}</div></details>` : ""}
+        <p class="budget-note">${showValue(budget.note)}</p>
+      </section>
+    `;
+  };
+
   const renderBookingPlan = () => {
     const container = document.querySelector("#booking-content");
     const plan = data.trip.bookingPlan;
@@ -141,6 +163,7 @@
     const hotels = asArray(plan.areaPlans).length ? plan.areaPlans : plan.hotels;
     container.innerHTML = `
       <div class="booking-status"><span>${showValue(plan.status)}</span><b>${showValue(plan.headline)}</b></div>
+      ${renderBudget(plan.budget)}
       <section class="booking-block">
         <div class="booking-block-heading"><span>01</span><div><h3>航班边界</h3><p>${showValue(flights.constraint)}</p></div></div>
         <h4 class="booking-subtitle">去程</h4>

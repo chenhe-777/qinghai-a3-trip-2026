@@ -19,6 +19,23 @@ window.TRIP_DATA = {
     bookingPlan: {
       status: "航班与五晚住宿均已预订｜公开信息已做隐私化处理",
       headline: "以下只保留执行所需信息，不展示姓名、订单号、价格或房间数量",
+      budget: {
+        label: "当前已确认固定支出",
+        basis: "本方 2 人均摊｜页面统一按人均显示",
+        perPersonTotal: 3876.5,
+        categories: [
+          { label: "往返机票", amount: 3045 },
+          { label: "五晚住宿", amount: 831.5 }
+        ],
+        lodging: [
+          { date: "9/27", label: "美豪酒店（茫崖店）", amount: 130 },
+          { date: "9/28", label: "大柴旦丽呈翠星酒店", amount: 175 },
+          { date: "9/29", label: "德令哈美豪 R 酒店", amount: 179 },
+          { date: "9/30", label: "茶卡白兰道酒店", amount: 121 },
+          { date: "10/1", label: "西宁富力万达文华酒店", amount: 226.5 }
+        ],
+        note: "当前只统计已提供的往返机票和五晚住宿；租车、油费、餐饮、门票等尚未计入。"
+      },
       lockedFlights: {
         constraint: "去返程均已出票。去程在西宁中转 2 小时 40 分；14:20 抵达茫崖晚于租车订单 14:00 取车时间，需提前让门店按航班留车。",
         outbound: [{
