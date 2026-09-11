@@ -120,16 +120,18 @@
     </article>
   `;
 
-  const renderHotelNight = (hotel) => `
-    <article class="hotel-night">
-      <header><span>${showValue(hotel.date)}</span><div><b>${showValue(hotel.city)}</b><p>${showValue(hotel.role)}</p></div></header>
-      <div class="hotel-choices">
-        <section><small>${showValue(hotel.primary?.area, "首选片区")}</small><h4>${showValue(hotel.primary?.name)}</h4><p>${showValue(hotel.primary?.facts)}</p><em>${showValue(hotel.primary?.why)}</em></section>
-        <section><small>${showValue(hotel.backup?.area, "备选片区")}</small><h4>${showValue(hotel.backup?.name)}</h4><p>${showValue(hotel.backup?.facts)}</p><em>${showValue(hotel.backup?.why)}</em></section>
-      </div>
-      ${renderSources(hotel.sources, "住宿资料")}
-    </article>
-  `;
+  const renderHotelNight = (hotel) => {
+    const choices = [hotel.primary, hotel.backup].filter(Boolean);
+    return `
+      <article class="hotel-night">
+        <header><span>${showValue(hotel.date)}</span><div><b>${showValue(hotel.city)}</b><p>${showValue(hotel.role)}</p></div></header>
+        <div class="hotel-choices${choices.length === 1 ? " is-single" : ""}">
+          ${choices.map((choice) => `<section><small>${showValue(choice.area, "住宿")}</small><h4>${showValue(choice.name)}</h4><p>${showValue(choice.facts)}</p><em>${showValue(choice.why)}</em></section>`).join("")}
+        </div>
+        ${renderSources(hotel.sources, "住宿资料")}
+      </article>
+    `;
+  };
 
   const renderBookingPlan = () => {
     const container = document.querySelector("#booking-content");
@@ -147,12 +149,12 @@
         <div class="booking-options is-locked">${asArray(flights.return).map(renderBookingOption).join("")}</div>
       </section>
       <section class="booking-block">
-        <div class="booking-block-heading"><span>02</span><div><h3>每晚先住哪个片区</h3><p>每晚先给“最好住这里”和“实在不行住这里”两个位置，再把相应酒店放在片区下面。</p></div></div>
+        <div class="booking-block-heading"><span>02</span><div><h3>已预订住宿</h3><p>五晚住宿已经锁定；这里只保留导航、房型设施和入住前仍需确认的事项。</p></div></div>
         <div class="hotel-list">${asArray(hotels).map(renderHotelNight).join("")}</div>
       </section>
       <section class="hotel-search-rules">
-        <p class="micro-label">下单筛选法</p>
-        <h3>同一套条件搜索，避免被首页低价误导</h3>
+        <p class="micro-label">入住前复核</p>
+        <h3>订单已完成，接下来只检查会影响执行的条件</h3>
         <ol>${asArray(plan.searchRules).map((rule) => `<li>${showValue(rule)}</li>`).join("")}</ol>
       </section>
     `;

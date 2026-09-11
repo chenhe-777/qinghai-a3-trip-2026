@@ -5,91 +5,74 @@ window.TRIP_DATA = {
     city: "青海 · 茫崖 / 冷湖 / 大柴旦 / 德令哈 / 茶卡 / 西宁",
     dates: "2026-09-27—2026-10-02（6 天 5 晚）",
     base: "花土沟→大柴旦→德令哈→茶卡→西宁，每日换宿",
-    arrival: "9/27 14:00 左右抵达海西茫崖机场，落地后取坦克 300",
-    departure: "10/2 12:00 左右从西宁曹家堡机场起飞，09:30 前完成还车",
+    arrival: "9/27 GJ8165 杭州萧山 T3 06:20 → 西宁曹家堡 T3 09:40；MU6517 12:20 → 茫崖 14:20",
+    departure: "10/2 GJ8166 西宁曹家堡 T3 20:00 → 杭州萧山 T3 23:10；14:00 完成还车",
     confirmedRouteId: "",
     defaultMode: "planning",
     fixedEvents: [
       "当前研究主线：茫崖进、西宁出，全程一车",
-      "9/27 14:00 抵达茫崖；首日只保留茫崖翡翠湖日落",
+      "9/27 两段航班均已出票；14:20 抵达茫崖，落地后取车",
       "9/28 是最高强度长驾日；9/29 必须在日落前完成托素湖",
-      "10/2 12:00 从西宁起飞；原 14:00 还车订单必须提前修改"
+      "10/2 14:00 曹家堡机场 T3 服务点还车；20:00 搭乘 GJ8166 返回杭州"
     ],
     updatedAt: "2026-09-11",
     bookingPlan: {
-      status: "待选择并下单｜以下均为攻略候选，不代表已有库存或已预订",
-      headline: "航班先按两端到离时刻锁定；住宿先选片区，再在片区内选酒店",
+      status: "航班与五晚住宿均已预订｜公开信息已做隐私化处理",
+      headline: "以下只保留执行所需信息，不展示姓名、订单号、价格或房间数量",
       lockedFlights: {
-        constraint: "本版先采用用户给定的两端到离时刻，不再比较杭州 / 宁波的转机组合。航班号尚未录入，出票后仍需复核托运、航站楼和租车衔接。",
+        constraint: "去返程均已出票。去程在西宁中转 2 小时 40 分；14:20 抵达茫崖晚于租车订单 14:00 取车时间，需提前让门店按航班留车。",
         outbound: [{
-          level: "暂按此执行",
-          title: "9/27 14:00 左右抵达茫崖机场",
-          route: "14:00 落地 → 取行李 → 办理租车 → 预计 15:00—15:15 驶离机场",
-          reason: "首日仍可保留花土沟补给和茫崖翡翠湖日落，但不能再把 14:00 写成已经拿到车。",
-          caution: "出票后补入航班号；同时让租车门店确认航班延误时的留车与等候规则。",
-          sources: [{ label: "用户锁定航班边界", url: "", role: "9/27 14:00 左右抵达茫崖" }]
+          level: "已出票",
+          title: "9/27 杭州 → 西宁 → 茫崖",
+          route: "GJ8165｜杭州萧山 T3 06:20 → 西宁曹家堡 T3 09:40；MU6517｜西宁曹家堡 T3 12:20 → 茫崖 14:20",
+          reason: "这是已经锁定的实际去程；首日时间线从 14:20 落地重新倒推。",
+          caution: "确认行李是否直挂；并让茫崖租车门店书面确认约 15:00—15:30 仍可取车。",
+          sources: [{ label: "已出票行程（隐私化摘录）", url: "", role: "航班号、航站楼与计划时刻" }]
         }],
         return: [{
-          level: "暂按此执行",
-          title: "10/2 12:00 左右从西宁起飞",
-          route: "07:15 前退房 → 补油 → 08:30 左右到机场服务点 → 09:30 前完成还车 → 进入 T3",
-          reason: "给还车争议、托运和国庆安检留出约 2.5 小时，不再安排东关大寺等市区景点。",
-          caution: "原租车订单写的是 14:00 还车，必须改到 09:00—09:30；若不能修改，就不能按这班航班执行。",
-          sources: [{ label: "用户锁定航班边界", url: "", role: "10/2 12:00 左右从西宁起飞" }]
+          level: "已出票",
+          title: "10/2 西宁 → 杭州",
+          route: "14:00 曹家堡机场 T3 服务点还车 → 托运、安检与机场晚餐 → GJ8166 20:00 起飞 → 杭州萧山 T3 23:10 抵达",
+          reason: "晚班直飞已经锁定，原订单 14:00 还车无需提前。",
+          caution: "国庆出行仍按票面值机截止时间执行；航变后重新倒推市区离开时间。",
+          sources: [{ label: "已出票行程（隐私化摘录）", url: "", role: "航班号、航站楼与计划时刻" }]
         }]
       },
       areaPlans: [
         {
           date: "9/27", city: "花土沟",
-          role: "翡翠湖日落后回镇，位置必须兼顾晚饭、采购、停车和次日 06:30 出城",
-          primary: { area: "首选片区｜前进路—昆仑路中段核心商业轴", name: "美豪丽致酒店 / 茫崖温馨酒店", facts: "前进路 1 号或昆仑路中段 84 号；餐饮、超市和大停车场集中", why: "最好住这里：日落后找饭、第二天买早餐与上 G315 都最省心。" },
-          backup: { area: "退一步｜创业路—市政府片区", name: "爱尚宾馆（茫崖市市政府店）", facts: "创业路 105 号；独立院内停车，环境较安静；不含早餐", why: "核心商业轴满房或明显涨价时选；前一晚自行买好第二天早餐。" },
-          sources: [
-            { label: "携程｜花土沟美豪丽致", url: "https://m.ctrip.com/html5/hotel/hoteldetail/130242346.html", role: "前进路位置、开业、设施与评分" },
-            { label: "携程｜茫崖温馨酒店", url: "https://hotels.ctrip.com/hotels/76180970.html", role: "昆仑路位置、停车与周边餐饮" },
-            { label: "携程｜爱尚宾馆", url: "https://hotels.ctrip.com/hotels/76255812.html", role: "创业路位置、院内停车、无早餐与当前点评" }
-          ]
+          role: "已预订｜9/27 入住，9/28 离店",
+          primary: { area: "已确认住宿", name: "美豪酒店（茫崖店）", facts: "花土沟镇昆仑路 84 号；精致大床房；弥漫式供氧、全屋智能、中央空调", why: "订单已确认；公开页未展示住客姓名、订单号、价格和房间数量。" },
+          backup: null,
+          sources: []
         },
         {
           date: "9/28", city: "大柴旦",
-          role: "全程最长驾驶日后的恢复性住宿；供氧、新风和步行吃晚饭比景观重要",
-          primary: { area: "首选片区｜翡翠步行街—大华街 / 团结路镇中心", name: "大柴旦丽呈华廷酒店（翡翠步行街店）", facts: "步行可解决晚饭和补给；供氧、新风、中央空调、免费停车", why: "最好住这里：19:00 后到达仍不需要再开车找饭，也是全程最值得升级的一晚。" },
-          backup: { area: "退一步｜人民西路—温泉路口 / 将军楼广场", name: "西鹿臻选酒店（海西州大柴旦店）", facts: "停车、早餐、洗衣、吸氧机和加湿器；靠镇区西侧", why: "中心区满房或价格失真时选；到店前先吃饭或打包，避免晚间折返。" },
-          sources: [
-            { label: "携程｜大柴旦丽呈华廷", url: "https://hotels.ctrip.com/hotels/130033526.html", role: "镇中心位置、供氧、停车与当前点评" },
-            { label: "携程｜西鹿臻选", url: "https://hotels.ctrip.com/hotels/128476449.html", role: "人民西路 / 温泉路口位置与设施" }
-          ]
+          role: "已预订｜9/28 入住，9/29 离店",
+          primary: { area: "已确认住宿", name: "大柴旦丽呈翠星酒店", facts: "臻品双床房；中央空调、零压枕、加湿器、智能客控", why: "以最新订单截图中的酒店名称为准，已覆盖网页原先的“丽呈华廷”候选。" },
+          backup: null,
+          sources: []
         },
         {
           date: "9/29", city: "德令哈",
-          role: "托素湖日落后进城；位置要兼顾晚餐、恢复和次日向北去柏树山",
-          primary: { area: "首选片区｜巴音河东岸—滨河东路 / 市中心广场", name: "全季富氧酒店（德令哈巴音河畔店）", facts: "滨河东路；4.8 分 / 1240 条；供氧、停车、洗衣与早餐", why: "最好住这里：恢复条件稳定，第二天向北出城不需要横穿太多城区。" },
-          backup: { area: "退一步｜巴音河西岸—海子诗歌馆 / 景华湾商业广场", name: "美豪 R 酒店（德令哈海子诗歌陈列馆店）", facts: "连湖路与新源路交汇；4.7 分 / 731 条；停车、洗衣与早餐", why: "东岸房价高或满房时选；餐饮更集中，但次日需多走一小段城区。" },
-          sources: [
-            { label: "携程｜德令哈全季富氧", url: "https://hotels.ctrip.com/hotels/121952233.html", role: "滨河东路位置、供氧、停车、早餐与当前点评" },
-            { label: "携程｜德令哈美豪 R", url: "https://hotels.ctrip.com/hotels/133972400.html", role: "连湖路位置、商业配套与当前点评" }
-          ]
+          role: "已预订｜9/29 入住，9/30 离店",
+          primary: { area: "已确认住宿", name: "美豪 R 酒店（德令哈海子诗歌陈列馆店）", facts: "连湖路与新源路交汇处；雅致大床房；智能客控、空调、加湿器、电视投屏、小冰箱；不含早餐", why: "订单已确认；次日早餐需要单独解决。" },
+          backup: null,
+          sources: []
         },
         {
           date: "9/30", city: "茶卡镇",
-          role: "不住乌兰县城或景区帐篷；住镇内便于晚餐和次日上 G109",
-          primary: { area: "首选片区｜幸福路中段—清真寺 / 汽车站镇中心", name: "茶卡白兰道酒店", facts: "幸福路，距汽车站约 700 米；供氧、早餐、停车、洗衣", why: "最好住这里：晚饭和采购选择最多，第二天上 G109 也不绕路。" },
-          backup: { area: "退一步｜幸福路东段—茶卡镇东出口", name: "星程酒店（茶卡镇店）", facts: "幸福路东 3 号楼；供氧、停车、洗衣；去盐湖约 7—10 分钟车程", why: "中心段满房时选，出镇方向更顺；近期硬件反馈略弱于白兰道。" },
-          sources: [
-            { label: "携程｜茶卡白兰道", url: "https://hotels.ctrip.com/hotels/121998764.html", role: "幸福路位置、供氧、停车、洗衣与近期点评" },
-            { label: "携程｜星程茶卡镇店", url: "https://hotels.ctrip.com/hotels/109716089.html", role: "幸福路东段位置、设施与近期点评" }
-          ]
+          role: "已预订｜9/30 入住，10/1 离店",
+          primary: { area: "已确认住宿", name: "茶卡白兰道酒店", facts: "雅致双床房；空调、移动制氧机、加湿器", why: "订单已确认；继续保留次日早餐时间与停车条件的行前复核。" },
+          backup: null,
+          sources: []
         },
         {
           date: "10/1", city: "西宁",
-          role: "次日 12:00 起飞；住宿是在机场确定性和最后一晚城市体验之间取舍",
-          primary: { area: "首选片区｜城东区昆仑东路—乐家湾方向", name: "西宁昆仑希尔顿欢朋酒店", facts: "昆仑东路 191 号；距机场约 20 公里；免费早餐和停车", why: "最好住这里：仍在西宁市区，但第二天向东去机场比城中 / 城西更稳。" },
-          backup: { area: "体验优先｜城中区香格里拉路—中心广场", name: "西宁香格里拉希尔顿欢朋酒店", facts: "嬉游直接推荐；城中核心商业区；距机场约 33 公里", why: "想把最后一晚留给老城和西宁美食时选；次日必须更早离店。" },
-          sources: [
-            { label: "希尔顿官网｜西宁昆仑欢朋", url: "https://www.hilton.com.cn/zh-cn/hotels/xnnxihx-hampton-by-hilton-xining-kunlun-road", role: "城东地址、机场距离与设施" },
-            { label: "嬉游｜西宁城市攻略", url: "https://mp.weixin.qq.com/s/fYcbCQTQLxs-qgvqi4ovpg", role: "香格里拉路欢朋的直接推荐" },
-            { label: "希尔顿官网｜香格里拉路欢朋", url: "https://www.hilton.com/zh-hans/hotels/xnnbhhx-hampton-xining-shangri-la-road/hotel-location/", role: "城中位置与机场 33 公里" }
-          ]
+          role: "已预订｜10/1 入住，10/2 离店",
+          primary: { area: "已确认住宿", name: "西宁富力万达文华酒店", facts: "位于海湖新区；房型、早餐和取消条件未在本次资料中提供", why: "20:00 晚班航班让最后一晚可以优先住宿体验；10/2 中午退房后再前往机场还车。" },
+          backup: null,
+          sources: []
         }
       ],
       flight: {
@@ -217,11 +200,11 @@ window.TRIP_DATA = {
         }
       ],
       searchRules: [
-        "按真实入住日搜索：4 位成人、2 间双床房；不要先看首页‘起价’。",
-        "优先勾选：免费取消 / 到店付、免费停车、含 4 早、4.5 分以上、供氧或制氧、洗衣。",
-        "只读近 3 个月差评，集中检查热水、异味、无窗、隔音、电梯、停车和早餐是否按时开放。",
-        "下单前打电话确认：最晚到店、早餐开始时间或能否打包、坦克 300 停车位、供氧是否收费。",
-        "现在先订可退方案；T-7 用同条件复查价格与最新评论，再决定是否换店。"
+        "把五晚订单确认页离线保存，但公开页不上传姓名、订单号、支付金额和房间数量。",
+        "9/27 联系茫崖酒店确认日落后晚到仍保留房间，并确认 9/28 清晨能否打包早餐。",
+        "9/28 长驾日提前告知大柴旦酒店预计到店时间，同时确认停车位置和供氧使用方式。",
+        "9/29 德令哈住宿不含早餐，前一晚必须单独确定次日早餐或打包方案。",
+        "T-3 逐店复核停车、早餐时段、供氧是否收费、最晚到店和取消边界。"
       ]
     }
   },
@@ -231,16 +214,16 @@ window.TRIP_DATA = {
       id: "day-1",
       date: "2026-09-27",
       label: "D1 · 茫崖",
-      note: "14:00 左右抵达茫崖机场。落地、取行李和验车后，预计 15:00—15:15 才能真正出发。",
+      note: "MU6517 计划 14:20 抵达茫崖机场。落地、取行李和验车后，预计 15:10—15:30 才能真正出发。",
       selectedRouteId: "route-d1",
       routes: [{
         id: "route-d1",
         name: "D1｜茫崖机场取车 → 花土沟 → 茫崖翡翠湖日落",
-        order: ["14:00 抵达茫崖机场", "落地后取车验车", "花土沟入住、加油与采购", "茫崖翡翠湖", "花土沟晚餐与住宿"],
+        order: ["14:20 抵达茫崖机场", "落地后取车验车", "花土沟寄存、加油与采购", "茫崖翡翠湖", "美豪酒店（茫崖店）"],
         reason: "用距离花土沟较近、辨识度最高的盐湖完成开场，不再为两个景点牺牲取车验车与日落窗口。",
         experience: "先沿盐池步道看蓝绿、乳白等不同色块，再把主拍摄时段留给日落前 60—90 分钟。",
-        totalTime: "约 6.5 小时；当天驾车约 55—70 公里、1—1.5 小时。",
-        tradeoff: "14:00 是航班到达时间，不是拿到车的时间；不再增加支线景点，把剩余窗口全部留给翡翠湖。",
+        totalTime: "落地后约 6 小时；当天驾车约 55—70 公里、1—1.5 小时。",
+        tradeoff: "14:20 才落地，艾肯泉继续不放回首日；若取车延误，就进一步压缩翡翠湖远端机位。",
         sources: [
           { label: "携程｜茫崖翡翠湖", url: "https://you.ctrip.com/sight/mangya2026914/5580343.html", role: "位置、当前开放参考与景点信息" },
           { label: "嬉游｜这个美到封神的省份，现在去还有免票！", url: "https://mp.weixin.qq.com/s/_NfhtsEZYs6hFZGj61J4eQ", role: "茫崖与海西景观价值判断" }
@@ -253,12 +236,12 @@ window.TRIP_DATA = {
         }
       }],
       timeline: [
-        { time: "14:00—15:10", action: "落地、取行李、取车验车与装载", from: "海西茫崖机场", to: "茫崖机场服务点", transport: "步行 / 租车接驳", doorToDoor: "预留 60—70 分钟", navigation: "海西茫崖机场服务点", deadline: "目标 15:10 前完成；逐项拍车身、轮胎、玻璃和油量", switchCondition: "若 15:20 仍未完成，取消酒店办理入住，只补油和采购后去翡翠湖" },
-        { time: "15:10—16:10", action: "花土沟寄存行李、加满油、买水和次日路餐", from: "茫崖机场", to: "花土沟镇", transport: "自驾", doorToDoor: "约 7—9 公里；含采购共 50—60 分钟", navigation: "已选住宿片区 → 正规加油站 → 超市", deadline: "16:10 离开花土沟", switchCondition: "房间未整理好只寄存行李；不在前台等待入住" },
-        { time: "16:10—20:05", action: "前往茫崖翡翠湖，步行观景并等日落", from: "花土沟镇", to: "茫崖翡翠湖景区", transport: "自驾 + 步行 / 景交以现场为准", doorToDoor: "单程约 23 公里、30—40 分钟；游玩约 2.5—3 小时", navigation: "茫崖翡翠湖景区游客中心", deadline: "目标 16:50 前入园；当前平台显示 20:00 闭园，日落后立即撤离", switchCondition: "若大风、闭园提前或 17:30 后才到，只走最近的核心盐池，不追远端机位" },
+        { time: "14:20—15:30", action: "落地、取行李、取车验车与装载", from: "海西茫崖机场", to: "茫崖机场服务点", transport: "步行 / 租车接驳", doorToDoor: "预留 50—70 分钟", navigation: "海西茫崖机场服务点", deadline: "目标 15:30 前完成；逐项拍车身、轮胎、玻璃和油量", switchCondition: "若 15:40 仍未完成，取消酒店办理入住，只补油和采购后去翡翠湖" },
+        { time: "15:30—16:20", action: "前往美豪酒店寄存行李、加满油、买水和次日路餐", from: "茫崖机场", to: "美豪酒店（茫崖店）", transport: "自驾", doorToDoor: "机场至花土沟约 7—9 公里；含采购共 40—50 分钟", navigation: "美豪酒店（茫崖店） → 正规加油站 → 超市", deadline: "16:20 离开花土沟", switchCondition: "房间未整理好只寄存行李；不在前台等待入住" },
+        { time: "16:20—20:05", action: "前往茫崖翡翠湖，步行观景并等日落", from: "花土沟镇", to: "茫崖翡翠湖景区", transport: "自驾 + 步行 / 景交以现场为准", doorToDoor: "单程约 23 公里、30—40 分钟；游玩约 2.5—3 小时", navigation: "茫崖翡翠湖景区游客中心", deadline: "目标 17:00 前入园；当前平台显示 20:00 闭园，日落后立即撤离", switchCondition: "若大风、闭园提前或 17:30 后才到，只走最近的核心盐池，不追远端机位" },
         { time: "20:05—21:30", action: "返回花土沟并吃晚饭", from: "茫崖翡翠湖", to: "花土沟镇", transport: "自驾", doorToDoor: "返程约 30—40 分钟；晚餐 45—60 分钟", navigation: "当天餐饮首选分店", deadline: "驾驶员不饮酒；饭后尽快休息", switchCondition: "首选停止接单就按页面备选顺序切换" }
       ],
-      fallbacks: [{ trigger: "15:30 后才离开花土沟，或景区通知提前停止入园", drop: "取消远端盐池与长距离步行", switchTo: "只看入口附近核心盐池和日落光线", nextNode: "20:30 左右回到花土沟，保证次日 06:30 出发" }]
+      fallbacks: [{ trigger: "16:20 后仍未离开花土沟，或景区通知提前停止入园", drop: "取消远端盐池与长距离步行", switchTo: "只看入口附近核心盐池和日落光线", nextNode: "20:30 左右回到美豪酒店，保证次日 06:30 出发" }]
     },
 
     {
@@ -288,10 +271,10 @@ window.TRIP_DATA = {
         }
       }],
       timeline: [
-        { time: "06:00—06:30", action: "退房、热食早餐并复核油量", from: "花土沟酒店", to: "花土沟出城口", transport: "自驾", doorToDoor: "30 分钟", navigation: "昨晚已选定的加油站 / G315 冷湖方向", deadline: "06:30 必须驶出花土沟", switchCondition: "酒店早餐未开就使用前晚购买的面包、牛奶和保温热水" },
+        { time: "06:00—06:30", action: "退房、热食早餐并复核油量", from: "美豪酒店（茫崖店）", to: "花土沟出城口", transport: "自驾", doorToDoor: "30 分钟", navigation: "昨晚已选定的加油站 / G315 冷湖方向", deadline: "06:30 必须驶出花土沟", switchCondition: "酒店早餐未开就使用前晚购买的面包、牛奶和保温热水" },
         { time: "06:30—11:30", action: "长距离前往黑独山，途中轮换休息但不加景点", from: "花土沟", to: "黑独山正式开放区", transport: "自驾", doorToDoor: "约 300 公里；按 4.5—5 小时管理", navigation: "黑独山景区正式游客入口（当天再以官方公告 / 导航确认）", deadline: "每 1.5—2 小时停车 10—15 分钟；11:30 左右抵达", switchCondition: "若导航延误超过 60 分钟，黑独山停留压缩为 60—75 分钟" },
         { time: "11:30—13:00", action: "黑独山核心观景；车上解决路餐", from: "黑独山入口", to: "正式观景区", transport: "景区规定交通 + 步行", doorToDoor: "游玩约 1.5 小时", navigation: "黑独山正式开放区", deadline: "13:00 离开，最晚不拖过 13:30", switchCondition: "大风、沙尘或景区管制时只在开放观景台停留，不进入任何未授权便道" },
-        { time: "13:00—19:00", action: "驶向大柴旦，中途补油、如厕和短休息", from: "黑独山", to: "大柴旦镇", transport: "自驾", doorToDoor: "约 330—350 公里；按 5.5—6 小时管理", navigation: "大柴旦镇预订酒店", deadline: "尽量在天黑前进入大柴旦镇区", switchCondition: "17:30 仍距大柴旦超过 150 公里时，立即取消所有拍照停车并联系酒店保留房间" },
+        { time: "13:00—19:00", action: "驶向大柴旦，中途补油、如厕和短休息", from: "黑独山", to: "大柴旦丽呈翠星酒店", transport: "自驾", doorToDoor: "约 330—350 公里；按 5.5—6 小时管理", navigation: "大柴旦丽呈翠星酒店", deadline: "尽量在天黑前进入大柴旦镇区", switchCondition: "17:30 仍距大柴旦超过 150 公里时，立即取消所有拍照停车并联系酒店保留房间" },
         { time: "19:00—21:00", action: "入住、热食晚餐并检查车辆", from: "大柴旦镇", to: "酒店与餐厅", transport: "自驾 / 步行", doorToDoor: "约 2 小时", navigation: "当天餐饮首选分店", deadline: "检查胎压、胎面与底盘可见处；驾驶员优先睡眠", switchCondition: "到店过晚就选营业更晚的雅古拜，不再排网红店" }
       ],
       fallbacks: [{ trigger: "上午路况使黑独山预计到达时间晚于 13:00", drop: "压缩黑独山至 45—60 分钟，不再等待理想光线", switchTo: "完成合规观景后立刻去大柴旦", nextNode: "当晚必须住大柴旦，不能把疲劳驾驶转嫁给次日" }]
@@ -325,12 +308,12 @@ window.TRIP_DATA = {
         }
       }],
       timeline: [
-        { time: "07:00—07:30", action: "早餐、退房并打包午餐", from: "大柴旦酒店", to: "大柴旦出城口", transport: "自驾", doorToDoor: "30 分钟", navigation: "星之谷景区当天确认入口", deadline: "07:30 出发", switchCondition: "餐厅未开就用酒店早餐或前晚打包，不在镇上等位" },
+        { time: "07:00—07:30", action: "早餐、退房并打包午餐", from: "大柴旦丽呈翠星酒店", to: "大柴旦出城口", transport: "自驾", doorToDoor: "30 分钟", navigation: "星之谷景区当天确认入口", deadline: "07:30 出发", switchCondition: "餐厅未开就用酒店早餐或前晚打包，不在镇上等位" },
         { time: "07:30—11:30", action: "前往星之谷，中途短休一次", from: "大柴旦", to: "彩虹丹霞·星之谷", transport: "自驾", doorToDoor: "约 4 小时；以当天导航为准", navigation: "彩虹丹霞·星之谷景区", deadline: "11:30 左右抵达", switchCondition: "路况使预计到达晚于 12:30 时，星之谷压缩为 60 分钟" },
         { time: "11:30—14:30", action: "星之谷游览并在车上吃路餐", from: "星之谷入口", to: "核心丹霞区", transport: "景区交通 / 步行以现场为准", doorToDoor: "含午餐最多 3 小时", navigation: "彩虹丹霞·星之谷正式入口", deadline: "14:30 必须离开；当前季节资料显示 18:00 停止入园，但本线路不等到闭园", switchCondition: "任何排队都不能突破 14:30，超过即跳过次要观景台" },
         { time: "14:30—17:00", action: "直奔托素湖，不再插入可鲁克湖", from: "星之谷", to: "托素湖正常开放入口", transport: "自驾", doorToDoor: "约 2—2.5 小时，砂石 / 支线路况另留余量", navigation: "托素湖景区当日开放入口", deadline: "目标 16:30、最晚 17:00 抵达", switchCondition: "17:00 前无法到达时，不走陌生湖岸便道，只在合规开放点短停后去德令哈" },
-        { time: "17:00—19:10", action: "托素湖湖岸观景，随后进德令哈", from: "托素湖", to: "德令哈酒店", transport: "步行 + 自驾", doorToDoor: "湖边 60—75 分钟；进城约 40—60 分钟", navigation: "托素湖正式观景区 → 德令哈预订酒店", deadline: "天黑前结束湖岸活动；不在无人区摸黑找机位", switchCondition: "大风或入口临时关闭，就把时间转给德令哈早到与车辆检查" },
-        { time: "19:10—21:00", action: "入住与晚餐", from: "德令哈酒店", to: "市区餐厅", transport: "自驾 / 步行", doorToDoor: "约 1.5 小时", navigation: "当天餐饮首选分店", deadline: "晚餐后补足次日饮水", switchCondition: "首选等位超过 20 分钟即换备选" }
+        { time: "17:00—19:10", action: "托素湖湖岸观景，随后进德令哈", from: "托素湖", to: "美豪 R 酒店（德令哈海子诗歌陈列馆店）", transport: "步行 + 自驾", doorToDoor: "湖边 60—75 分钟；进城约 40—60 分钟", navigation: "托素湖正式观景区 → 美豪 R 酒店（德令哈海子诗歌陈列馆店）", deadline: "天黑前结束湖岸活动；不在无人区摸黑找机位", switchCondition: "大风或入口临时关闭，就把时间转给德令哈早到与车辆检查" },
+        { time: "19:10—21:00", action: "入住与晚餐", from: "美豪 R 酒店（德令哈海子诗歌陈列馆店）", to: "市区餐厅", transport: "自驾 / 步行", doorToDoor: "约 1.5 小时", navigation: "当天餐饮首选分店", deadline: "晚餐后补足次日饮水", switchCondition: "首选等位超过 20 分钟即换备选" }
       ],
       fallbacks: [{ trigger: "14:30 仍未离开星之谷", drop: "立即结束星之谷，不加可鲁克湖", switchTo: "直接导航托素湖正式入口", nextNode: "17:00 前抵达托素湖；这是当日取舍基准" }]
     },
@@ -362,9 +345,9 @@ window.TRIP_DATA = {
         }
       }],
       timeline: [
-        { time: "07:15—08:00", action: "早餐、退房与补油", from: "德令哈酒店", to: "德令哈北侧", transport: "自驾", doorToDoor: "45 分钟", navigation: "柏树山景区 / 当日开放入口", deadline: "08:00 出发", switchCondition: "天气低云、降雪或身体不适时直接去茶卡" },
+        { time: "07:15—08:00", action: "早餐、退房与补油", from: "美豪 R 酒店（德令哈海子诗歌陈列馆店）", to: "德令哈北侧", transport: "自驾", doorToDoor: "45 分钟", navigation: "柏树山景区 / 当日开放入口", deadline: "08:00 出发", switchCondition: "天气低云、降雪或身体不适时直接去茶卡" },
         { time: "08:20—10:00", action: "柏树山近端观景短线", from: "柏树山入口", to: "第一处主要观景位", transport: "自驾至允许区域 + 步行", doorToDoor: "约 1.5 小时", navigation: "柏树山景区正式入口", deadline: "10:00 下山", switchCondition: "不追第二处远端观景位；任何高反、结冰或道路管制都立即折返" },
-        { time: "10:00—13:30", action: "前往茶卡镇，午餐、寄存或先办入住", from: "柏树山", to: "茶卡镇", transport: "自驾", doorToDoor: "含支线约 200 公里；按 3—3.5 小时管理", navigation: "茶卡镇预订酒店 / 当天午餐分店", deadline: "13:30 左右到茶卡", switchCondition: "若 13:30 后才到，先吃快餐或打包，不把黄金光线耗在等位" },
+        { time: "10:00—13:30", action: "前往茶卡镇，午餐、寄存或先办入住", from: "柏树山", to: "茶卡白兰道酒店", transport: "自驾", doorToDoor: "含支线约 200 公里；按 3—3.5 小时管理", navigation: "茶卡白兰道酒店 / 当天午餐分店", deadline: "13:30 左右到茶卡", switchCondition: "若 13:30 后才到，先吃快餐或打包，不把黄金光线耗在等位" },
         { time: "13:30—18:40", action: "茶卡盐湖完整游览", from: "茶卡镇", to: "茶卡盐湖天空之镜景区", transport: "自驾 + 景区步行 / 小火车", doorToDoor: "游玩约 4—5 小时", navigation: "茶卡盐湖天空之镜景区游客中心", deadline: "官网当前 9 月 19:20 停止售票；本日 18:40 开始出园", switchCondition: "风大无倒影时，改看盐雕、铁轨、采盐景观，不为镜面死等" },
         { time: "18:40—20:30", action: "返回茶卡镇吃晚饭并休息", from: "茶卡盐湖", to: "茶卡镇", transport: "自驾", doorToDoor: "约 15—25 分钟 + 晚餐", navigation: "当天餐饮首选分店", deadline: "饭后为次日国庆首日备水和早餐", switchCondition: "游客集中时直接用备选店，避免排队超过 25 分钟" }
       ],
@@ -398,45 +381,47 @@ window.TRIP_DATA = {
         }
       }],
       timeline: [
-        { time: "07:15—08:00", action: "早餐、退房与加满油", from: "茶卡酒店", to: "G109 青海湖方向", transport: "自驾", doorToDoor: "45 分钟", navigation: "青海湖二郎剑景区游客中心", deadline: "08:00 出发", switchCondition: "酒店早餐排队就打包，不把国庆首日第一段路拖晚" },
+        { time: "07:15—08:00", action: "早餐、退房与加满油", from: "茶卡白兰道酒店", to: "G109 青海湖方向", transport: "自驾", doorToDoor: "45 分钟", navigation: "青海湖二郎剑景区游客中心", deadline: "08:00 出发", switchCondition: "酒店早餐排队就打包，不把国庆首日第一段路拖晚" },
         { time: "08:00—10:30", action: "驶向二郎剑，按实时拥堵调整", from: "茶卡镇", to: "青海湖二郎剑景区", transport: "自驾", doorToDoor: "约 150 公里；平日约 2 小时，节日按 2.5—3 小时", navigation: "青海湖二郎剑景区停车场", deadline: "目标 10:30 前停车", switchCondition: "若景区发布限流或停车饱和，按官方疏导进入，不改走私人湖边入口" },
         { time: "10:30—13:40", action: "二郎剑湖岸游览与简餐", from: "游客中心", to: "半岛 / 湖岸步道", transport: "步行、骑行、小火车或游船以当日运营为准", doorToDoor: "约 3 小时", navigation: "青海湖二郎剑景区", deadline: "13:40 开始回停车场，14:00 左右发车", switchCondition: "大风停航就改走湖岸步道；午餐只用景区简餐 / 自带路餐，不排长队" },
-        { time: "14:00—18:30", action: "前往西宁并办理入住", from: "二郎剑", to: "西宁市区酒店", transport: "自驾", doorToDoor: "约 150 公里；节日按 3.5—4.5 小时", navigation: "西宁预订酒店停车场", deadline: "天黑前后进入市区即可，不再增加远郊点", switchCondition: "拥堵超过预期时直接去酒店，不绕日月山等额外景点" },
+        { time: "14:00—18:30", action: "前往西宁并办理入住", from: "二郎剑", to: "西宁富力万达文华酒店", transport: "自驾", doorToDoor: "约 150 公里；节日按 3.5—4.5 小时", navigation: "西宁富力万达文华酒店停车场", deadline: "天黑前后进入市区即可，不再增加远郊点", switchCondition: "拥堵超过预期时直接去酒店，不绕日月山等额外景点" },
         { time: "18:30—20:30", action: "西宁正式晚餐", from: "酒店", to: "市区餐厅", transport: "步行 / 网约车优先", doorToDoor: "约 1.5—2 小时", navigation: "当天餐饮首选分店", deadline: "车辆停妥后不再疲劳开车找吃的", switchCondition: "首选排队超过 30 分钟即按备选切换" }
       ],
-      fallbacks: [{ trigger: "二郎剑停车或入园排队已使 12:00 仍未开始游览", drop: "取消小火车 / 游船等耗时项目", switchTo: "只走湖岸短线，14:30 前离开", nextNode: "西宁酒店是当晚固定节点；不能用夜间赶路补白天排队" }]
+      fallbacks: [{ trigger: "二郎剑停车或入园排队已使 12:00 仍未开始游览", drop: "取消小火车 / 游船等耗时项目", switchTo: "只走湖岸短线，14:30 前离开", nextNode: "西宁富力万达文华酒店是当晚固定节点；不能用夜间赶路补白天排队" }]
     },
 
     {
       id: "day-6",
       date: "2026-10-02",
       label: "D6 · 返程",
-      note: "12:00 左右从曹家堡机场起飞。目标 08:30 左右到还车点、09:30 前完成还车，不再安排市区景点。",
+      note: "GJ8166 计划 20:00 从曹家堡机场 T3 起飞；租车仍按 14:00 在机场服务点归还，上午保留西宁半日窗口。",
       selectedRouteId: "route-d6",
       routes: [{
         id: "route-d6",
-        name: "D6｜酒店早餐 → 补油 → 曹家堡机场 T3 还车 → 12:00 起飞",
-        order: ["06:30 早餐与退房", "07:15 向机场移动并补油", "08:30 左右到还车点", "09:30 前完成还车", "托运、安检与候机", "12:00 左右起飞"],
-        reason: "国庆假期中午航班不能再塞市区景点；把全部缓冲留给道路、还车争议、托运和安检。",
-        experience: "今天是纯返程日。若流程顺利，在安检后完成早午餐；不把富余时间重新解释成可加景点。",
-        totalTime: "酒店至机场约 20—35 公里；按 60—90 分钟行车、60 分钟还车和至少 2 小时候机管理。",
-        tradeoff: "取消东关清真大寺与市区堂食；西宁人文和早餐放在 10/1 晚餐或酒店早餐完成。",
-        sources: [{ label: "用户锁定航班边界", url: "", role: "10/2 12:00 左右从西宁起飞" }],
+        name: "D6｜西宁半日 → 14:00 机场还车 → GJ8166 20:00 返回杭州",
+        order: ["08:00 早餐", "09:00—11:00 西宁半日内容待确认", "11:00—12:00 早午餐与退房", "补油后 14:00 还车", "托运、安检与机场晚餐", "20:00 起飞"],
+        reason: "晚班航班把上午还给西宁，同时保留原租车订单 14:00 还车和充足的机场缓冲。",
+        experience: "上午只安排市区内、随时可撤的内容；中午从海湖新区向东移动，完成还车后再进入机场。",
+        totalTime: "西宁富力万达文华酒店至机场按国庆路况预留 75—90 分钟，另留补油和还车时间。",
+        tradeoff: "上午具体活动尚未锁定；不安排塔尔寺等远郊项目，避免影响 14:00 还车。",
+        sources: [{ label: "已出票行程（隐私化摘录）", url: "", role: "GJ8166 20:00—23:10；租车订单 14:00 还车" }],
         placeIds: [],
         map: {
-          title: "D6 西宁酒店—补油—曹家堡机场",
-          note: "只向机场单向移动；住宿越靠城东，今天的道路缓冲越大。",
-          points: [{ x: 12, y: 45, label: "西宁酒店" }, { x: 43, y: 28, label: "补油" }, { x: 88, y: 24, label: "曹家堡机场" }]
+          title: "D6 万达文华—补油—曹家堡机场",
+          note: "从海湖新区向东前往机场；上午活动必须留在西宁市区并可随时结束。",
+          points: [{ x: 12, y: 45, label: "万达文华" }, { x: 43, y: 28, label: "补油" }, { x: 88, y: 24, label: "曹家堡机场" }]
         }
       }],
       timeline: [
-        { time: "06:30—07:15", action: "酒店早餐、退房、装车并核对还车材料", from: "西宁酒店", to: "酒店停车场", transport: "步行", doorToDoor: "45 分钟", navigation: "已选酒店停车场", deadline: "07:15 必须发车", switchCondition: "酒店早餐 06:30 未开放，就使用前晚准备的早餐，不在市区另找餐厅" },
-        { time: "07:15—08:30", action: "补满油并前往曹家堡机场", from: "西宁酒店", to: "曹家堡机场 T3 服务点", transport: "自驾", doorToDoor: "城东约 20 公里、城中约 33 公里；国庆按 75 分钟管理", navigation: "顺路正规加油站 → 订单内曹家堡机场 T3 服务点", deadline: "目标 08:30 到服务点", switchCondition: "实时导航延误时只加油，不洗车；保留加油小票" },
-        { time: "08:30—09:30", action: "验车、结算并完成还车", from: "机场服务点", to: "曹家堡机场 T3", transport: "租车服务", doorToDoor: "预留 60 分钟", navigation: "订单内曹家堡机场 T3 服务点", deadline: "09:30 前完成交车", switchCondition: "出现车损争议时立即调取 D1 取车视频、照片和客服记录，并同步联系平台客服" },
-        { time: "09:30—11:30", action: "托运、安检、安检后早午餐与候机", from: "曹家堡机场 T3", to: "登机口", transport: "步行", doorToDoor: "预留约 2 小时", navigation: "票面值机柜台与登机口", deadline: "按票面登机截止时间提前到登机口", switchCondition: "值机或安检排队超过预期时，取消堂食，购买可带走简餐" },
-        { time: "12:00 左右", action: "乘机返程", from: "西宁曹家堡机场", to: "返程目的地", transport: "航班", doorToDoor: "以票面为准", navigation: "航班号待补", deadline: "出票后补入准确起飞与落地时间", switchCondition: "航班调整后重新倒推还车，不沿用本版钟点" }
+        { time: "08:00—09:00", action: "早餐、整理行李并核对还车材料", from: "西宁富力万达文华酒店", to: "酒店停车场", transport: "步行", doorToDoor: "约 1 小时", navigation: "西宁富力万达文华酒店", deadline: "出门前完成装车", switchCondition: "若前一日进城过晚，就取消上午活动并延长休息" },
+        { time: "09:00—11:00", action: "西宁市区半日活动，具体内容待下一步确认", from: "酒店", to: "市区内可快速撤离的地点", transport: "自驾 / 网约车", doorToDoor: "控制在 2 小时内", navigation: "待确认", deadline: "11:00 开始返回酒店", switchCondition: "实时路况或身体状态不佳时直接取消" },
+        { time: "11:00—12:00", action: "早午餐、退房并正式装车", from: "酒店周边", to: "西宁富力万达文华酒店停车场", transport: "步行 / 网约车", doorToDoor: "约 1 小时", navigation: "西宁富力万达文华酒店", deadline: "12:00 前完成退房", switchCondition: "餐厅排队超过 20 分钟就改为打包" },
+        { time: "12:00—14:00", action: "补满油并前往曹家堡机场还车", from: "西宁富力万达文华酒店", to: "曹家堡机场 T3 服务点", transport: "自驾", doorToDoor: "含补油按 1.5—2 小时管理", navigation: "顺路正规加油站 → 订单内曹家堡机场 T3 服务点", deadline: "14:00 完成交车", switchCondition: "实时导航延误时只加油，不洗车；保留加油小票" },
+        { time: "14:00—15:00", action: "验车、结算并进入 T3", from: "机场服务点", to: "曹家堡机场 T3", transport: "租车服务", doorToDoor: "预留 60 分钟", navigation: "订单内曹家堡机场 T3 服务点", deadline: "15:00 前结束还车流程", switchCondition: "出现车损争议时立即调取 D1 取车视频、照片和客服记录，并同步联系平台客服" },
+        { time: "15:00—19:20", action: "值机托运、安检、机场晚餐与候机", from: "曹家堡机场 T3", to: "登机口", transport: "步行", doorToDoor: "约 4 小时 20 分", navigation: "GJ8166 值机柜台与票面登机口", deadline: "按票面登机截止时间提前到登机口", switchCondition: "航班提前或值机排队超预期时，先完成安检再用餐" },
+        { time: "20:00—23:10", action: "乘坐 GJ8166 返回杭州", from: "西宁曹家堡机场 T3", to: "杭州萧山机场 T3", transport: "航班", doorToDoor: "计划飞行 3 小时 10 分", navigation: "GJ8166", deadline: "以当天航司通知为准", switchCondition: "航变后重新倒推市区离开时间" }
       ],
-      fallbacks: [{ trigger: "07:15 仍未离店，或导航预计 09:00 后才能到还车点", drop: "取消酒店堂食与洗车", switchTo: "车上吃早餐，只补油后直达机场", nextNode: "09:30 前完成还车；不要牺牲托运与安检时间" }]
+      fallbacks: [{ trigger: "上午路况异常，或 11:00 仍无法返回酒店", drop: "立即取消剩余市区活动和坐店午餐", switchTo: "回酒店退房、打包后补油直达机场", nextNode: "14:00 还车仍是固定节点；20:00 航班缓冲不用于增加远郊景点" }]
     }
   ],
 
@@ -445,7 +430,7 @@ window.TRIP_DATA = {
       id: "mangya-emerald",
       name: "茫崖翡翠湖",
       highlights: ["蓝绿、乳白等多色盐池", "戈壁与远山背景", "日落前低角度光线"],
-      why: "由采盐形成的盐池群，不同矿物浓度让湖面呈现多层蓝绿。它离花土沟近，是 14:00 落地、完成取车后仍有机会赶上日落的第一主景。",
+      why: "由采盐形成的盐池群，不同矿物浓度让湖面呈现多层蓝绿。它离花土沟近，是 14:20 落地、完成取车后仍有机会赶上日落的第一主景。",
       duration: "2.5—3 小时；其中日落前 60—90 分钟最重要",
       role: "导航游客中心，先走近端核心盐池，再根据风力和体力向外延伸；大场景适合广角 / 高机位，人物靠盐池边缘取倒影。",
       limits: "当前平台显示 08:00—20:00，仅作行前参考；盐壳薄处不要踩，禁止驶入盐池便道。无人机须看当天禁飞、风力和景区规定。",
@@ -545,18 +530,18 @@ window.TRIP_DATA = {
 
   meals: [
     {
-      id: "meal-d1-breakfast", dayId: "day-1", label: "D1｜早餐", note: "14:00 是抵达茫崖的时间；早餐应在出发城市或机场解决，不占用落地后的自驾窗口。",
-      strategy: { title: "先保留餐次，不假装有门店", detail: "出票后按起飞机场、值机时间和安检前后区域重新研究。" },
-      manualNeed: "请补充去程航班号、起飞机场和计划到机场时间；若你手上有嬉游评论区里的机场早餐留言，也请截图。",
+      id: "meal-d1-breakfast", dayId: "day-1", label: "D1｜早餐 · 杭州萧山 T3", note: "GJ8165 06:20 起飞，早餐应在安检后或登机前用便携食物解决。",
+      strategy: { title: "不占用西宁中转窗口", detail: "到达杭州机场后优先完成值机与安检，再在登机口附近购买早餐；具体门店 T-1 查看 T3 当日营业。" },
+      manualNeed: "T-1 核对值机截止时间、登机口和 T3 清晨营业餐饮；不在公开页记录乘机人信息。",
       selected: { primary: "", backup2: "", backup3: "" }, candidates: [],
-      sources: [{ label: "用户锁定航班边界", url: "", role: "9/27 14:00 左右抵达茫崖；去程航班号尚待补入" }]
+      sources: [{ label: "已出票行程（隐私化摘录）", url: "", role: "GJ8165 杭州萧山 T3 06:20 起飞" }]
     },
     {
-      id: "meal-d1-lunch", dayId: "day-1", label: "D1｜午餐", note: "优先在出发机场或机上完成；茫崖落地后不安排坐店午餐。",
-      strategy: { title: "不占用取车后的翡翠湖日落窗口", detail: "最晚在航班落地前完成正餐；落地后只做验车、补给和景区。" },
-      manualNeed: "补入去程航班号后，再按起飞机场和机上餐食条件补具体选择。",
+      id: "meal-d1-lunch", dayId: "day-1", label: "D1｜午餐 · 西宁中转", note: "09:40 抵达西宁、12:20 继续飞茫崖；午餐只能在完成中转手续后快速解决。",
+      strategy: { title: "先完成中转，再吃便携午餐", detail: "确认后续登机口后，在同一航站楼购买可带走餐食；14:20 落地茫崖后不安排坐店午餐。" },
+      manualNeed: "提前确认行李是否直挂及中转动线；T-1 再看曹家堡 T3 安检后餐饮。",
       selected: { primary: "", backup2: "", backup3: "" }, candidates: [],
-      sources: [{ label: "用户锁定航班边界", url: "", role: "14:00 左右落地，午餐不能挤占落地后的日落窗口" }]
+      sources: [{ label: "已出票行程（隐私化摘录）", url: "", role: "GJ8165 09:40 抵达；MU6517 12:20 起飞" }]
     },
     {
       id: "meal-d1-dinner", dayId: "day-1", label: "D1｜晚餐 · 花土沟", note: "翡翠湖日落后约 20:40 回镇。按指定来源顺序，没有找到足以核实到 2026 营业、具体分店和晚间接单的餐厅。",
@@ -669,10 +654,10 @@ window.TRIP_DATA = {
       ]
     },
     {
-      id: "meal-d6-breakfast", dayId: "day-6", label: "D6｜早餐 · 西宁", note: "12:00 航班下不再横穿城区找早餐。优先选 06:30 能开餐或能打包的酒店；若未开餐，使用前晚准备的早餐。",
-      safetyLocked: true,
-      strategy: { title: "酒店早餐 / 前晚打包", detail: "06:30—07:00 完成，07:15 必须发车。泉儿头等市区早餐候选保留为资料，但本航班边界下不启用。" },
-      selected: { primary: "d6b-quaner", backup2: "d6b-shendiao", backup3: "d6b-xiaoqiao" },
+      id: "meal-d6-breakfast", dayId: "day-6", label: "D6｜早餐 · 西宁", note: "20:00 航班不再要求清晨离店；可在万达文华酒店或海湖新区从容吃早餐。",
+      safetyLocked: false,
+      strategy: { title: "酒店早餐或城西本地早餐", detail: "08:00—09:00 完成；若选择市区早餐，先装好行李并保留 11:00 返回酒店的边界。" },
+      selected: { primary: "", backup2: "", backup3: "" },
       candidates: [
         { id: "d6b-quaner", sourceTier: "嬉游正文", evidenceStatus: "嬉游给出具体地址、5:00—14:30 与菜品；评论区仍待补", name: "泉儿头杂碎", category: "牛羊杂碎早餐", feature: "开门早、位置在城东，最匹配还车日", classicDishes: ["特色羊杂", "牛杂", "馍馍"], base: { location: "大众街 74 号", duration: "35—50 分钟", price: "嬉游文中招牌羊杂 35 元 / 份", hours: "嬉游资料 05:00—14:30；T-1 再核" }, platforms: { amap: {}, dianping: {} }, routeRelation: "东关大寺后顺路，随后继续向东去机场", risk: "早餐高峰可能排队；文章时段不是 2026 营业承诺", condition: "排队不超 15 分钟", repetition: "前五天未安排杂碎早餐", sources: [{ label: "嬉游｜西宁城市美食攻略", url: "https://mp.weixin.qq.com/s/fYcbCQTQLxs-qgvqi4ovpg", role: "地址、营业参考、菜品与体验" }] },
         { id: "d6b-shendiao", sourceTier: "嬉游正文", evidenceStatus: "嬉游给出旗舰店地址与 6:30—16:00；但位于城西", name: "神雕老字号牦牛大骨汤旗舰店", category: "牦牛大骨汤", feature: "不吃杂碎时的热汤早餐", classicDishes: ["牦牛大骨汤", "大饼", "辣酱和咸菜"], base: { location: "彭家寨镇富兴路 2-30 号", duration: "40—55 分钟", price: "未获取", hours: "嬉游资料 06:30—16:00；T-1 再核" }, platforms: { amap: {}, dianping: {} }, routeRelation: "只适合西侧住宿并在 07:00 前用餐；之后横穿城区去大寺", risk: "明显增加东西向行车", condition: "酒店靠海湖新区 / 彭家寨且 06:30 能入店", repetition: "D4 若吃牦牛大骨头则不选", sources: [{ label: "嬉游｜西宁城市美食攻略", url: "https://mp.weixin.qq.com/s/fYcbCQTQLxs-qgvqi4ovpg", role: "旗舰店、地址、时段与菜品" }] },
@@ -680,24 +665,25 @@ window.TRIP_DATA = {
       ]
     },
     {
-      id: "meal-d6-lunch", dayId: "day-6", label: "D6｜早午餐 · 曹家堡机场 T3", note: "09:30 前还车后先托运安检；约 10:15—11:00 在安检后解决早午餐。",
-      strategy: { title: "安检后简餐", detail: "机场 T3 已投运，但官方公开页没有给出当前餐饮品牌清单；排队长时只买可带走食物，不影响登机。" },
-      manualNeed: "出票后补航班号和登机口；若能在机场小程序 / 高德看到 T3 安检后餐饮列表，请截 3—5 家店。",
+      id: "meal-d6-lunch", dayId: "day-6", label: "D6｜早午餐 · 西宁", note: "11:00 返回万达文华后，在酒店周边完成早午餐并于 12:00 前退房。",
+      strategy: { title: "海湖新区就近吃，不横穿城区", detail: "优先酒店步行范围内、出餐快的店；排队超过 20 分钟就打包，12:00 开始向机场移动。" },
+      manualNeed: "下一步围绕西宁富力万达文华酒店补 3 家 10:30—11:00 可用餐的具体分店。",
       selected: { primary: "", backup2: "", backup3: "" }, candidates: [],
-      sources: [{ label: "西宁市政府｜曹家堡机场 T3 投运", url: "https://www.xining.gov.cn.wsyby.8686c.com/xwdt/jdtp/202508/t20250807_217861.html", role: "确认国内航班转至 T3" }, { label: "高德｜曹家堡国际机场", url: "https://ditu.amap.com/place/B03CC00037", role: "机场地址与电话 0971-96345；未返回具体餐饮" }]
+      sources: [{ label: "已预订住宿（隐私化摘录）", url: "", role: "10/1 入住西宁富力万达文华酒店" }]
     },
     {
-      id: "meal-d6-dinner", dayId: "day-6", label: "D6｜晚餐", note: "12:00 左右起飞后，晚餐应在返程抵达城市安排，不属于青海线路餐饮。",
-      manualNeed: "补入返程落地机场和时间后，再决定是否需要机场晚餐或回家后用餐。",
+      id: "meal-d6-dinner", dayId: "day-6", label: "D6｜晚餐 · 曹家堡机场 T3", note: "14:00 还车后距离 20:00 起飞仍有充足时间；值机安检后在 T3 完成提前晚餐。",
+      manualNeed: "T-1 从机场小程序或高德补 T3 安检后的具体餐饮列表，选 3 家营业稳定、排队可控的门店。",
       selected: { primary: "", backup2: "", backup3: "" }, candidates: [],
-      sources: [{ label: "用户锁定航班边界", url: "", role: "10/2 12:00 左右从西宁起飞" }]
+      sources: [{ label: "已出票行程（隐私化摘录）", url: "", role: "GJ8166 20:00 从曹家堡 T3 起飞" }]
     }
   ],
 
   checks: [
-    { id: "check-route", dayId: "day-1", title: "A3 路线与两端航班时刻边界已锁", when: "航班号补入前", verify: "9/27 14:00 左右抵达茫崖；10/2 12:00 左右从西宁起飞。出票后用准确航班号重算 30 分钟级时间线", done: true },
-    { id: "check-rental", dayId: "day-1", title: "修改还车时间并复核租车边界", when: "现在", verify: "把 10/2 14:00 还车改为 09:00—09:30；并确认落地留车、里程、轮胎 / 玻璃、非铺装路免责、救援、备用胎与 4 人行李空间", done: false },
-    { id: "check-hotels", dayId: "", title: "按首选 / 备选片区锁定五晚可退住宿", when: "现在", verify: "花土沟、大柴旦、德令哈、茶卡、西宁；先选片区，再比较 4 位成人 / 2 间双床、早餐、停车、供氧和退改", done: false },
+    { id: "check-route", dayId: "day-1", title: "A3 路线与两端航班时刻边界已锁", when: "已完成", verify: "9/27 GJ8165 + MU6517，14:20 抵达茫崖；10/2 GJ8166，20:00 从西宁返回杭州", done: true },
+    { id: "check-flight-transfer", dayId: "day-1", title: "确认西宁中转行李是否直挂", when: "现在", verify: "向航司确认 GJ8165 转 MU6517 是否需要提取并重新托运行李；若需要，提前熟悉曹家堡 T3 中转动线", done: false },
+    { id: "check-rental", dayId: "day-1", title: "确认茫崖延迟取车与 14:00 还车边界", when: "现在", verify: "去程 14:20 才落地，向茫崖门店书面确认约 15:00—15:30 仍可取车；10/2 继续按订单 14:00 在曹家堡机场 T3 服务点还车", done: false },
+    { id: "check-hotels", dayId: "", title: "五晚住宿已锁定", when: "已完成", verify: "美豪酒店（茫崖店）→大柴旦丽呈翠星酒店→德令哈美豪 R→茶卡白兰道→西宁富力万达文华", done: true },
     { id: "check-altitude-medicine", dayId: "", title: "提前网上下单抗高反药品", when: "现在", verify: "先向医生或药师确认适用药物、禁忌和服用时点，再完成下单；收货后核对数量与有效期", done: false },
     { id: "check-energy-gel", dayId: "", title: "带上能量胶", when: "出发前采购，9/26 装车前复核", verify: "按 4 人的实际需要准备并检查保质期；装入随车补给包，长驾日放在方便取用的位置", done: false },
     { id: "check-jack-wine", dayId: "", title: "带上给杰克的酒", when: "9/26 整理行李时", verify: "确认已经装箱；按实际酒精度、容量和承运航司规则核对携带或托运要求，并做好防碎防漏", done: false },
@@ -708,6 +694,6 @@ window.TRIP_DATA = {
     { id: "check-chaka", dayId: "day-4", title: "购买茶卡可退改票并核末班", when: "2026-09-24", verify: "确认 9/30 门票、景交 / 小火车末班、鞋套、停车和天气退改；官网咨询 0977-8246999、救援 0977-8246699", done: false },
     { id: "check-erlangjian", dayId: "day-5", title: "核二郎剑国庆预约与交通公告", when: "2026-09-24 后每日关注", verify: "只使用正式景区；确认 10/1 预约、停车、运营时间、小火车 / 游船与共和县交通疏导", done: false },
     { id: "check-restaurants", dayId: "", title: "T-1 核餐厅营业并保留替换顺序", when: "每天前一晚", verify: "先复核嬉游 / 评论区候选，再查马蜂窝，最后用大众点评 / 高德核门店、营业与最新评论；长驾日按页面准备路餐", done: false },
-    { id: "check-return", dayId: "day-6", title: "补入返程航班号并确认提前还车", when: "出票后立即", verify: "12:00 左右起飞；09:30 前完成还车。租车平台必须书面确认新还车时刻，D6 不再安排任何市区景点", done: false }
+    { id: "check-return", dayId: "day-6", title: "返程航班与还车时间已锁定", when: "已完成", verify: "10/2 14:00 还车；GJ8166 20:00 从西宁曹家堡 T3 起飞，23:10 抵达杭州萧山 T3", done: true }
   ]
 };

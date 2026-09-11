@@ -695,6 +695,10 @@ footer {
   margin-top: 14px;
 }
 
+.hotel-choices.is-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .hotel-choices section {
   padding: 14px;
   border-radius: 7px;
