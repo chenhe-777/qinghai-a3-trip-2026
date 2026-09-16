@@ -44,7 +44,7 @@
   };
 
   data.meals.forEach((meal) => {
-    const validIds = new Set(asArray(meal.candidates).map((candidate) => candidate.id));
+    const validIds = new Set(asArray(meal.candidates).filter((candidate) => candidate.rankable !== false).map((candidate) => candidate.id));
     const selection = { ...defaultMealSelections[meal.id], ...(stored.mealSelections?.[meal.id] || {}) };
     Object.keys(selection).forEach((rank) => {
       if (!validIds.has(selection[rank])) selection[rank] = "";
@@ -247,7 +247,7 @@
   };
 
   const renderPlaceModule = (place) => `
-    <section class="decision-module scenic-module">
+    <section class="decision-module scenic-module${place.image?.src ? "" : " without-photo"}">
       <div class="module-copy">
         <p class="module-label">本段怎么玩</p>
         <h4>${showValue(place.name)}</h4>
@@ -264,7 +264,7 @@
         <div class="caution-line"><b>景点注意</b><p>${showValue(place.limits)}</p></div>
         ${renderSources(place.sources, "景点资料")}
       </div>
-      ${renderPlacePhoto(place)}
+      ${place.image?.src ? renderPlacePhoto(place) : ""}
     </section>
   `;
 
@@ -319,8 +319,9 @@
           ${renderPlatform("大众点评", platforms.dianping)}
           ${renderSources(candidate.sources, "门店与推荐来源")}
         </details>
+        ${candidate.rankable === false ? '<p class="ranking-empty">资料不足，先保留研究候选；补齐门店或营业信息后再排序。</p>' : ""}
         <div class="rank-actions" aria-label="餐厅排序">
-          ${Object.entries(rankLabels).map(([rankKey, rankLabel]) => `<button type="button" data-action="rank-meal" data-meal-id="${escapeHtml(meal.id)}" data-candidate-id="${escapeHtml(candidate.id)}" data-rank="${rankKey}" aria-pressed="${rank === rankKey}">${escapeHtml(rankLabel)}</button>`).join("")}
+          ${Object.entries(rankLabels).map(([rankKey, rankLabel]) => `<button type="button" data-action="rank-meal" data-meal-id="${escapeHtml(meal.id)}" data-candidate-id="${escapeHtml(candidate.id)}" data-rank="${rankKey}" aria-pressed="${rank === rankKey}" ${candidate.rankable === false ? "disabled" : ""}>${escapeHtml(rankLabel)}</button>`).join("")}
         </div>
       </article>
     `;
@@ -416,7 +417,7 @@
       let bestScore = 0;
       timeline.forEach((item, index) => {
         const text = activityText(item);
-        let score = tokens.reduce((total, token) => total + (text.includes(token) ? token.length : 0), 0);
+        let score = asArray(item.placeIds).includes(place.id) ? 10000 : tokens.reduce((total, token) => total + (text.includes(token) ? token.length : 0), 0);
         if (/游览|观景|日落|湖岸|外观|短停/.test(item.action || "")) score += 3;
         if (score > bestScore) {
           bestIndex = index;
@@ -478,6 +479,7 @@
     events.forEach((event) => {
       if (event.kind !== "activity") return;
       event.places = placeAssignments.get(event.sourceIndex) || [];
+      event.optionalPlaces = asArray(event.item.optionPlaceIds).map((id) => data.places.find((place) => place.id === id)).filter(Boolean);
       event.fallbacks = fallbackAssignments.get(event.sourceIndex) || [];
     });
     return events.sort((a, b) => a.sort - b.sort);
@@ -568,6 +570,7 @@
             </dl>
           </section>
           ${event.places.map(renderPlaceModule).join("")}
+          ${event.optionalPlaces.length ? `<details class="museum-alternatives"><summary>还有哪些博物馆可选？展开比较 3 个替换方案</summary><p class="module-intro">上午只选一馆；以下是替换首选的自由活动菜单，不是叠加三个景点。</p>${event.optionalPlaces.map(renderPlaceModule).join("")}</details>` : ""}
           ${event.meals.map(renderMealModule).join("")}
           ${hasDecisionModule ? "" : renderPlainChoices(item)}
           <div class="event-cautions">
@@ -661,6 +664,8 @@
 
     if (button.dataset.action === "rank-meal") {
       const { mealId, candidateId, rank } = button.dataset;
+      const targetMeal = data.meals.find((item) => item.id === mealId);
+      if (getMealCandidate(targetMeal, candidateId)?.rankable === false) return;
       const selection = { ...(state.mealSelections[mealId] || {}) };
       const wasSelected = selection[rank] === candidateId;
       Object.keys(rankLabels).forEach((key) => {

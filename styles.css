@@ -1274,6 +1274,32 @@ footer {
   gap: 24px;
 }
 
+.scenic-module.without-photo {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.museum-alternatives {
+  margin: 20px 24px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.museum-alternatives > summary {
+  cursor: pointer;
+  color: var(--lake-dark);
+  font-weight: 600;
+}
+
+.museum-alternatives .decision-module {
+  margin: 16px 0 0;
+}
+
+.rank-actions button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .decision-module h4 {
   margin: 0;
   font-family: var(--serif);
