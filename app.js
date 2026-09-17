@@ -223,7 +223,7 @@
           <dl class="overview-facts">
             <div><dt>为什么这样排</dt><dd>${showValue(route.reason)}</dd></div>
             <div><dt>今天会看到什么</dt><dd>${showValue(route.experience)}</dd></div>
-            <div><dt>总强度</dt><dd>${showValue(route.totalTime)}</dd></div>
+            <div><dt>${data.trip.focus === "experience" ? "行车分工" : "总强度"}</dt><dd>${showValue(data.trip.focus === "experience" ? data.trip.driverScope?.handoff : route.totalTime)}</dd></div>
             <div class="is-caution"><dt>主动放弃</dt><dd>${showValue(route.tradeoff)}</dd></div>
           </dl>
           ${renderSources(route.sources, "路线判断依据")}
@@ -246,6 +246,15 @@
     `;
   };
 
+  const renderExperience = (experience) => {
+    if (!experience) return "";
+    return `<section class="experience-guide"><p class="experience-priority"><b>本次主体验：</b>${showValue(experience.priority)}</p>
+      <details open><summary>游览顺序｜怎么逛更值得</summary><ol>${asArray(experience.sequence).map(item=>`<li>${showValue(item)}</li>`).join("")}</ol><dl class="module-facts"><div><dt>短停版</dt><dd>${showValue(experience.shortVersion)}</dd></div><div><dt>充分版</dt><dd>${showValue(experience.fullVersion)}</dd></div></dl></details>
+      <details><summary>手机拍照｜景、人、细节三种构图</summary><ol>${asArray(experience.photos).map(item=>`<li>${showValue(item)}</li>`).join("")}</ol><p>${showValue(experience.limitation)}</p></details>
+      <details><summary>随身准备与朋友圈文案</summary><p><b>带上：</b>${asArray(experience.prepare).map(item=>showValue(item)).join("；")}</p><div class="caption-options">${asArray(experience.captions).map((text,index)=>`<blockquote><small>文案 ${index+1}</small><p>${showValue(text)}</p></blockquote>`).join("")}</div><small>${showValue(experience.credit)}</small></details>
+    </section>`;
+  };
+
   const renderPlaceModule = (place) => `
     <section class="decision-module scenic-module${place.image?.src ? "" : " without-photo"}">
       <div class="module-copy">
@@ -262,6 +271,7 @@
           <div><dt>怎么走</dt><dd>${showValue(place.role)}</dd></div>
         </dl>
         <div class="caution-line"><b>景点注意</b><p>${showValue(place.limits)}</p></div>
+        ${renderExperience(place.experience)}
         ${place.booking ? `<details class="booking-guidance"><summary>门票与预约｜什么时候买、从哪里买？</summary><dl class="module-facts"><div><dt>何时办理</dt><dd>${showValue(place.booking.when)}</dd></div><div><dt>具体入口</dt><dd>${showValue(place.booking.entry)}</dd></div><div><dt>票种 / 费用</dt><dd>${showValue(place.booking.price)}</dd></div></dl></details>` : ""}
         ${renderSources(place.sources, "景点资料")}
       </div>
@@ -339,6 +349,8 @@
       : '<p class="ranking-empty">暂未排序。比较完后可把任意餐厅标成首选、备选 2 或备选 3。</p>';
   };
 
+  const renderDiningPlan = (plan) => plan ? `<details class="dining-plan"><summary>${showValue(plan.title)}</summary><div>${asArray(plan.options).map(option=>`<p><b>${showValue(option.title)}：</b>${showValue(option.detail)}</p>`).join("")}<p class="order-advice">${showValue(plan.order)}</p></div></details>` : "";
+
   const renderMealModule = (meal) => {
     const candidates = meal.safetyLocked ? [] : asArray(meal.candidates);
     return `
@@ -349,8 +361,9 @@
         </div>
         <p class="module-intro">${showValue(meal.note, "本餐边界待补")}</p>
         ${meal.strategy ? `<div class="strategy-box"><b>${showValue(meal.strategy.title, "本餐策略")}</b><p>${showValue(meal.strategy.detail)}</p></div>` : ""}
+        ${renderDiningPlan(meal.diningPlan)}
         ${candidates.length ? `${renderMealRanking(meal)}<div class="restaurant-grid">${candidates.map((candidate, index) => renderRestaurant(meal, candidate, index)).join("")}</div>` : ""}
-        ${meal.researchGap ? `<p class="meal-research-note">资料缺口由我继续核；需你补的内容已汇总到<a href="#responsibilities">统一确认清单</a>，不在本餐重复布置。</p>` : ""}
+        ${meal.researchGap ? `<p class="meal-research-note">资料缺口集中留在页首；你方便时补充即可，见<a href="#responsibilities">资料补充清单</a>，不在本餐重复布置。</p>` : ""}
         ${renderSources(meal.sources, "本餐资料")}
       </section>
     `;
@@ -496,34 +509,24 @@
   const renderResponsibilities = () => {
     const container = document.querySelector("#responsibilities");
     if (!container) return;
-    const research = data.checks.filter(check => check.owner === "assistant" && !check.done);
-    const completed = data.checks.filter(check => check.owner === "assistant" && check.done);
-    const actions = data.checks.filter(check => check.owner === "user" && check.id !== "check-manual-batch");
-    const batch = data.checks.find(check => check.id === "check-manual-batch");
-    const labels = {partial: "已补一部分", blocked: "待线下答复", scheduled: "临行复核"};
-    container.innerHTML = `
-      <header class="section-heading"><div><span>WHO DOES WHAT</span><h2 id="responsibility-title">分工与统一确认清单</h2></div><p>${showValue(data.trip.responsibilitySummary)}</p></header>
-      <p class="responsibility-summary">当前没有新增路线选项要你拍板。我的研究缺口不用你勾选；下面的线下问题可以最后一次性处理。</p>
-      <details class="responsibility-group manual-confirmations">
-        <summary><b>你统一确认｜${asArray(data.trip.manualConfirmations).length} 组问题，集中处理</b><span>展开看问谁、问什么、影响哪段行程</span></summary>
-        <div class="responsibility-body"><p>现在不用逐项打电话。景区问题需运营方答复；餐饮资料可后补。你提供答复/定位，我负责核对和重算，不需要你估算里程。</p>
-          ${asArray(data.trip.manualConfirmations).map(item => `<article class="manual-confirmation"><h3>${showValue(item.title)}</h3><p><b>问谁：</b>${showValue(item.who)}</p><ol>${asArray(item.questions).map(q=>`<li>${showValue(q)}</li>`).join("")}</ol><p class="manual-impact"><b>拿到答复后我做：</b>${showValue(item.impact)}</p></article>`).join("")}
-          ${batch ? renderUserCheck(batch) : ""}
-          <small>勾选仅表示你已处理这份清单，不等于景区开放已得到证实；答复需再同步给我。</small>
-        </div>
-      </details>
-      <details class="responsibility-group"><summary><b>我继续查｜${research.length} 项研究与临行复核</b><span>只读进度，不是你的待办</span></summary><div class="responsibility-body research-status-list">
-        ${research.map(check => `<article><span class="research-status">${showValue(labels[check.status], "研究中")}</span><h3>${showValue(check.title)}</h3><small>${showValue(check.when)}</small><p>${showValue(check.verify)}</p></article>`).join("")}
-        <p class="confirmed-summary">已锁定：${completed.map(check=>showValue(check.title)).join("；")}。未来复核日期是计划节点，未创建自动定时任务。</p>
-      </div></details>
-      <details class="responsibility-group"><summary><b>你实际办理｜门票、采购与装箱</b><span>已有具体入口和时点；按需要逐项落实</span></summary><div class="responsibility-body"><p>只有实际购买、预约或装箱才勾选；门票说明也已放回各景点，不要求所有备选都买。</p><div class="check-list">${actions.map(renderUserCheck).join("")}</div></div></details>
+    const research = data.checks.filter(check=>check.owner==="assistant" && !check.done);
+    const actions = data.checks.filter(check=>check.owner==="user" && !check.done && check.kind!=="packing" && check.id!=="check-portable-breakfast");
+    const labels={partial:"基础已补，继续深化",blocked:"资料缺口",scheduled:"临行复核"};
+    container.innerHTML=`
+      <header class="section-heading"><div><span>ROUTE LOCKED · EXPERIENCE FIRST</span><h2 id="responsibility-title">已采用的默认安排与行前准备</h2></div><p>${showValue(data.trip.responsibilitySummary)}</p></header>
+      <div class="default-arrangements">${asArray(data.trip.defaults).map(item=>`<article><b>${showValue(item.title)}</b><p>${showValue(item.detail)}</p></article>`).join("")}</div>
+      <details class="responsibility-group"><summary><b>${showValue(data.trip.driverScope?.title)}</b><span>已移交，不再是你的电话核查清单</span></summary><div class="responsibility-body"><ul>${asArray(data.trip.driverScope?.items).map(item=>`<li>${showValue(item)}</li>`).join("")}</ul><p>${showValue(data.trip.driverScope?.handoff)}</p></div></details>
+      <details class="responsibility-group"><summary><b>行前采购与装包｜提前、装箱、前晚补购</b><span>按本方两人准备；完成后再勾选</span></summary><div class="responsibility-body">${asArray(data.trip.packingGroups).map(group=>`<section class="packing-group"><h3>${showValue(group.title)}</h3><div class="check-list">${asArray(group.items).map(item=>renderUserCheck(data.checks.find(check=>check.id===item.id)||{id:item.id,title:item.title,when:group.title,verify:item.detail})).join("")}</div></section>`).join("")}</div></details>
+      <details class="responsibility-group"><summary><b>你实际办理｜门票、既定采购与装箱</b><span>默认采用不等于已经购票或买齐</span></summary><div class="responsibility-body"><p>只办理实际主线的票，不给所有备选一起买。能量胶、给杰克的酒、抗高反药品仍在清单；药品先按医生/药师建议准备。</p><div class="check-list">${actions.map(renderUserCheck).join("")}</div></div></details>
+      <details class="responsibility-group"><summary><b>资料不够时你补｜${asArray(data.trip.materialGaps).length} 类，统一收集</b><span>我先推进；补充资料不是开始深入的前提</span></summary><div class="responsibility-body">${asArray(data.trip.materialGaps).map(item=>`<article class="manual-confirmation"><h3>${showValue(item.title)}</h3><p>${showValue(item.detail)}</p></article>`).join("")}</div></details>
+      <details class="responsibility-group"><summary><b>我继续做｜体验、餐食与预约资料</b><span>只读进度，不让你勾选研究缺口</span></summary><div class="responsibility-body research-status-list">${research.map(check=>`<article><span class="research-status">${showValue(labels[check.status],"研究中")}</span><h3>${showValue(check.title)}</h3><small>${showValue(check.when)}</small><p>${showValue(check.verify)}</p></article>`).join("")}</div></details>
     `;
   };
 
   const renderChecks = (day) => {
     const checks = data.checks.filter(check => check.owner === "user" && check.dayId === day.id && !check.done);
     if (!checks.length) return "";
-    return `<p class="day-action-link">本日有 ${checks.length} 项你实际办理的事项；<a href="#responsibilities">查看页首统一清单</a>。景区玩法与购票入口仍在下方对应时段。</p>`;
+    return `<p class="day-action-link">本日有 ${checks.length} 项你实际办理的事项；<a href="#responsibilities">查看页首办理清单</a>。景区玩法与购票入口仍在下方对应时段。</p>`;
   };
 
   const activityType = (event) => {
@@ -558,7 +561,7 @@
     </section>
   `;
 
-  const renderActivityEvent = (event, index) => {
+  const renderActivityContent = (event, index) => {
     const item = event.item;
     const type = activityType(event);
     const hasDecisionModule = event.places.length || event.meals.length;
@@ -588,13 +591,20 @@
           ${event.meals.map(renderMealModule).join("")}
           ${hasDecisionModule ? "" : renderPlainChoices(item)}
           <div class="event-cautions">
-            <div><b>硬截止</b><p>${showValue(item.deadline)}</p></div>
-            <div><b>临场怎么改</b><p>${showValue(item.switchCondition)}</p></div>
+            <div><b>${data.trip.focus === "experience" && hasDecisionModule ? "现场配合" : "硬截止"}</b><p>${showValue(data.trip.focus === "experience" && hasDecisionModule ? (event.places.length ? "按朋友安排的停留时间选短停或充分版；景区末班、预约和项目规则依当日运营，不照搬旧离场钟点。" : "餐次按朋友安排衔接；便携餐提前备好，停车后吃。机场餐不压缩登机，10/2的14:00机场还车不变。") : item.deadline)}</p></div>
+            <div><b>临场怎么改</b><p>${showValue(data.trip.focus === "experience" && event.places.length ? "光线/风力不好就换拍摄题材，时间短先保留主体验；不为了照片新增绕行或未开放机位。" : item.switchCondition)}</p></div>
           </div>
-          ${event.fallbacks.map(renderFallback).join("")}
+          ${data.trip.focus === "experience" ? "" : event.fallbacks.map(renderFallback).join("")}
         </div>
       </article>
     `;
+  };
+
+  const renderActivityEvent = (event,index) => {
+    if (data.trip.focus === "experience" && ["drive","key"].includes(activityType(event)) && !event.places.length && !event.meals.length) {
+      return `<article class="timeline-event driver-event"><div class="timeline-time"><span>途中</span><small>朋友安排</small></div><details class="driver-transfer"><summary><b>${showValue(event.item.from)} → ${showValue(event.item.to)}</b><span>行车 / 用车交朋友统筹</span></summary><p>只保留衔接节点；路线、导航、休息与实际时间按朋友安排，不将旧分钟表作为我们的执行指令。</p></details></article>`;
+    }
+    return renderActivityContent(event,index);
   };
 
   const renderSyntheticMealEvent = (event, index) => `
@@ -635,7 +645,7 @@
       <article class="day-plan">
         <header class="day-plan-header">
           <div><p class="micro-label">${showValue(day.date)}</p><h2>${showValue(day.label)}</h2></div>
-          <p>${showValue(day.note)}</p>
+          <div><p>${showValue(day.note)}</p>${day.scheduleNote ? `<p class="schedule-note">${showValue(day.scheduleNote)}</p>` : ""}</div>
         </header>
         ${renderRouteOverview(day, route)}
         <div class="timeline" aria-label="${showValue(day.label)}完整时间线">
