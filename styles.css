@@ -2325,3 +2325,71 @@ footer p b {
 .driver-transfer span { color: #65766f; }
 .order-advice { border-left: 3px solid #799796; padding-left: 12px; }
 @media (max-width: 600px) { .default-arrangements { grid-template-columns: 1fr; } .driver-transfer { padding: 12px; } }
+
+/* 阅读、比较、审查分层；保留已有山湖配色。 */
+[hidden] { display: none !important; }
+.view-tabs { display:flex; gap:6px; }
+.view-tabs button { color:#e9eee4; background:transparent; border:1px solid transparent; padding:8px 12px; border-radius:6px; cursor:pointer; font-size:14px; }
+.view-tabs button[aria-pressed="true"] { background:#e9eee4; color:var(--lake-dark); }
+.view-tabs button:focus-visible, select:focus-visible { outline:3px solid var(--sun); outline-offset:3px; }
+.compact-hero { display:flex; justify-content:space-between; align-items:center; gap:24px; padding:24px 0; margin:0; border:0; border-radius:0; box-shadow:none; background:none; }
+.compact-hero h1 { font-size:32px; margin:4px 0; }
+.compact-hero p { font-size:14px; max-width:440px; margin:0; }
+.compact-hero .eyebrow { font-size:12px; }
+.day-plan-header { padding:20px 0 8px; border:0; }
+.compact-overview { margin:0 0 20px; padding:0 0 12px; border-bottom:1px solid var(--line); }
+.today-route { font-size:14px; line-height:1.9; }
+.today-route span { color:var(--lichen); padding:0 5px; }
+.route-reference { font-size:13px; color:var(--ink-soft); }
+.route-reference summary { cursor:pointer; }
+.route-reference .route-map { max-width:600px; margin:12px 0; }
+.fixed-note { color:var(--lake); font-weight:600; }
+.scenic-module, .scenic-module.without-photo { display:block; padding:0; background:transparent; border:0; }
+.scenic-highlights { font-size:13px; color:var(--ink-soft); margin:8px 0 14px; }
+.experience-guide { margin-top:10px; }
+.activity-card { padding:18px 22px; }
+.activity-card > .decision-module { margin:0; }
+.experience-guide summary, .meal-options > summary { padding:4px 0; }
+.composition-figure { margin:14px 0; max-width:660px; }
+.composition-figure img { display:block; width:100%; height:auto; border:1px solid var(--line); border-radius:9px; }
+.composition-figure figcaption { font-size:13px; color:var(--lake); padding:8px 0; }
+.photo-steps { padding-left:22px; }
+.provenance { color:var(--ink-soft); font-size:13px; line-height:1.8; }
+.landscape-reference { max-width:660px; }
+.place-photo-frame { display:block; min-height:0; }
+.place-photo-frame img { display:block; width:100%; height:auto; min-height:0; max-height:340px; object-fit:contain; }
+.place-photo-frame:hover img { transform:none; }
+.poem-text { font-family:var(--serif); font-size:22px; color:var(--lake-dark); }
+.poem-actions { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.poem-actions button { background:var(--paper-strong); border:1px solid var(--lake); color:var(--lake); border-radius:6px; padding:6px 14px; cursor:pointer; }
+.poem-actions button[aria-pressed="true"] { background:var(--lake); color:white; }
+.meal-options { border-top:1px solid var(--line); padding:12px 0; font-size:14px; }
+.meal-options summary { cursor:pointer; font-weight:600; }
+.restaurant-grid { margin-top:14px; }
+.ranking-empty { font-size:12px; }
+.prep-heading { padding:16px 0 24px; border-bottom:1px solid var(--line); }
+.prep-heading h2 { font-family:var(--serif); font-size:30px; margin:8px 0; }
+.prep-heading p { font-size:14px; margin:8px 0; }
+.prep-section { margin:24px 0; }
+.prep-section > h3 { font-family:var(--serif); font-size:21px; margin:0 0 14px; }
+.prep-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.prep-review-item { padding:14px; border:1px solid var(--line); border-radius:9px; background:var(--paper-strong); }
+.prep-review-item .check-item { margin:0 0 12px; padding:0; border:0; background:none; }
+.review-control { display:flex; align-items:center; gap:14px; font-size:13px; padding-left:28px; }
+.review-control select { font:inherit; min-height:38px; border:1px solid var(--line); border-radius:6px; padding:4px 10px; background:var(--paper); color:var(--ink); max-width:100%; }
+.prep-review-item > small { display:block; margin:8px 0 0 28px; font-size:12px; color:var(--ink-soft); }
+@media(max-width:700px) {
+ .topbar { flex-wrap:wrap; gap:10px; padding:10px 16px; }
+ .brand small { display:none; }
+ .view-tabs { width:100%; justify-content:space-between; }
+ .view-tabs button { flex:1; padding:6px 8px; font-size:13px; }
+ .navigation-rail { top:104px; }
+ html { scroll-padding-top:184px; }
+ .compact-hero { display:block; padding:20px 0; }
+ .compact-hero h1 { font-size:26px; }
+ .compact-hero > p { margin-top:10px; }
+ .prep-grid { grid-template-columns:1fr; }
+ .activity-card { padding:16px; }
+ .poem-text { font-size:20px; }
+ .day-plan-header { padding:16px 0 4px; }
+}

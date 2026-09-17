@@ -17,34 +17,20 @@
       <span class="brand-mark" aria-hidden="true">旅</span>
       <span><b>A3 自驾攻略工作台</b><small>TIME · CHOICE · CAUTION · SOURCE</small></span>
     </a>
-    <span class="mode-static">路线已锁 · 体验深化</span>
+    <nav class="view-tabs" aria-label="工作台入口">
+      <button type="button" data-action="show-view" data-view="itinerary">逐日攻略</button>
+      <button type="button" data-action="show-view" data-view="preparation">行前准备</button>
+      <button type="button" data-action="show-view" data-view="records">机酒账本</button>
+    </nav>
   </header>
 
   <main id="main-content">
-    <section class="hero" id="top" aria-labelledby="trip-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span data-bind="city">旅行目的地</span> · FIELD NOTES</p>
-        <h1 id="trip-title" data-bind="title">旅行攻略工作台</h1>
-        <p class="hero-summary">路线由朋友统筹。选择日期，从上往下看景点怎么玩、手机怎么拍、三餐怎么选；内部顺序与准备信息展开读，朋友圈文案已备好。</p>
-      </div>
-
-      <dl class="trip-facts" aria-label="旅行基本信息">
-        <div><dt>日期</dt><dd data-bind="dates">待确认</dd></div>
-        <div><dt>落脚点</dt><dd data-bind="base">待确认</dd></div>
-        <div><dt>抵达</dt><dd data-bind="arrival">待确认</dd></div>
-        <div><dt>离开</dt><dd data-bind="departure">待确认</dd></div>
-      </dl>
-
-      <ol class="stage-strip" aria-label="攻略进度">
-        <li data-stage="boundary"><span>01</span><div><b>定边界</b><small>锁定不能错的时间</small></div></li>
-        <li data-stage="choice"><span>02</span><div><b>深化体验</b><small>玩法、拍照、三餐与准备</small></div></li>
-        <li data-stage="execution"><span>03</span><div><b>待执行</b><small>确认后再压缩现场清单</small></div></li>
-      </ol>
-
-      <div class="fixed-events" id="fixed-events" aria-label="固定节点"></div>
+    <section class="hero compact-hero" id="top" aria-labelledby="trip-title">
+      <div><p class="eyebrow">2026 · 9/27—10/2 · 六日五晚</p><h1 id="trip-title">青海 · 山湖之间</h1></div>
+      <p>选一天看景点与三餐。拍照图解、古诗文与资料出处，点开再读。</p>
     </section>
 
-    <details class="booking-section" id="booking">
+    <details class="booking-section" id="booking" hidden>
       <summary class="booking-summary">
         <div><span>BOOKED · PER PERSON</span><h2 id="booking-title">已订机票与逐晚住宿</h2></div>
         <p>航班和五晚住宿已锁定；展开查看时间、落脚位置、早餐安排与人均固定支出。</p>
@@ -52,18 +38,15 @@
       <div id="booking-content"></div>
     </details>
 
-    <section id="responsibilities" class="responsibility-section" aria-labelledby="responsibility-title"></section>
+    <section id="responsibilities" class="responsibility-section" aria-labelledby="responsibility-title" hidden></section>
 
     <div class="navigation-rail" aria-label="按日期查看行程">
       <nav class="day-tabs" id="day-tabs" aria-label="按日期查看"></nav>
     </div>
 
     <div id="workspace" class="workspace">
-      <section class="workspace-section itinerary-section" id="itinerary" aria-labelledby="itinerary-title">
-        <header class="section-heading">
-          <div><span>READ TOP TO BOTTOM</span><h2 id="itinerary-title">当天完整时间线</h2></div>
-          <p>玩法、拍照、文案、三餐放回当天顺序；公路段折叠交朋友。原时段是攻略参考，不替代朋友的实际行车安排。</p>
-        </header>
+      <section class="workspace-section itinerary-section" id="itinerary" aria-label="当天攻略">
+
         <div id="itinerary-content"></div>
       </section>
     </div>
@@ -76,7 +59,7 @@
   </main>
 
   <footer>
-    <p><b data-bind="title">旅行攻略工作台</b><span>时间顺序是页面唯一主轴</span></p>
+    <p><b data-bind="title">旅行攻略工作台</b><span>逐日攻略 · 行前准备 · 机酒账本</span></p>
     <small>更新于 <span data-bind="updatedAt">待确认</span> · 营业、预约与交通请按行前清单复核</small>
   </footer>
 

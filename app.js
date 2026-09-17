@@ -40,7 +40,10 @@
   const state = {
     activeDayId: data.days.some((day) => day.id === stored.activeDayId) ? stored.activeDayId : (data.days[0]?.id || ""),
     mealSelections: {},
-    checks: { ...(stored.checks || {}) }
+    checks: { ...(stored.checks || {}) },
+    activeView: location.hash === "#responsibilities" ? "preparation" : location.hash === "#booking" ? "records" : "itinerary",
+    preparationReview: { ...(stored.preparationReview || {}) },
+    captionSelections: { ...(stored.captionSelections || {}) }
   };
 
   data.meals.forEach((meal) => {
@@ -70,7 +73,7 @@
     });
 
     const fixedEvents = document.querySelector("#fixed-events");
-    fixedEvents.innerHTML = asArray(data.trip.fixedEvents).map((item) => `<span>${showValue(item)}</span>`).join("");
+    if (fixedEvents) fixedEvents.innerHTML = asArray(data.trip.fixedEvents).map((item) => `<span>${showValue(item)}</span>`).join("");
   };
 
   const renderMode = () => {
@@ -214,23 +217,12 @@
 
   const renderRouteOverview = (day, route) => {
     if (!route) return "";
-    return `
-      <section class="day-overview" aria-labelledby="day-overview-title">
-        <div class="overview-copy">
-          <p class="micro-label">TODAY AT A GLANCE</p>
-          <h3 id="day-overview-title">${showValue(route.name)}</h3>
-          <ol class="route-order">${asArray(route.order).map((stop) => `<li>${showValue(stop)}</li>`).join("")}</ol>
-          <dl class="overview-facts">
-            <div><dt>为什么这样排</dt><dd>${showValue(route.reason)}</dd></div>
-            <div><dt>今天会看到什么</dt><dd>${showValue(route.experience)}</dd></div>
-            <div><dt>${data.trip.focus === "experience" ? "行车分工" : "总强度"}</dt><dd>${showValue(data.trip.focus === "experience" ? data.trip.driverScope?.handoff : route.totalTime)}</dd></div>
-            <div class="is-caution"><dt>主动放弃</dt><dd>${showValue(route.tradeoff)}</dd></div>
-          </dl>
-          ${renderSources(route.sources, "路线判断依据")}
-        </div>
-        ${renderRouteMap(route)}
-      </section>
-    `;
+    const hotel = asArray(data.trip.bookingPlan?.areaPlans)[data.days.indexOf(day)];
+    const stops = asArray(route.placeIds).map(id => data.places.find(p=>p.id===id)?.name).filter(Boolean);
+    return `<section class="compact-overview"><p class="today-route">${stops.map(showValue).join(' <span aria-hidden="true">→</span> ')}</p>
+      ${hotel ? `<p class="provenance">今晚住：${showValue(hotel.primary?.name)}</p>` : ''}
+      ${day.id === 'day-6' ? '<p class="fixed-note">14:00 曹家堡机场T3还车 · 20:00 GJ8166返杭</p>' : ''}
+      <details class="route-reference"><summary>查看路线关系图</summary>${renderRouteMap(route)}</details></section>`;
   };
 
   const renderPlacePhoto = (place) => {
@@ -246,38 +238,27 @@
     `;
   };
 
-  const renderExperience = (experience) => {
-    if (!experience) return "";
-    return `<section class="experience-guide"><p class="experience-priority"><b>本次主体验：</b>${showValue(experience.priority)}</p>
-      <details open><summary>游览顺序｜怎么逛更值得</summary><ol>${asArray(experience.sequence).map(item=>`<li>${showValue(item)}</li>`).join("")}</ol><dl class="module-facts"><div><dt>短停版</dt><dd>${showValue(experience.shortVersion)}</dd></div><div><dt>充分版</dt><dd>${showValue(experience.fullVersion)}</dd></div></dl></details>
-      <details><summary>手机拍照｜景、人、细节三种构图</summary><ol>${asArray(experience.photos).map(item=>`<li>${showValue(item)}</li>`).join("")}</ol><p>${showValue(experience.limitation)}</p></details>
-      <details><summary>随身准备与朋友圈文案</summary><p><b>带上：</b>${asArray(experience.prepare).map(item=>showValue(item)).join("；")}</p><div class="caption-options">${asArray(experience.captions).map((text,index)=>`<blockquote><small>文案 ${index+1}</small><p>${showValue(text)}</p></blockquote>`).join("")}</div><small>${showValue(experience.credit)}</small></details>
+  const renderExperience = (place) => {
+    const e=place.experience;if(!e)return '';
+    const g=e.visualGuide;
+    return `<section class="experience-guide">
+      <details><summary>游玩详情 · 顺序、停留与注意事项</summary><p>${showValue(e.priority)}</p><ol>${asArray(e.sequence).map(x=>`<li>${showValue(x)}</li>`).join('')}</ol><dl class="module-facts"><div><dt>短停</dt><dd>${showValue(e.shortVersion)}</dd></div><div><dt>充分</dt><dd>${showValue(e.fullVersion)}</dd></div></dl><p class="caution-line">${showValue(place.limits)}</p><p><b>随身带：</b>${asArray(e.prepare).map(showValue).join('；')}</p></details>
+      <details class="photo-guide"><summary>拍照图解 · 看取景框与人物站位</summary>
+        <p class="provenance">${showValue(g.credit)}</p><figure class="composition-figure"><img src="${escapeHtml(g.src)}" alt="${escapeHtml(g.alt)}" width="600" height="510" loading="lazy"><figcaption>${showValue(g.title)}</figcaption></figure>
+        <ol class="photo-steps"><li><b>人站哪里：</b>${showValue(g.stand)}</li><li><b>手机怎么拿：</b>${showValue(g.phone)}</li><li><b>画面留什么：</b>${showValue(g.frame)}</li></ol>
+        <p class="provenance">${showValue(e.limitation)}</p>
+        <details class="landscape-reference"><summary>实景照片 · 看景观，不是拍摄机位示范</summary>${renderPlacePhoto(place)}<p class="provenance">${place.id==='mangya-emerald'?'这张是航拍景观图，手机在地面不能照着复现。':'实景图片供辨认景观；本攻略未据此核实摄影师站位。'}${place.image?.src?` <a href="${escapeHtml(place.image.src)}" target="_blank" rel="noreferrer">查看原图</a>`:''}</p>${renderSources(place.sources,'景观图与景点资料')}</details>
+      </details>
+      <details class="poem-drawer" data-place-id="${escapeHtml(place.id)}"><summary>古诗文配文 · 选一句，查看出处与典故</summary><p class="provenance">${showValue(e.credit)}</p><div class="caption-options">${asArray(e.captions).map(c=>`<blockquote><p class="poem-text">${showValue(c.text)}</p><small>${showValue(c.author)} ·《${showValue(c.work)}》</small><p><b>适合：</b>${showValue(c.fit)}</p><p class="provenance">${showValue(c.context)}</p><div class="poem-actions"><a href="${escapeHtml(c.url)}" target="_blank" rel="noreferrer">核对原文</a><button type="button" data-action="select-caption" data-place-id="${escapeHtml(place.id)}" data-caption-id="${escapeHtml(c.id)}" aria-pressed="${state.captionSelections[place.id]===c.id}">${state.captionSelections[place.id]===c.id?'已选 · 再点取消':'选这句'}</button></div></blockquote>`).join('')}</div></details>
     </section>`;
   };
 
-  const renderPlaceModule = (place) => `
-    <section class="decision-module scenic-module${place.image?.src ? "" : " without-photo"}">
-      <div class="module-copy">
-        <p class="module-label">本段怎么玩</p>
-        <h4>${showValue(place.name)}</h4>
-        <p class="module-intro">${showValue(place.why)}</p>
-        <div class="choice-stack" aria-label="可选择的玩法">
-          ${asArray(place.highlights).length
-            ? asArray(place.highlights).map((item, index) => `<div><span>${String(index + 1).padStart(2, "0")}</span><p>${showValue(item)}</p></div>`).join("")
-            : '<div><span>01</span><p>具体玩法待补</p></div>'}
-        </div>
-        <dl class="module-facts">
-          <div><dt>建议停留</dt><dd>${showValue(place.duration)}</dd></div>
-          <div><dt>怎么走</dt><dd>${showValue(place.role)}</dd></div>
-        </dl>
-        <div class="caution-line"><b>景点注意</b><p>${showValue(place.limits)}</p></div>
-        ${renderExperience(place.experience)}
-        ${place.booking ? `<details class="booking-guidance"><summary>门票与预约｜什么时候买、从哪里买？</summary><dl class="module-facts"><div><dt>何时办理</dt><dd>${showValue(place.booking.when)}</dd></div><div><dt>具体入口</dt><dd>${showValue(place.booking.entry)}</dd></div><div><dt>票种 / 费用</dt><dd>${showValue(place.booking.price)}</dd></div></dl></details>` : ""}
-        ${renderSources(place.sources, "景点资料")}
-      </div>
-      ${place.image?.src ? renderPlacePhoto(place) : ""}
-    </section>
-  `;
+  const renderPlaceModule = (place) => `<section id="place-${escapeHtml(place.id)}" class="decision-module scenic-module without-photo"><div class="module-copy">
+    <h4>${showValue(place.name)}</h4><p class="module-intro">${showValue(place.why)}</p><p class="scenic-highlights">${asArray(place.highlights).map(showValue).join(' · ')}</p>
+    ${place.experience?renderExperience(place):`<details><summary>景点详情与注意事项</summary><p>${showValue(place.duration)}</p><p>${showValue(place.limits)}</p></details>`}
+    ${place.booking?`<details class="booking-guidance"><summary>门票与预约 · 入口、票种与办理时间</summary><dl class="module-facts"><div><dt>何时办理</dt><dd>${showValue(place.booking.when)}</dd></div><div><dt>入口</dt><dd>${showValue(place.booking.entry)}</dd></div><div><dt>票种</dt><dd>${showValue(place.booking.price)}</dd></div></dl><a href="#responsibilities">到行前准备办理</a></details>`:''}
+    ${renderSources(place.sources,'景点资料与来源')}</div></section>`;
+
 
   const rankLabels = { primary: "首选", backup2: "备选 2", backup3: "备选 3" };
   const candidateRank = (meal, candidateId) => Object.keys(rankLabels).find((rank) => state.mealSelections[meal.id]?.[rank] === candidateId) || "";
@@ -349,24 +330,14 @@
       : '<p class="ranking-empty">暂未排序。比较完后可把任意餐厅标成首选、备选 2 或备选 3。</p>';
   };
 
-  const renderDiningPlan = (plan) => plan ? `<details class="dining-plan"><summary>${showValue(plan.title)}</summary><div>${asArray(plan.options).map(option=>`<p><b>${showValue(option.title)}：</b>${showValue(option.detail)}</p>`).join("")}<p class="order-advice">${showValue(plan.order)}</p></div></details>` : "";
+  const renderDiningPlan = (plan) => plan ? `<details class="dining-plan"><summary>餐食组合与点单建议</summary><div>${asArray(plan.options).map(option=>`<p><b>${showValue(option.title)}：</b>${showValue(option.detail)}</p>`).join("")}<p class="order-advice">${showValue(plan.order)}</p></div></details>` : "";
 
   const renderMealModule = (meal) => {
-    const candidates = meal.safetyLocked ? [] : asArray(meal.candidates);
-    return `
-      <section class="decision-module meal-module">
-        <div class="meal-heading">
-          <div><p class="module-label">本段吃什么</p><h4>${showValue(meal.label)}</h4></div>
-          <span>${candidates.length ? `${candidates.length} 个可比较选项` : "当前采用兜底策略"}</span>
-        </div>
-        <p class="module-intro">${showValue(meal.note, "本餐边界待补")}</p>
-        ${meal.strategy ? `<div class="strategy-box"><b>${showValue(meal.strategy.title, "本餐策略")}</b><p>${showValue(meal.strategy.detail)}</p></div>` : ""}
-        ${renderDiningPlan(meal.diningPlan)}
-        ${candidates.length ? `${renderMealRanking(meal)}<div class="restaurant-grid">${candidates.map((candidate, index) => renderRestaurant(meal, candidate, index)).join("")}</div>` : ""}
-        ${meal.researchGap ? `<p class="meal-research-note">资料缺口集中留在页首；你方便时补充即可，见<a href="#responsibilities">资料补充清单</a>，不在本餐重复布置。</p>` : ""}
-        ${renderSources(meal.sources, "本餐资料")}
-      </section>
-    `;
+    const candidates=meal.safetyLocked?[]:asArray(meal.candidates);
+    return `<section class="decision-module meal-module"><div class="meal-heading"><h4>${showValue(meal.label)}</h4><span>${candidates.length?candidates.length+' 个选项':''}</span></div><p class="module-intro">${showValue(meal.readerNote || meal.note)}</p>
+      ${meal.strategy?`<details class="dining-plan"><summary>携带与购买建议</summary><p>${showValue(meal.strategy.detail)}</p></details>`:''}${renderDiningPlan(meal.diningPlan)}
+      ${candidates.length?`${renderMealRanking(meal)}<details class="meal-options" data-meal-id="${escapeHtml(meal.id)}"><summary>展开比较餐厅 · 选择首选与备选</summary><div class="restaurant-grid">${candidates.map((c,i)=>renderRestaurant(meal,c,i)).join('')}</div></details>`:''}
+      ${renderSources(meal.sources,'本餐推荐来源')}</section>`;
   };
 
   const parseStartTime = (time) => {
@@ -506,27 +477,24 @@
     </label>
   `;
 
+  const renderReviewItem = (check) => `<article class="prep-review-item">${renderUserCheck(check)}<label class="review-control">审查需求 <select data-action="review-preparation" data-check-id="${escapeHtml(check.id)}" aria-label="审查：${escapeHtml(check.title)}">${[['','未审查'],['owned','已有够用'],['buy','需要采购'],['skip','本次不带']].map(([value,label])=>`<option value="${value}" ${(state.preparationReview[check.id]||'')===value?'selected':''}>${label}</option>`).join('')}</select></label><small>勾选表示已落实；需求选择不会自动勾选。</small></article>`;
+
   const renderResponsibilities = () => {
-    const container = document.querySelector("#responsibilities");
-    if (!container) return;
-    const research = data.checks.filter(check=>check.owner==="assistant" && !check.done);
-    const actions = data.checks.filter(check=>check.owner==="user" && !check.done && check.kind!=="packing" && check.id!=="check-portable-breakfast");
-    const labels={partial:"基础已补，继续深化",blocked:"资料缺口",scheduled:"临行复核"};
-    container.innerHTML=`
-      <header class="section-heading"><div><span>ROUTE LOCKED · EXPERIENCE FIRST</span><h2 id="responsibility-title">已采用的默认安排与行前准备</h2></div><p>${showValue(data.trip.responsibilitySummary)}</p></header>
-      <div class="default-arrangements">${asArray(data.trip.defaults).map(item=>`<article><b>${showValue(item.title)}</b><p>${showValue(item.detail)}</p></article>`).join("")}</div>
-      <details class="responsibility-group"><summary><b>${showValue(data.trip.driverScope?.title)}</b><span>已移交，不再是你的电话核查清单</span></summary><div class="responsibility-body"><ul>${asArray(data.trip.driverScope?.items).map(item=>`<li>${showValue(item)}</li>`).join("")}</ul><p>${showValue(data.trip.driverScope?.handoff)}</p></div></details>
-      <details class="responsibility-group"><summary><b>行前采购与装包｜提前、装箱、前晚补购</b><span>按本方两人准备；完成后再勾选</span></summary><div class="responsibility-body">${asArray(data.trip.packingGroups).map(group=>`<section class="packing-group"><h3>${showValue(group.title)}</h3><div class="check-list">${asArray(group.items).map(item=>renderUserCheck(data.checks.find(check=>check.id===item.id)||{id:item.id,title:item.title,when:group.title,verify:item.detail})).join("")}</div></section>`).join("")}</div></details>
-      <details class="responsibility-group"><summary><b>你实际办理｜门票、既定采购与装箱</b><span>默认采用不等于已经购票或买齐</span></summary><div class="responsibility-body"><p>只办理实际主线的票，不给所有备选一起买。能量胶、给杰克的酒、抗高反药品仍在清单；药品先按医生/药师建议准备。</p><div class="check-list">${actions.map(renderUserCheck).join("")}</div></div></details>
-      <details class="responsibility-group"><summary><b>资料不够时你补｜${asArray(data.trip.materialGaps).length} 类，统一收集</b><span>我先推进；补充资料不是开始深入的前提</span></summary><div class="responsibility-body">${asArray(data.trip.materialGaps).map(item=>`<article class="manual-confirmation"><h3>${showValue(item.title)}</h3><p>${showValue(item.detail)}</p></article>`).join("")}</div></details>
-      <details class="responsibility-group"><summary><b>我继续做｜体验、餐食与预约资料</b><span>只读进度，不让你勾选研究缺口</span></summary><div class="responsibility-body research-status-list">${research.map(check=>`<article><span class="research-status">${showValue(labels[check.status],"研究中")}</span><h3>${showValue(check.title)}</h3><small>${showValue(check.when)}</small><p>${showValue(check.verify)}</p></article>`).join("")}</div></details>
-    `;
+    const container=document.querySelector('#responsibilities');
+    const packed=new Set(asArray(data.trip.packingGroups).flatMap(g=>asArray(g.items).map(i=>i.id)));
+    const actions=data.checks.filter(c=>c.owner==='user'&&!c.done&&!packed.has(c.id));
+    const tickets=actions.filter(c=>['check-chaka','check-erlangjian','check-museum-ticket'].includes(c.id));
+    const purchases=actions.filter(c=>!tickets.includes(c));
+    container.innerHTML=`<header class="prep-heading"><p class="micro-label">BEFORE DEPARTURE</p><h2 id="responsibility-title">行前准备 · 在这里审查</h2><p>按本方两人准备。物品先选“已有／需购／不带”，备齐后再勾选；门票购妥后再勾。</p></header>
+      <section class="prep-section"><h3>特别记下的三件事</h3><div class="check-list">${purchases.map(renderUserCheck).join('')}</div></section>
+      ${asArray(data.trip.packingGroups).map(g=>`<section class="prep-section"><h3>${showValue(g.title)}</h3><div class="prep-grid">${asArray(g.items).map(i=>renderReviewItem(data.checks.find(c=>c.id===i.id)||{id:i.id,title:i.title,when:g.title,verify:i.detail})).join('')}</div></section>`).join('')}
+      <section class="prep-section"><h3>门票与预约 · 实际办理</h3><div class="check-list">${tickets.map(renderUserCheck).join('')}</div>${data.places.filter(p=>['chaka','qinghai-erlangjian','tibetan-culture'].includes(p.id)).map(p=>`<details class="booking-guidance"><summary>${showValue(p.name)} · 查看购票依据</summary><p>${showValue(p.booking?.when)}</p><p>${showValue(p.booking?.entry)}</p><p>${showValue(p.booking?.price)}</p>${renderSources(p.sources,'购票资料')}</details>`).join('')}</section>
+      <details class="responsibility-group"><summary><b>资料补充 · 你方便时统一补</b></summary><div class="responsibility-body">${asArray(data.trip.materialGaps).map(i=>`<article class="manual-confirmation"><h3>${showValue(i.title)}</h3><p>${showValue(i.detail)}</p></article>`).join('')}</div></details>`;
   };
 
   const renderChecks = (day) => {
-    const checks = data.checks.filter(check => check.owner === "user" && check.dayId === day.id && !check.done);
-    if (!checks.length) return "";
-    return `<p class="day-action-link">本日有 ${checks.length} 项你实际办理的事项；<a href="#responsibilities">查看页首办理清单</a>。景区玩法与购票入口仍在下方对应时段。</p>`;
+    const checks=data.checks.filter(c=>c.owner==='user'&&c.dayId===day.id&&!c.done&&!state.checks[c.id]);
+    return checks.length?`<p class="day-action-link">本日办理：${checks.map(c=>showValue(c.title)).join('；')}。<a href="#responsibilities">去行前准备</a></p>`:'';
   };
 
   const activityType = (event) => {
@@ -562,48 +530,20 @@
   `;
 
   const renderActivityContent = (event, index) => {
-    const item = event.item;
-    const type = activityType(event);
-    const hasDecisionModule = event.places.length || event.meals.length;
-    return `
-      <article class="timeline-event type-${type}">
-        <div class="timeline-time"><span>${showValue(item.time, "待排")}</span><small>${String(index + 1).padStart(2, "0")}</small></div>
-        <div class="activity-card">
-          <header class="activity-heading">
-            <div><span class="type-badge">${typeLabels[type]}</span><h3>${showValue(item.action)}</h3></div>
-            <p>${showValue(item.doorToDoor, "用时待确认")}</p>
-          </header>
-          <div class="movement-strip">
-            <span><small>从</small>${showValue(item.from)}</span>
-            <i aria-hidden="true">→</i>
-            <span><small>到</small>${showValue(item.to)}</span>
-            <em>${showValue(item.transport, "交通待确认")}</em>
-          </div>
-          <section class="action-brief">
-            <p class="module-label">这一段具体做什么</p>
-            <dl>
-              <div><dt>导航到</dt><dd>${showValue(item.navigation)}</dd></div>
-              <div><dt>路程 / 用时</dt><dd>${showValue(item.doorToDoor)}</dd></div>
-            </dl>
-          </section>
-          ${event.places.map(renderPlaceModule).join("")}
-          ${event.optionalPlaces.length ? `<details class="museum-alternatives"><summary>还有哪些博物馆可选？展开比较 3 个替换方案</summary><p class="module-intro">上午只选一馆；以下是替换首选的自由活动菜单，不是叠加三个景点。</p>${event.optionalPlaces.map(renderPlaceModule).join("")}</details>` : ""}
-          ${event.meals.map(renderMealModule).join("")}
-          ${hasDecisionModule ? "" : renderPlainChoices(item)}
-          <div class="event-cautions">
-            <div><b>${data.trip.focus === "experience" && hasDecisionModule ? "现场配合" : "硬截止"}</b><p>${showValue(data.trip.focus === "experience" && hasDecisionModule ? (event.places.length ? "按朋友安排的停留时间选短停或充分版；景区末班、预约和项目规则依当日运营，不照搬旧离场钟点。" : "餐次按朋友安排衔接；便携餐提前备好，停车后吃。机场餐不压缩登机，10/2的14:00机场还车不变。") : item.deadline)}</p></div>
-            <div><b>临场怎么改</b><p>${showValue(data.trip.focus === "experience" && event.places.length ? "光线/风力不好就换拍摄题材，时间短先保留主体验；不为了照片新增绕行或未开放机位。" : item.switchCondition)}</p></div>
-          </div>
-          ${data.trip.focus === "experience" ? "" : event.fallbacks.map(renderFallback).join("")}
-        </div>
-      </article>
-    `;
+    const item=event.item, type=activityType(event), hasModules=event.places.length||event.meals.length;
+    return `<article class="timeline-event type-${type}"><div class="timeline-time"><span>${showValue(item.time)}</span></div><div class="activity-card">
+      ${hasModules?'':`<header class="activity-heading"><h3>${showValue(item.action)}</h3></header>`}
+      ${event.places.map(renderPlaceModule).join('')}
+      ${event.optionalPlaces.length?`<details class="museum-alternatives"><summary>其他博物馆 · 替换选择</summary><p>上午选一馆即可；以下不是额外叠加。</p>${event.optionalPlaces.map(renderPlaceModule).join('')}</details>`:''}
+      ${event.meals.map(renderMealModule).join('')}
+      ${hasModules?'':`<details class="dining-plan"><summary>安排详情</summary><p>${showValue(item.navigation,item.action)}</p><p>${showValue(item.deadline)}</p></details>`}
+    </div></article>`;
   };
 
   const renderActivityEvent = (event,index) => {
-    if (data.trip.focus === "experience" && ["drive","key"].includes(activityType(event)) && !event.places.length && !event.meals.length) {
-      return `<article class="timeline-event driver-event"><div class="timeline-time"><span>途中</span><small>朋友安排</small></div><details class="driver-transfer"><summary><b>${showValue(event.item.from)} → ${showValue(event.item.to)}</b><span>行车 / 用车交朋友统筹</span></summary><p>只保留衔接节点；路线、导航、休息与实际时间按朋友安排，不将旧分钟表作为我们的执行指令。</p></details></article>`;
-    }
+    const type=activityType(event);
+    if (!event.places.length&&!event.meals.length&&['drive','key'].includes(type)) return '';
+    if (!event.places.length&&!event.meals.length&&/加满油|补满油|检查车辆|寄存|采购次日/.test(event.item.action)) return '';
     return renderActivityContent(event,index);
   };
 
@@ -645,7 +585,7 @@
       <article class="day-plan">
         <header class="day-plan-header">
           <div><p class="micro-label">${showValue(day.date)}</p><h2>${showValue(day.label)}</h2></div>
-          <div><p>${showValue(day.note)}</p>${day.scheduleNote ? `<p class="schedule-note">${showValue(day.scheduleNote)}</p>` : ""}</div>
+
         </header>
         ${renderRouteOverview(day, route)}
         <div class="timeline" aria-label="${showValue(day.label)}完整时间线">
@@ -657,6 +597,22 @@
     bindImageFallbacks();
   };
 
+  const renderView = () => {
+    const view=state.activeView;
+    document.querySelector('#workspace').hidden=view!=='itinerary';
+    document.querySelector('.navigation-rail').hidden=view!=='itinerary';
+    document.querySelector('#responsibilities').hidden=view!=='preparation';
+    const booking=document.querySelector('#booking');booking.hidden=view!=='records';booking.open=view==='records';
+    document.querySelector('.compact-hero').hidden=view!=='itinerary';
+    document.querySelectorAll('[data-action="show-view"]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+  };
+  const switchView = (view) => {
+    if (!['itinerary','preparation','records'].includes(view))return;
+    state.activeView=view;saveState();renderView();
+    history.replaceState(null,'',view==='preparation'?'#responsibilities':view==='records'?'#booking':'#itinerary');
+    document.querySelector(view==='preparation'?'#responsibilities':view==='records'?'#booking':'#main-content')?.scrollIntoView({block:'start'});
+  };
+
   const renderAll = () => {
     renderBindings();
     renderMode();
@@ -664,6 +620,7 @@
     renderResponsibilities();
     renderDayTabs();
     renderItinerary();
+    renderView();
   };
 
   const toast = document.querySelector("#toast");
@@ -676,10 +633,20 @@
   };
 
   document.addEventListener("click", (event) => {
+    const link=event.target.closest('a[href="#responsibilities"],a[href="#booking"]');
+    if(link){event.preventDefault();switchView(link.getAttribute('href')==='#booking'?'records':'preparation');return;}
     const button = event.target.closest("button[data-action]");
     if (!button) return;
 
+    if(button.dataset.action==='show-view'){switchView(button.dataset.view);return;}
+    if(button.dataset.action==='select-caption'){
+      const {placeId,captionId}=button.dataset;
+      state.captionSelections[placeId]=state.captionSelections[placeId]===captionId?'':captionId;saveState();renderItinerary();
+      const drawer=[...document.querySelectorAll('.poem-drawer')].find(x=>x.dataset.placeId===placeId);if(drawer)drawer.open=true;
+      showToast('配文选择已保存在本机');return;
+    }
     if (button.dataset.action === "select-day") {
+      state.activeView='itinerary';history.replaceState(null,'','#itinerary');
       state.activeDayId = button.dataset.dayId;
       saveState();
       renderAll();
@@ -702,11 +669,14 @@
       const meal = data.meals.find((item) => item.id === mealId);
       const candidate = getMealCandidate(meal, candidateId);
       renderAll();
+      const drawer=[...document.querySelectorAll('.meal-options')].find(x=>x.dataset.mealId===mealId);if(drawer)drawer.open=true;
       showToast(wasSelected ? `已取消“${candidate?.name || "该餐厅"}”的${rankLabels[rank]}` : `已设为${rankLabels[rank]}：${candidate?.name || "该餐厅"}`);
     }
   });
 
   document.addEventListener("change", (event) => {
+    const review=event.target.closest('select[data-action="review-preparation"]');
+    if(review){state.preparationReview[review.dataset.checkId]=review.value;saveState();return;}
     const input = event.target.closest('input[data-action="toggle-check"]');
     if (!input) return;
     state.checks[input.dataset.checkId] = input.checked;
@@ -714,6 +684,7 @@
     input.closest(".check-item")?.classList.toggle("is-done", input.checked);
   });
 
+  window.addEventListener('hashchange',()=>{state.activeView=location.hash==='#responsibilities'?'preparation':location.hash==='#booking'?'records':'itinerary';renderView();});
   window.addEventListener("storage", (event) => {
     if (event.key === storageKey) window.location.reload();
   });
