@@ -60,7 +60,7 @@ window.TRIP_DATA = {
             "amount": 226.5
           }
         ],
-        "note": "当前只统计已提供的往返机票和五晚住宿；玛多订单为两间房合计585.31元，本方两人暂按一间房、即订单一半292.66元计，人均146.33元。茶卡旧订单不计入当前路线；租车、油费、餐饮、门票等尚未计入。"
+        "note": "当前只统计主线已提供的往返机票和五晚住宿；玛多订单为两间房合计585.31元，本方两人暂按一间房、即订单一半292.66元计，人均146.33元。茶卡白兰道保留为前一天可切换的 Plan B，不计入主线固定支出；租车、油费、餐饮、门票等尚未计入。"
       },
       "lockedFlights": {
         "constraint": "去返程均已出票；9/27 14:20 抵达茫崖后取车，10/2 14:00 机场还车、20:00 起飞。",
@@ -191,7 +191,7 @@ window.TRIP_DATA = {
       },
       {
         "title": "早餐与长驾日午餐已采用",
-        "detail": "五晚均按不含早准备；前晚买便携早餐，D2—D5默认带路餐，不因找早餐店耽误出发。"
+        "detail": "除茶卡白兰道外按无早餐准备；家里先带坚果、面包、牛肉干和八宝粥，饮水与大部分重补给落地后按需购买。"
       },
       {
         "title": "最后一天南馆优先",
@@ -214,7 +214,7 @@ window.TRIP_DATA = {
     "materialGaps": [
       {
         "title": "花土沟晚餐与机场T3餐食",
-        "detail": "各补2—3家具体门店：完整店名、位置、营业、人均、招牌菜或近期评论。没有资料先保留常温餐/就近热食方案，不编店名。"
+        "detail": "花土沟已补3家可定位候选；机场T3目前只核到汉堡王具体点位，另有一家餐饮经营主体但未能对应公开店名。T3第二、第三家店仍需现场导览或平台截图，暂不编店名。"
       },
       {
         "title": "玛多晚餐的当天营业",
@@ -222,12 +222,12 @@ window.TRIP_DATA = {
       },
       {
         "title": "嬉游评论区与其他景点攻略",
-        "detail": "你后续看到合适的正文、评论、实拍或游览图可一起发；我负责拆解到对应景点/餐次，不将所有材料混成主时间线。"
+        "detail": "已用你提供的嬉游正文核景观与餐饮偏好；公开抓取仍拿不到完整评论区。你后续碰巧看到实走评论可继续发，我只拆到对应景点，不把材料混进主时间线。"
       }
     ],
     "foodPlan": {
-      "title": "D4—D5 随车餐｜按两天准备",
-      "summary": "9/30沿途餐馆证据不足，10/1又约14:00才到二郎剑；两天都默认带完整午餐。9/29在德令哈一次买齐两天常温食品，9/30到玛多只补水和缺口。",
+      "title": "随车补给｜各自准备、重物落地买",
+      "summary": "家里先带少量熟悉的坚果、面包、牛肉干和八宝粥；四人不做统一采购。饮水与大部分重补给落地后按住宿地逐日补，不一次背齐六天。",
       "days": [
         {
           "label": "D4 德令哈→冬格措纳湖→玛多",
@@ -245,13 +245,13 @@ window.TRIP_DATA = {
           "label": "早餐份",
           "twoPeople": "4份",
           "fourPeople": "8份",
-          "note": "每份=面包/饼类主食＋常温奶或豆饮；按包装储存条件选"
+          "note": "面包或八宝粥作主食，另配坚果；饮品和水落地后买"
         },
         {
           "label": "完整午餐份",
           "twoPeople": "4份",
           "fourPeople": "8份",
-          "note": "每份=主食＋常温蛋白/肉类包装食品＋水果或咸味小食"
+          "note": "面包/饼类主食＋牛肉干等常温蛋白＋坚果；按个人食量准备"
         },
         {
           "label": "独立应急餐",
@@ -263,25 +263,25 @@ window.TRIP_DATA = {
           "label": "小加餐",
           "twoPeople": "8小份",
           "fourPeople": "16小份",
-          "note": "按每人每天2小份估算；坚果、饼干或已习惯的能量胶，不能代替正餐"
+          "note": "坚果、牛肉干或已习惯的能量胶；作为加餐，不替代正餐"
         },
         {
           "label": "饮水",
           "twoPeople": "每天3—4升",
           "fourPeople": "每天6—8升",
-          "note": "优先小瓶分装；D4在德令哈装车，D4晚在玛多补D5用量"
+          "note": "全部落地后购买；每天前晚按次日需要补，不从杭州背水"
         }
       ],
       "avoid": "不把需冷藏的熟食、乳制品或隔夜饭团在车内常温久放；自热食品只在车辆停稳、车外通风处按包装说明使用。"
     },
     "packingGroups": [
       {
-        "title": "提前采购｜本方两人先备齐",
+        "title": "从家里带｜按每人一套整理",
         "items": [
           {
             "id": "check-layer",
-            "title": "防风保暖与日晒防护",
-            "detail": "现有防风外套＋保暖中层、帽子/薄手套、墨镜、防晒与润唇；先用已有衣物，不为景区另买整套。"
+            "title": "衣物｜照确认表装箱",
+            "detail": "每人：冲锋衣1件、棉衣1件、抓绒衣2件、速干衣2件、抓绒裤2条、一次性内裤/袜子6套、鸭舌帽1顶、徒步鞋1双。换洗衣物统一放行李箱。"
           },
           {
             "id": "check-toilet-kit",
@@ -290,43 +290,48 @@ window.TRIP_DATA = {
           },
           {
             "id": "check-meal-kit",
-            "title": "车内餐具与常温备用餐",
-            "detail": "餐具、封口袋、干净铺垫、保温杯；本方两人各留一份独立备用餐，不只带糖果和能量胶。"
+            "title": "少量自带路餐",
+            "detail": "坚果、面包、牛肉干、八宝粥和已买的能量胶先带一部分；各自管理个人份，大部分补给与饮水落地后再买。"
           },
           {
             "id": "check-phone-kit",
             "title": "手机与充电",
             "detail": "充电线、现有合规充电宝和足够存储空间；坐飞机前按现行航司规定检查充电宝标识及携带方式。"
+          },
+          {
+            "id": "check-travel-gear",
+            "title": "背包与器材｜照确认表",
+            "detail": "48L背包1个、头枕1个、富士X-T5机身＋腾龙18-300镜头1套；这是携带清单，不重新加入拍照教学。"
           }
         ]
       },
       {
-        "title": "9/26装包｜分成三个位置",
+        "title": "9/26装包｜随身、车内、行李箱",
         "items": [
           {
             "id": "check-day-bag",
             "title": "随身小包",
-            "detail": "证件、手机、当日饮水、纸巾/湿巾、个人药品、墨镜、防晒和一份小加餐；药品先按医生/药师建议准备。"
+            "detail": "证件、手机、纸巾/湿巾、个人用品和一份小加餐；当天饮水落地后放入，熟悉的中成药能量补充剂按已用方式携带。"
           },
           {
             "id": "check-car-box",
-            "title": "车内公共补给袋",
-            "detail": "D4—D5备用餐、当日饮水、垃圾袋和清洁物；放在能直接取到的位置，不压在行李箱底。公共数量按页面两人/四人口径与朋友对齐。"
+            "title": "车内补给袋｜个人份为主",
+            "detail": "家里只带少量路餐；落地后再买当日饮水、大部分食品、垃圾袋和清洁物。四人各自准备，重物不从杭州背。"
           },
           {
             "id": "check-hotel-bag",
-            "title": "酒店与换洗袋",
-            "detail": "干净袜子、可换鞋、擦拭巾与装湿物的袋子；当前路线不再经过茶卡盐湖，无需为下湖单独准备鞋套。"
+            "title": "行李箱｜换洗与酒店用品",
+            "detail": "图片清单中的衣物、一次性内裤/袜子、备用鞋与洗护统一放行李箱；无需另设一只“酒店换洗袋”。"
           }
         ]
       },
       {
-        "title": "每天前晚补购｜不要一次囤六天",
+        "title": "落地后与每天前晚补购",
         "items": [
           {
             "id": "check-portable-breakfast",
-            "title": "按次日餐次买",
-            "detail": "早餐各一份主食＋密封常温饮品；D2—D5各备完整午餐，备用餐单独保留。9/29在德令哈按随车餐表买齐D4—D5两天份，D4晚在玛多补水。"
+            "title": "按次日餐次补，不统一采购",
+            "detail": "各自准备个人早餐与路餐；家里带的坚果、面包、牛肉干、八宝粥先消耗，饮水和大部分食品落地买。D4—D5仍各留一份完整午餐。"
           },
           {
             "id": "check-night-charge",
@@ -1306,6 +1311,11 @@ window.TRIP_DATA = {
         "alt": "航拍视角下呈眼睛形状的艾肯泉泉眼与彩色矿物环带",
         "caption": "航拍资料图：泉眼与矿物沉积形成‘恶魔之眼’色环，地面视角不会完全相同。"
       },
+      "booking": {
+        "when": "目前不需要你提前办理；9/27按正式游客入口现场规则",
+        "entry": "艾肯泉正式游客入口/游客中心",
+        "price": "未核到2026年必须提前实名预约的公告；现场如有门票或景交按当日公示办理"
+      },
       "experience": {
         "captions": [
           {
@@ -1540,6 +1550,11 @@ window.TRIP_DATA = {
         "src": "https://www.westchinago.com/wp-content/uploads/2022/02/dachaidan-jade-lake-0216aa.jpg",
         "alt": "大柴旦翡翠湖蓝绿与乳白色盐池及堤岸",
         "caption": "资料图：分割盐池呈现蓝绿、乳白等不同色块。"
+      },
+      "booking": {
+        "when": "有票但未核到国庆必须抢票；D2到达时间弹性，优先正规可退改票或现场办理",
+        "entry": "大柴旦翡翠湖旅游景区正式售票页/游客中心",
+        "price": "正规平台当前列成人门票，小火车另购；实际票价和浙江籍优惠以使用日页面与证件核验为准"
       },
       "experience": {
         "captions": [
@@ -2375,17 +2390,69 @@ window.TRIP_DATA = {
       "readerNote": "回花土沟后吃热饭，可比较酒店周边餐馆与现有候选。",
       "dayId": "day-1",
       "label": "D1｜晚餐 · 花土沟",
-      "note": "优先美豪酒店昆仑路周边、晚到仍接单的现做正餐；指定渠道证据暂不足，不用其他平台的泛推荐补成首选。",
+      "note": "携程茫崖餐馆页可核到3家镇内具体门店与地址，但未公开2026营业时段；先按位置、样本量和晚餐适配度排序，到店前再用地图看是否接单。",
       "strategy": {
         "title": "当晚必须在花土沟镇内吃，不跨城",
         "detail": "先入住处附近搜索仍营业的热食；21:00 前不能落座就启用前往景区前已买好的便携晚餐。"
       },
       "selected": {
-        "primary": "",
-        "backup2": "",
-        "backup3": ""
+        "primary": "d1d-dahuzi",
+        "backup2": "d1d-tongfuju",
+        "backup3": "d1d-dongguanzhuamian"
       },
-      "candidates": [],
+      "candidates": [
+        {
+          "id": "d1d-dahuzi",
+          "name": "大胡子餐饮（昆仑路店）",
+          "sourceTier": "携程",
+          "evidenceStatus": "茫崖餐馆页4.5分/11条，核到昆仑路门店；2026营业时段未公开",
+          "rankable": true,
+          "category": "西北菜 / 烧烤",
+          "feature": "样本量在花土沟公开候选中较多，适合四人抵达后吃一顿热食",
+          "classicDishes": ["到店看羊肉、面食与蔬菜现有菜单"],
+          "base": {"location": "昆仑路盛世佰爱KTV楼下", "duration": "50—70分钟", "price": "携程参考85元/人", "hours": "未公开，出发前地图复核"},
+          "platforms": {"amap": {}, "dianping": {}},
+          "routeRelation": "与美豪酒店同在昆仑路片区，具体步行/车程以地图为准",
+          "risk": "公开页未提供近期营业时段",
+          "condition": "能接单且等位不超过20分钟",
+          "repetition": "D2若继续吃羊肉，改选面食或炒菜",
+          "sources": [{"label": "携程｜茫崖餐馆列表", "url": "https://you.ctrip.com/restaurantlist/mangya2026914.html", "role": "店名、位置、人均、评分与评论量"}]
+        },
+        {
+          "id": "d1d-tongfuju",
+          "name": "重庆同福居火锅城（昆仑路店）",
+          "sourceTier": "携程",
+          "evidenceStatus": "茫崖餐馆页4.2分/7条，核到昆仑路50号；2026营业时段未公开",
+          "rankable": true,
+          "category": "火锅",
+          "feature": "适合四人分食，菜单线索完整",
+          "classicDishes": ["麻辣牛肉", "小酥肉", "毛肚", "鸳鸯锅"],
+          "base": {"location": "昆仑路50号", "duration": "60—90分钟", "price": "携程参考98元/人", "hours": "未公开，出发前地图复核"},
+          "platforms": {"amap": {}, "dianping": {}},
+          "routeRelation": "镇内昆仑路备选",
+          "risk": "首日抵达晚时火锅耗时更长",
+          "condition": "不晚到、能快速落座时选择",
+          "repetition": "D2避免继续吃重口炕锅",
+          "sources": [{"label": "携程｜茫崖餐馆列表", "url": "https://you.ctrip.com/restaurantlist/mangya2026914.html", "role": "店名、地址、人均与菜品线索"}]
+        },
+        {
+          "id": "d1d-dongguanzhuamian",
+          "name": "西宁东关抓面",
+          "sourceTier": "携程",
+          "evidenceStatus": "茫崖餐馆页4.2分/5条，核到昆仑路26号；2026营业时段未公开",
+          "rankable": true,
+          "category": "面食 / 简餐",
+          "feature": "晚到时比火锅更容易控制用餐时长",
+          "classicDishes": ["炒拉面", "干炒面片", "牛肉汤粉", "羊杂汤"],
+          "base": {"location": "昆仑路26号", "duration": "35—55分钟", "price": "携程参考12元/人", "hours": "未公开，出发前地图复核"},
+          "platforms": {"amap": {}, "dianping": {}},
+          "routeRelation": "镇内快速热食备选",
+          "risk": "晚间是否营业未确认",
+          "condition": "晚到且仍营业时优先",
+          "repetition": "与后续羊肉晚餐错开",
+          "sources": [{"label": "携程｜茫崖餐馆列表", "url": "https://you.ctrip.com/restaurantlist/mangya2026914.html", "role": "店名、地址、人均与菜品线索"}]
+        }
+      ],
       "sources": [
         {
           "label": "大众点评｜茫崖市美食入口",
@@ -2393,13 +2460,13 @@ window.TRIP_DATA = {
           "role": "只能确认当地有商户目录，公开页未返回可核门店"
         }
       ],
-      "researchGap": "花土沟晚餐：指定渠道中仍缺同址门店与近期营业信息；后续你补 2—3 家晚餐候选即可，不需要找早餐店。",
+      "researchGap": "3家候选和地址已补；目前只差出发前地图显示的当日营业状态，不需要你再专门找店。",
       "diningPlan": {
         "title": "点单与就餐取舍",
         "options": [
           {
             "title": "想尝当地特色",
-            "detail": "花土沟具体店尚缺；先就近找正在营业、明码标价的现做正餐，不虚设首选。"
+            "detail": "先看大胡子餐饮；想吃火锅切同福居，晚到想快吃切西宁东关抓面。"
           },
           {
             "title": "想吃清爽或不同口味",
@@ -2503,111 +2570,111 @@ window.TRIP_DATA = {
       "readerNote": "入住大柴旦后吃热饭，面食、烤肉或炒菜按胃口选。",
       "dayId": "day-2",
       "label": "D2｜晚餐 · 大柴旦",
-      "note": "马蜂窝可以提供餐厅名单，但公开页没有完整门牌、电话和 2026 营业时段；因此只列研究候选，不提前排序。",
+      "note": "Trip.com 2026年9月餐馆页已给出三家镇内候选与营业时段；马蜂窝旧榜单只作菜品线索，不再压过当前营业信息。",
       "selected": {
-        "primary": "",
-        "backup2": "",
-        "backup3": ""
+        "primary": "d2d-aiyoubu",
+        "backup2": "d2d-loulan",
+        "backup3": "d2d-salarenjia"
       },
       "candidates": [
         {
           "id": "d2d-aiyoubu",
-          "rankable": false,
-          "sourceTier": "马蜂窝",
-          "evidenceStatus": "有推荐评价；缺具体门牌、电话和营业时段",
-          "name": "艾有布特色炕锅",
+          "rankable": true,
+          "sourceTier": "Trip.com 2026年9月页",
+          "evidenceStatus": "4.7分/9条，平台展示10:00—次日02:00",
+          "name": "伊布拉特色炕锅",
           "category": "炕锅羊排",
-          "feature": "马蜂窝大柴旦美食页列 No.1，唯一公开点评强烈推荐炕锅羊排",
+          "feature": "营业跨度覆盖晚到，适合四人分享炕锅",
           "classicDishes": [
             "炕锅羊排"
           ],
           "base": {
-            "location": "大柴旦镇；具体门牌待补",
+            "location": "大柴旦镇；到店按地图导航",
             "duration": "50—70 分钟",
-            "price": "未获取",
-            "hours": "未获取"
+            "price": "Trip.com标为经济型；以现场菜单为准",
+            "hours": "平台展示10:00—次日02:00"
           },
           "platforms": {
             "amap": {},
             "dianping": {}
           },
-          "routeRelation": "仅在确认位于镇内、入住后不绕路时使用",
-          "risk": "只有 1 条公开点评，样本很弱",
-          "condition": "高德 / 点评证实仍营业且 20:00 后接单",
+          "routeRelation": "入住大柴旦后镇内用餐",
+          "risk": "国庆营业仍以当日地图/电话为准",
+          "condition": "当天仍接单且等位不超过20分钟",
           "repetition": "D4 晚餐避免再点炕锅",
           "sources": [
             {
-              "label": "马蜂窝｜大柴旦美食",
-              "url": "https://www.mafengwo.cn/cy/17985/",
-              "role": "榜单与用户推荐"
+              "label": "Trip.com｜大柴旦2026年9月餐馆页",
+              "url": "https://hk.trip.com/restaurant/chaidan-town-2116136/",
+              "role": "当月评分、评论量与营业时段"
             }
           ]
         },
         {
           "id": "d2d-loulan",
-          "rankable": false,
-          "sourceTier": "马蜂窝",
-          "evidenceStatus": "有菜品评价；具体分店与营业仍待核",
-          "name": "大柴旦清真楼兰餐厅",
-          "category": "清真西北菜",
-          "feature": "马蜂窝评价点名大盘鸡与葱爆羊肉",
+          "rankable": true,
+          "sourceTier": "Trip.com 2026年9月页",
+          "evidenceStatus": "4.3分/17条，平台展示11:00—次日02:00",
+          "name": "克里木烧烤炕锅",
+          "category": "烧烤 / 炕锅",
+          "feature": "评论样本比同镇多数候选更完整，晚间时段覆盖足",
           "classicDishes": [
-            "大盘鸡",
-            "葱爆羊肉"
+            "烧烤",
+            "炕锅"
           ],
           "base": {
-            "location": "大柴旦镇；具体门牌待补",
+            "location": "大柴旦镇；到店按地图导航",
             "duration": "50—70 分钟",
-            "price": "未获取",
-            "hours": "未获取"
+            "price": "Trip.com标为经济型；以现场菜单为准",
+            "hours": "平台展示11:00—次日02:00"
           },
           "platforms": {
             "amap": {},
             "dianping": {}
           },
-          "routeRelation": "适合 4 人分食，但必须先确认具体分店",
-          "risk": "马蜂窝仅 1 条公开点评",
-          "condition": "地图核到同名店且无需跨镇绕行",
+          "routeRelation": "镇内晚餐备选，适合4人分食",
+          "risk": "国庆营业仍以当日地图/电话为准",
+          "condition": "首选排队过长时切换",
           "repetition": "和 D3 烧烤做品类去重",
           "sources": [
             {
-              "label": "马蜂窝｜大柴旦美食",
-              "url": "https://www.mafengwo.cn/cy/17985/",
-              "role": "菜品与口碑线索"
+              "label": "Trip.com｜大柴旦2026年9月餐馆页",
+              "url": "https://hk.trip.com/restaurant/chaidan-town-2116136/",
+              "role": "当月评分、评论量与营业时段"
             }
           ]
         },
         {
           "id": "d2d-salarenjia",
-          "rankable": false,
-          "sourceTier": "马蜂窝",
-          "evidenceStatus": "列入目的地餐饮页；口碑样本和门店信息不足",
-          "name": "撒拉人家",
-          "category": "土火锅 / 炕锅",
-          "feature": "马蜂窝页面记录土火锅、炕锅品类",
+          "rankable": true,
+          "sourceTier": "Trip.com 2026年9月页",
+          "evidenceStatus": "3.8分/8条，平台展示08:00—23:00",
+          "name": "鑫辰川菜馆",
+          "category": "川菜",
+          "feature": "用于连续两晚不想再吃羊肉和炕锅时换口味",
           "classicDishes": [
-            "土火锅",
-            "炕锅"
+            "川味热菜",
+            "米饭与蔬菜"
           ],
           "base": {
-            "location": "大柴旦镇；具体门牌待补",
+            "location": "大柴旦镇；到店按地图导航",
             "duration": "55—75 分钟",
-            "price": "未获取",
-            "hours": "未获取"
+            "price": "Trip.com标为经济型；以现场菜单为准",
+            "hours": "平台展示08:00—23:00"
           },
           "platforms": {
             "amap": {},
             "dianping": {}
           },
-          "routeRelation": "只作为前两家无法营业时的调查对象",
-          "risk": "缺可用于决策的点评量与营业证据",
-          "condition": "地图与最新评论都能核到",
+          "routeRelation": "镇内换口味备选",
+          "risk": "23:00前结束营业，晚到要先确认接单",
+          "condition": "不想继续吃羊肉或首选排队时选择",
           "repetition": "若 D1 已吃火锅，本餐不优先",
           "sources": [
             {
-              "label": "马蜂窝｜大柴旦美食",
-              "url": "https://www.mafengwo.cn/cy/17985/",
-              "role": "餐厅名单与菜系线索"
+              "label": "Trip.com｜大柴旦2026年9月餐馆页",
+              "url": "https://hk.trip.com/restaurant/chaidan-town-2116136/",
+              "role": "当月评分、评论量与营业时段"
             }
           ]
         },
@@ -2650,7 +2717,7 @@ window.TRIP_DATA = {
           ]
         }
       ],
-      "researchGap": "已补一个可定位的高德候选；大柴旦如要你补资料，优先晚餐 2—3 家的近期评论和营业时间，早餐不用补。",
+      "researchGap": "三家已具备2026年9月营业时段与评论量，不需要你再补；出发当天只看地图是否仍接单。",
       "diningPlan": {
         "title": "点单与就餐取舍",
         "options": [
@@ -2760,17 +2827,17 @@ window.TRIP_DATA = {
       "readerNote": "德令哈晚饭可选手抓、面食或炒菜，与前一晚换着吃。",
       "dayId": "day-3",
       "label": "D3｜晚餐 · 德令哈",
-      "note": "西行老严有明显更强的马蜂窝样本；另两家只够做调查备选，不能与首选同等展示。",
+      "note": "西行老严保留马蜂窝强样本；Trip.com 2026年9月页补到当月营业时段，并加入川菜与土暖锅两个换口味备选。",
       "selected": {
         "primary": "d3d-laoyan",
-        "backup2": "",
-        "backup3": ""
+        "backup2": "d3d-caiji",
+        "backup3": "d3d-ziyunxiang"
       },
       "candidates": [
         {
           "id": "d3d-laoyan",
           "sourceTier": "马蜂窝",
-          "evidenceStatus": "马蜂窝德令哈美食 No.1，4.4 分 / 65 条；具体营业待地图复核",
+          "evidenceStatus": "马蜂窝德令哈美食No.1、4.4分/65条；Trip.com 2026年9月同名城市条目展示12:00—次日02:00，但到店仍按祥和花苑分店导航",
           "name": "西行老严烤羊肉（祥和花苑 2 期东门店）",
           "category": "清真烧烤",
           "feature": "当前德令哈候选中口碑样本最完整",
@@ -2781,8 +2848,8 @@ window.TRIP_DATA = {
           "base": {
             "location": "祥和花苑 2 期东门店；门牌号待复核",
             "duration": "50—70 分钟",
-            "price": "未获取",
-            "hours": "未获取"
+            "price": "以现场菜单为准",
+            "hours": "同名城市条目参考12:00—次日02:00；祥和花苑分店当天复核"
           },
           "platforms": {
             "amap": {},
@@ -2797,72 +2864,79 @@ window.TRIP_DATA = {
               "label": "马蜂窝｜德令哈美食",
               "url": "https://www.mafengwo.cn/cy/12444/",
               "role": "榜单、评分与点评量"
+            },
+            {
+              "label": "Trip.com｜德令哈2026年9月餐馆页",
+              "url": "https://tw.trip.com/restaurant/delingha-891/",
+              "role": "同名城市条目的当月展示时段；不用于混合不同分店评分"
             }
           ]
         },
         {
           "id": "d3d-caiji",
-          "rankable": false,
-          "sourceTier": "马蜂窝",
-          "evidenceStatus": "4.0 分但只有 1 条点评；具体分店信息不足",
-          "name": "蔡记羊羔肉",
-          "category": "羊羔肉",
-          "feature": "提供非烧烤的羊肉做法",
+          "rankable": true,
+          "sourceTier": "Trip.com 2026年9月页",
+          "evidenceStatus": "4.9分/12条，平台展示09:30—23:00",
+          "name": "福楼老厨房（德令哈店）",
+          "category": "川菜",
+          "feature": "不想连续吃烧烤和羊肉时的热菜备选",
           "classicDishes": [
-            "羊羔肉"
+            "川味热菜",
+            "米饭与蔬菜"
           ],
           "base": {
-            "location": "德令哈市区；具体门牌待补",
+            "location": "德令哈市区；到店按地图导航",
             "duration": "50—70 分钟",
-            "price": "未获取",
-            "hours": "未获取"
+            "price": "Trip.com标为经济型；以现场菜单为准",
+            "hours": "平台展示09:30—23:00"
           },
           "platforms": {
             "amap": {},
             "dianping": {}
           },
-          "routeRelation": "地图核到离酒店更近时才有替代价值",
-          "risk": "证据量太低",
-          "condition": "补到具体分店与近期营业证据",
+          "routeRelation": "柏树山返回市区后的换口味备选",
+          "risk": "晚于22:30抵达要先确认接单",
+          "condition": "首选排队或已连续吃羊肉时切换",
           "repetition": "与 D2 肉食总量控制",
           "sources": [
             {
-              "label": "马蜂窝｜德令哈美食",
-              "url": "https://www.mafengwo.cn/cy/12444/",
-              "role": "餐厅与低样本评分"
+              "label": "Trip.com｜德令哈2026年9月餐馆页",
+              "url": "https://tw.trip.com/restaurant/delingha-891/",
+              "role": "当月评分、评论量与营业时段"
             }
           ]
         },
         {
           "id": "d3d-ziyunxiang",
-          "rankable": false,
-          "sourceTier": "马蜂窝",
-          "evidenceStatus": "4.0 分但只有 1 条点评；具体分店信息不足",
-          "name": "紫云祥",
-          "category": "青海菜",
-          "feature": "马蜂窝点评提到生炒羊肉",
+          "rankable": true,
+          "sourceTier": "Trip.com 2026年9月页",
+          "evidenceStatus": "4.3分/9条，平台展示11:00—22:00",
+          "name": "旺客来土暖锅",
+          "category": "西北菜 / 土暖锅",
+          "feature": "想吃热汤锅、又不选烧烤时的本地口味备选",
           "classicDishes": [
-            "生炒羊肉"
+            "土暖锅",
+            "热菜与主食"
           ],
           "base": {
-            "location": "德令哈市区；具体门牌待补",
+            "location": "德令哈市区；到店按地图导航",
             "duration": "50—70 分钟",
-            "price": "未获取",
-            "hours": "未获取"
+            "price": "Trip.com标为经济型；以现场菜单为准",
+            "hours": "平台展示11:00—22:00"
           },
           "platforms": {
             "amap": {},
             "dianping": {}
           },
-          "routeRelation": "地图核到顺路时才保留",
-          "risk": "证据量太低",
-          "condition": "补到具体分店与近期营业证据",
+          "routeRelation": "回到德令哈市区后的晚餐备选",
+          "risk": "三家中结束营业最早，晚到不宜选",
+          "condition": "21:00前能到店且想吃热锅时选择",
           "repetition": "若首选吃烤羊肉则不再点同类",
           "sources": [
             {
-              "label": "马蜂窝｜德令哈美食",
-              "url": "https://www.mafengwo.cn/cy/12444/",
-              "role": "菜品线索与低样本评分"
+              "label": "Trip.com｜德令哈2026年9月餐馆页",
+              "url": "https://tw.trip.com/restaurant/delingha-891/",
+              "role": "当月评分、评论量与营业时段"
             }
           ]
         },
@@ -2905,7 +2979,7 @@ window.TRIP_DATA = {
           ]
         }
       ],
-      "researchGap": "已补河西总店的地图地址；还缺近期营业时间。你后续可补德令哈晚餐评论，不能把不同分店评分拼到一起。",
+      "researchGap": "德令哈已有3个可排序候选与2026年9月展示时段；不需要你补。西行老严具体分店营业仍在当天地图复核。",
       "diningPlan": {
         "title": "点单与就餐取舍",
         "options": [
@@ -3884,11 +3958,29 @@ window.TRIP_DATA = {
       "label": "D6｜晚餐 · 曹家堡机场 T3",
       "note": "14:00 还车后距离 20:00 起飞仍有充足时间；值机安检后在 T3 完成提前晚餐。",
       "selected": {
-        "primary": "",
+        "primary": "d6d-burgerking",
         "backup2": "",
         "backup3": ""
       },
-      "candidates": [],
+      "candidates": [
+        {
+          "id": "d6d-burgerking",
+          "name": "汉堡王（曹家堡机场店）",
+          "sourceTier": "携程",
+          "evidenceStatus": "核到T3二层空侧具体铺位F2DC1GF；公开评论较旧，当前营业时段未公开",
+          "rankable": true,
+          "category": "快餐",
+          "feature": "安检后位置明确，适合控制用餐时间",
+          "classicDishes": ["汉堡", "薯条", "鸡翅/鸡条"],
+          "base": {"location": "T3航站楼2层空侧F2DC1GF", "duration": "30—45分钟", "price": "携程历史参考48元/人", "hours": "未公开；安检后看现场"},
+          "platforms": {"amap": {}, "dianping": {}},
+          "routeRelation": "值机安检后在空侧就餐，不需返回陆侧",
+          "risk": "页面评论来自2020—2021年，不能证明2026国庆当天营业",
+          "condition": "现场仍营业就作第一明确候选；未营业则看同侧现开热食",
+          "repetition": "当天午餐若已吃快餐，晚餐优先找面食或热饭",
+          "sources": [{"label": "携程｜汉堡王（曹家堡机场店）", "url": "https://you.ctrip.com/food/0/78482794.html", "role": "T3空侧具体铺位、人均与菜品线索"}]
+        }
+      ],
       "sources": [
         {
           "label": "已出票行程（隐私化摘录）",
@@ -3897,16 +3989,16 @@ window.TRIP_DATA = {
         }
       ],
       "strategy": {
-        "title": "机场就餐为主；具体店名不编造",
-        "detail": "参考 17:00—18:00 提前晚餐，按实际登机口选同侧热食；自带一套密封常温食品兜底。机场餐饮条目仍未核到足够 T3 分店，不标成嬉游推荐。"
+        "title": "机场就餐为主；已有1家可定位候选",
+        "detail": "参考17:00—18:00提前晚餐；先看T3二层空侧汉堡王F2DC1GF，未营业则按实际登机口选同侧热食，并保留一套密封常温食品兜底。"
       },
-      "researchGap": "T3 安检后门店是目前明确资料缺口；我继续找，你后续如方便只补 T3 门店导览或 2—3 家店，不要混用 T2 / 其他机场。",
+      "researchGap": "T3目前只有1家能公开核到具体空侧铺位；第二、第三家店需机场现场导览或平台截图。无需现在专门补，若你后续看到T3导览再发。",
       "diningPlan": {
         "title": "机场餐食的三种处理方式",
         "options": [
           {
             "title": "同侧热食",
-            "detail": "按实际登机口/安检区选能及时出餐的店；当前没有足够可靠的T3具体分店名单。"
+            "detail": "先看汉堡王F2DC1GF；未营业时按实际登机口/安检区选能及时出餐的店。"
           },
           {
             "title": "随身常温餐",
@@ -3917,7 +4009,7 @@ window.TRIP_DATA = {
             "detail": "查看价格、保质期和储存条件；饮品依安检区与航司规则购买/携带。"
           }
         ],
-        "order": "优先一顿能吃完整的餐，而非只买零食；具体店名待资料补齐。"
+        "order": "优先一顿能吃完整的餐，而非只买零食；第二、第三家店不凭旧T2资料编造。"
       }
     }
   ],
@@ -3971,18 +4063,29 @@ window.TRIP_DATA = {
       "dayId": "",
       "owner": "assistant",
       "kind": "research",
+      "status": "partial",
+      "title": "门票预约清单已分级",
+      "when": "9/24复核国庆公告；游览前看当日项目",
+      "verify": "二郎剑必须优先提前实名购票；藏文化南馆需购票但当前平台显示可随买随用；茫崖/大柴旦翡翠湖、黑独山、星之谷属于到场需核票种或景交但未核到必须抢票；艾肯泉、石油基地遗址、小柴旦湖、柏树山、冬格措纳湖目前没有需要你预先办理的独立预约。",
+      "done": false
+    },
+    {
+      "id": "check-ai-museum-guide",
+      "dayId": "day-6",
+      "owner": "assistant",
+      "kind": "research",
       "status": "scheduled",
-      "title": "门票预约、内部景交与国庆公告",
-      "when": "9/24及各景区游览前",
-      "verify": "我负责核景点票种、内部项目和预约；道路/车辆入口/末段导航不再是我们待核任务。默认景点不等于已买票；具体办理入口留在对应景点。",
+      "title": "制作藏文化南馆离线AI讲解",
+      "when": "门票确认后、出发前完成",
+      "verify": "以场馆官方展览资料为底，做90—120分钟路线、8—12个停靠点、术语卡与可直接播放/阅读的中文讲解；不杜撰文物故事。",
       "done": false
     },
     {
       "id": "check-altitude-medicine",
       "dayId": "",
-      "title": "提前网上下单抗高反药品",
+      "title": "补齐熟悉的中成药能量补充剂",
       "when": "现在",
-      "verify": "先向医生或药师确认适用药物、禁忌和服用时点，再完成下单；收货后核对数量与有效期",
+      "verify": "此前使用体验良好；已买3瓶，再买5瓶，合计8瓶。收货后只需核对数量和有效期。",
       "done": false,
       "owner": "user",
       "kind": "action",
@@ -4013,9 +4116,9 @@ window.TRIP_DATA = {
     {
       "id": "check-portable-breakfast",
       "dayId": "",
-      "title": "按次日餐次买",
-      "when": "每天前晚补购",
-      "verify": "按页面D4—D5随车餐表准备：本方两人4份早餐、4份完整午餐、2份独立应急餐和每天3—4升饮水；能量胶只作加餐。",
+      "title": "自带少量路餐，落地后逐日补购",
+      "when": "9/26先装少量；每天前晚补",
+      "verify": "家里先带坚果、面包、牛肉干、八宝粥；四人各自准备。饮水和大部分重补给落地购买，D4—D5各留一份完整午餐。",
       "done": false,
       "owner": "user",
       "kind": "packing",
@@ -4027,9 +4130,9 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "action",
       "status": "pending",
-      "title": "确认茶卡白兰道旧订单已取消并退款",
-      "when": "现在检查一次",
-      "verify": "当前路线9/30住玛多，费用表已不计茶卡白兰道；确认旧订单状态不是待入住，并核对退款到账。",
+      "title": "保留茶卡白兰道作为保守 Plan B",
+      "when": "到免费取消截止日前一天再决定",
+      "verify": "主线可行就按订单规则在截止前取消并核对退款；若主线事不可为，则保留茶卡住宿切换保守路线。该订单不计入主线固定支出。",
       "done": false
     },
     {
@@ -4038,9 +4141,9 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "action",
       "status": "pending",
-      "title": "10/1二郎剑：落实景区门票",
-      "when": "10/1可售后优先提前购",
-      "verify": "走官方或正规渠道；国庆放票时点未核到，不编造截止日期。游船/小火车不自动计入必买。",
+      "title": "10/1二郎剑：提前实名购票",
+      "when": "9/24起查看官方小程序，最迟入园前办好",
+      "verify": "优先“智游青海湖”官方小程序或正规授权平台；官方2026提示建议提前预约。基础门票先买，游船/小火车根据当天风浪与时间另选。",
       "done": false
     },
     {
@@ -4049,9 +4152,9 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "action",
       "status": "pending",
-      "title": "10/2首选藏文化南馆：落实门票和讲解",
-      "when": "按国庆售票开放后办理",
-      "verify": "首选已对齐，不再要求重选。若改省博，从9/29查看10/2免费实名预约；其他备选不用全部买。",
+      "title": "10/2藏文化南馆：买票＋使用自制AI讲解",
+      "when": "10/1前购买南馆票；AI讲解由我先做",
+      "verify": "正规平台当前显示南馆成人票可随买随用；不要误买北馆。自制AI讲解按官方展览资料做成离线手机页，不依赖现场人工讲解。",
       "done": false
     },
     {
@@ -4082,9 +4185,9 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "packing",
       "status": "pending",
-      "title": "防风保暖与日晒防护",
-      "when": "提前采购｜本方两人先备齐",
-      "verify": "现有防风外套＋保暖中层、帽子/薄手套、墨镜、防晒与润唇；先用已有衣物，不为景区另买整套。",
+      "title": "衣物｜照确认表装箱",
+      "when": "9/26装行李箱",
+      "verify": "每人：冲锋衣1件、棉衣1件、抓绒衣2件、速干衣2件、抓绒裤2条、一次性内裤/袜子6套、鸭舌帽1顶、徒步鞋1双。",
       "done": false
     },
     {
@@ -4104,9 +4207,9 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "packing",
       "status": "pending",
-      "title": "车内餐具与常温备用餐",
-      "when": "提前采购｜本方两人先备齐",
-      "verify": "餐具、封口袋、干净铺垫、保温杯；本方两人各留一份独立备用餐，不只带糖果和能量胶。",
+      "title": "少量自带路餐",
+      "when": "9/26装包",
+      "verify": "坚果、面包、牛肉干、八宝粥和能量胶先带一部分；各自管理个人份，大部分食品与饮水落地再买。",
       "done": false
     },
     {
@@ -4128,7 +4231,7 @@ window.TRIP_DATA = {
       "status": "pending",
       "title": "随身小包",
       "when": "9/26装包｜分成三个位置",
-      "verify": "证件、手机、当日饮水、纸巾/湿巾、个人药品、墨镜、防晒和一份小加餐；药品先按医生/药师建议准备。",
+      "verify": "证件、手机、纸巾/湿巾、个人用品和一份小加餐；当天饮水落地后放入，熟悉的中成药能量补充剂按已用方式携带。",
       "done": false
     },
     {
@@ -4137,9 +4240,9 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "packing",
       "status": "pending",
-      "title": "车内公共补给袋",
-      "when": "9/26装包｜分成三个位置",
-      "verify": "备用餐、额外饮水、垃圾袋和清洁物；放在能直接取到的位置，不压在行李箱底。公共数量与朋友协调，个人份先备好。",
+      "title": "车内补给袋｜个人份为主",
+      "when": "落地买齐后装车",
+      "verify": "家里只带少量路餐；落地后购买当日饮水、大部分食品、垃圾袋和清洁物。四人各自准备，重物不从杭州背。",
       "done": false
     },
     {
@@ -4148,9 +4251,20 @@ window.TRIP_DATA = {
       "owner": "user",
       "kind": "packing",
       "status": "pending",
-      "title": "酒店与换洗袋",
-      "when": "9/26装包｜分成三个位置",
-      "verify": "干净袜子、可换鞋、擦拭巾与装湿鞋的袋子；盐湖下水鞋套按景区要求现场选，不提前买一堆一次性鞋套。",
+      "title": "行李箱｜换洗与酒店用品",
+      "when": "9/26装箱",
+      "verify": "确认表中的衣物、一次性内裤/袜子、备用鞋与洗护全部放行李箱；不再另设酒店换洗袋。",
+      "done": false
+    },
+    {
+      "id": "check-travel-gear",
+      "dayId": "",
+      "owner": "user",
+      "kind": "packing",
+      "status": "pending",
+      "title": "背包与器材｜照确认表",
+      "when": "9/26装包",
+      "verify": "48L背包1个、头枕1个、富士X-T5机身＋腾龙18-300镜头1套；只作为携带清单，不重新加入拍照准备。",
       "done": false
     },
     {
