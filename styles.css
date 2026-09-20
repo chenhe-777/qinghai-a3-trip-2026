@@ -2344,7 +2344,7 @@ footer p b {
 .route-reference summary { cursor:pointer; }
 .route-reference .route-map { max-width:600px; margin:12px 0; }
 .fixed-note { color:var(--lake); font-weight:600; }
-.scenic-module, .scenic-module.without-photo { display:block; padding:0; background:transparent; border:0; }
+.scenic-module, .scenic-module.without-photo { padding:0; background:transparent; border:0; }
 .scenic-highlights { font-size:13px; color:var(--ink-soft); margin:8px 0 14px; }
 .experience-guide { margin-top:10px; }
 .activity-card { padding:18px 22px; }

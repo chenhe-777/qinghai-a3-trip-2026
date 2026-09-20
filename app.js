@@ -240,24 +240,19 @@
 
   const renderExperience = (place) => {
     const e=place.experience;if(!e)return '';
-    const g=e.visualGuide;
     return `<section class="experience-guide">
-      <details><summary>游玩详情 · 顺序、停留与注意事项</summary><p>${showValue(e.priority)}</p><ol>${asArray(e.sequence).map(x=>`<li>${showValue(x)}</li>`).join('')}</ol><dl class="module-facts"><div><dt>短停</dt><dd>${showValue(e.shortVersion)}</dd></div><div><dt>充分</dt><dd>${showValue(e.fullVersion)}</dd></div></dl><p class="caution-line">${showValue(place.limits)}</p><p><b>随身带：</b>${asArray(e.prepare).map(showValue).join('；')}</p></details>
-      <details class="photo-guide"><summary>拍照图解 · 看取景框与人物站位</summary>
-        <p class="provenance">${showValue(g.credit)}</p><figure class="composition-figure"><img src="${escapeHtml(g.src)}" alt="${escapeHtml(g.alt)}" width="600" height="510" loading="lazy"><figcaption>${showValue(g.title)}</figcaption></figure>
-        <ol class="photo-steps"><li><b>人站哪里：</b>${showValue(g.stand)}</li><li><b>手机怎么拿：</b>${showValue(g.phone)}</li><li><b>画面留什么：</b>${showValue(g.frame)}</li></ol>
-        <p class="provenance">${showValue(e.limitation)}</p>
-        <details class="landscape-reference"><summary>实景照片 · 看景观，不是拍摄机位示范</summary>${renderPlacePhoto(place)}<p class="provenance">${place.id==='mangya-emerald'?'这张是航拍景观图，手机在地面不能照着复现。':'实景图片供辨认景观；本攻略未据此核实摄影师站位。'}${place.image?.src?` <a href="${escapeHtml(place.image.src)}" target="_blank" rel="noreferrer">查看原图</a>`:''}</p>${renderSources(place.sources,'景观图与景点资料')}</details>
-      </details>
-      <details class="poem-drawer" data-place-id="${escapeHtml(place.id)}"><summary>古诗文配文 · 选一句，查看出处与典故</summary><p class="provenance">${showValue(e.credit)}</p><div class="caption-options">${asArray(e.captions).map(c=>`<blockquote><p class="poem-text">${showValue(c.text)}</p><small>${showValue(c.author)} ·《${showValue(c.work)}》</small><p><b>适合：</b>${showValue(c.fit)}</p><p class="provenance">${showValue(c.context)}</p><div class="poem-actions"><a href="${escapeHtml(c.url)}" target="_blank" rel="noreferrer">核对原文</a><button type="button" data-action="select-caption" data-place-id="${escapeHtml(place.id)}" data-caption-id="${escapeHtml(c.id)}" aria-pressed="${state.captionSelections[place.id]===c.id}">${state.captionSelections[place.id]===c.id?'已选 · 再点取消':'选这句'}</button></div></blockquote>`).join('')}</div></details>
+      <details class="poem-drawer" data-place-id="${escapeHtml(place.id)}"><summary>古诗文配文 · 选一句，查看出处与典故</summary><p class="provenance">候选句保留原始出处与语境；不把异地诗句写成本地典故。</p><div class="caption-options">${asArray(e.captions).map(c=>`<blockquote><p class="poem-text">${showValue(c.text)}</p><small>${showValue(c.author)} ·《${showValue(c.work)}》</small><p><b>适合：</b>${showValue(c.fit)}</p><p class="provenance">${showValue(c.context)}</p><div class="poem-actions"><a href="${escapeHtml(c.url)}" target="_blank" rel="noreferrer">核对原文</a><button type="button" data-action="select-caption" data-place-id="${escapeHtml(place.id)}" data-caption-id="${escapeHtml(c.id)}" aria-pressed="${state.captionSelections[place.id]===c.id}">${state.captionSelections[place.id]===c.id?'已选 · 再点取消':'选这句'}</button></div></blockquote>`).join('')}</div></details>
     </section>`;
   };
 
-  const renderPlaceModule = (place) => `<section id="place-${escapeHtml(place.id)}" class="decision-module scenic-module without-photo"><div class="module-copy">
-    <h4>${showValue(place.name)}</h4><p class="module-intro">${showValue(place.why)}</p><p class="scenic-highlights">${asArray(place.highlights).map(showValue).join(' · ')}</p>
-    ${place.experience?renderExperience(place):`<details><summary>景点详情与注意事项</summary><p>${showValue(place.duration)}</p><p>${showValue(place.limits)}</p></details>`}
+  const renderPlaceModule = (place) => `<section id="place-${escapeHtml(place.id)}" class="decision-module scenic-module${place.image?.src?'':' without-photo'}"><div class="module-copy">
+    <p class="module-label">本段怎么玩</p><h4>${showValue(place.name)}</h4><p class="module-intro">${showValue(place.why)}</p>
+    <div class="choice-stack">${asArray(place.highlights).map((item,index)=>`<div><span>${String(index+1).padStart(2,'0')}</span><p>${showValue(item)}</p></div>`).join('')}</div>
+    <dl class="module-facts"><div><dt>建议停留</dt><dd>${showValue(place.duration)}</dd></div><div><dt>在路线中的作用</dt><dd>${showValue(place.role)}</dd></div></dl>
+    <div class="caution-line"><b>景点注意</b><p>${showValue(place.limits)}</p></div>
+    ${place.experience?renderExperience(place):''}
     ${place.booking?`<details class="booking-guidance"><summary>门票与预约 · 入口、票种与办理时间</summary><dl class="module-facts"><div><dt>何时办理</dt><dd>${showValue(place.booking.when)}</dd></div><div><dt>入口</dt><dd>${showValue(place.booking.entry)}</dd></div><div><dt>票种</dt><dd>${showValue(place.booking.price)}</dd></div></dl><a href="#responsibilities">到行前准备办理</a></details>`:''}
-    ${renderSources(place.sources,'景点资料与来源')}</div></section>`;
+    ${renderSources(place.sources,'景点资料与来源')}</div>${place.image?.src?renderPlacePhoto(place):''}</section>`;
 
 
   const rankLabels = { primary: "首选", backup2: "备选 2", backup3: "备选 3" };
