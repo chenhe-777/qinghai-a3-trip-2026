@@ -218,7 +218,9 @@
   const renderRouteOverview = (day, route) => {
     if (!route) return "";
     const hotel = asArray(data.trip.bookingPlan?.areaPlans)[data.days.indexOf(day)];
-    const stops = asArray(route.placeIds).map(id => data.places.find(p=>p.id===id)?.name).filter(Boolean);
+    const stops = asArray(route.order).length
+      ? asArray(route.order)
+      : asArray(route.placeIds).map(id => data.places.find(p=>p.id===id)?.name).filter(Boolean);
     return `<section class="compact-overview"><p class="today-route">${stops.map(showValue).join(' <span aria-hidden="true">→</span> ')}</p>
       ${hotel ? `<p class="provenance">今晚住：${showValue(hotel.primary?.name)}</p>` : ''}
       ${day.id === 'day-6' ? '<p class="fixed-note">14:00 曹家堡机场T3还车 · 20:00 GJ8166返杭</p>' : ''}
