@@ -1,7 +1,7 @@
 window.TRIP_DATA = {
   "trip": {
     "id": "qinghai-a3-planning-2026-v4",
-    "mealSelectionVersion": "2026-09-20-source-audit-v1",
+    "mealSelectionVersion": "2026-09-20-amap-dianping-only-v2",
     "title": "9·27 青海 A3 六日自驾｜体验与餐饮攻略",
     "city": "青海 · 茫崖 / 冷湖 / 大柴旦 / 德令哈 / 冬格措纳湖 / 玛多 / 青海湖 / 西宁",
     "dates": "2026-09-27—2026-10-02（6 天 5 晚）",
@@ -2410,9 +2410,9 @@ window.TRIP_DATA = {
           "rankable": true,
           "category": "川菜 / 家常热菜",
           "feature": "目前花土沟唯一取得高德地方榜名次且能交叉核到地址、时段的候选",
-          "classicDishes": ["川味热菜", "米饭与蔬菜；到店按当日菜单选择"],
+          "classicDishes": [],
           "base": {"location": "创业路与文化路交叉口西北40米", "duration": "50—70分钟", "price": "高德参考38元/人", "hours": "Trip.com展示09:00—24:00；电话18919584689"},
-          "platforms": {"amap": {"score": "4.2", "price": "38元/人", "list": "海西热门川菜馆", "rank": "第5"}, "dianping": {}},
+          "platforms": {"amap": {"score": "4.2", "price": "38元/人", "list": "海西热门川菜馆", "rank": "第5", "location": "茫崖市；具体门牌待补高德截图"}, "dianping": {}},
           "routeRelation": "花土沟镇内；从美豪酒店出发按地图导航",
           "risk": "高德公开评论样本较旧，国庆当日是否接单仍需地图复核",
           "condition": "当晚仍营业且等位不超过20分钟",
@@ -2487,7 +2487,7 @@ window.TRIP_DATA = {
         "options": [
           {
             "title": "想尝当地特色",
-            "detail": "先看茫崖姐妹川菜馆；想吃火锅切同福居，晚到想快吃切西宁东关抓面。"
+            "detail": "目前只有茫崖姐妹川菜馆具备高德地方榜数据；其他店补到高德或大众点评分店页后再比较。"
           },
           {
             "title": "想吃清爽或不同口味",
@@ -2723,7 +2723,8 @@ window.TRIP_DATA = {
               "score": "4.2",
               "price": "56 元 / 人",
               "list": "海西烧烤榜",
-              "rank": "第3"
+              "rank": "第3",
+              "location": "柴旦镇中心停车场"
             },
             "dianping": {}
           },
@@ -2983,7 +2984,8 @@ window.TRIP_DATA = {
               "score": "4.4",
               "price": "67 元 / 人",
               "list": "海西烧烤榜",
-              "rank": "第1"
+              "rank": "第1",
+              "location": "柴达木西路34号"
             },
             "dianping": {}
           },
@@ -3371,15 +3373,15 @@ window.TRIP_DATA = {
         "options": [
           {
             "title": "最近",
-            "detail": "入住时先问前台哪家当晚还接单，再看约560米外的新建蒸汽餐厅；这是查看顺序，不是预选首选。"
+            "detail": "入住时先问前台当晚有哪些店仍接单，再在高德或大众点评核对具体分店；当前没有合格的预选首选。"
           },
           {
             "title": "想看得到菜品",
-            "detail": "香煎满屋有鱼头、土豆和烤羊排等平台菜品线索，但评论样本少，按现场菜单点。"
+            "detail": "若你补到玛多餐厅的高德或大众点评页面，再比较评分、评价量、营业和菜品；此前其他平台的菜品线索全部停用。"
           },
           {
             "title": "想快速吃主食",
-            "detail": "伊隆老炒炮仗作为面食备选；三家都未营业时，不继续远找，吃车内备用餐。"
+            "detail": "没有核到可用分店或都未营业时，不继续远找，直接使用车内完整备用餐。"
           }
         ],
         "order": "抵达后先入住再看营业；四人桌餐先点2个热菜＋1个蔬菜＋各自主食，吃不够再加。"
@@ -3433,6 +3435,7 @@ window.TRIP_DATA = {
       "dayId": "day-5",
       "label": "D5｜午餐 · 青海湖二郎剑",
       "note": "2026 年官方商业续约公示能确认景区内有大食巷、肯德基和德克士；具体营业时段仍要在 9/30 电话核。",
+      "safetyLocked": true,
       "strategy": {
         "title": "自带完整午餐为主，景区热食可替换",
         "detail": "每人带1份完整午餐，在朋友选择的安全停靠点吃；若到二郎剑后仍未吃且排队不超20分钟，再选正式备案商户并看明码标价。"
@@ -3585,11 +3588,11 @@ window.TRIP_DATA = {
           "rankable": true,
           "category": "西北烤肉 / 炕锅羊肉",
           "feature": "榜单交叉最完整，且位于酒店所在的海湖新区，减少首晚到西宁后的跨城折返",
-          "classicDishes": ["炕锅羊肉（点评367人推荐）", "烤肉与青海面食；四人先点一份共享"],
+          "classicDishes": ["炕锅羊肉（大众点评367人推荐）"],
           "base": {"location": "彭家寨新村综合办公楼一楼18号", "duration": "60—80分钟", "price": "大众点评参考90元/人", "hours": "携程页面展示11:00—次日02:30；出发前地图复核，电话0971-6267666"},
           "platforms": {
-            "amap": {"score": "4.5", "list": "2025高德状元榜·美食", "rank": "城西区全年综合分4.67"},
-            "dianping": {"score": "4.4", "price": "90元/人", "list": "2026必吃榜·新上榜", "years": "收录10年", "reviews": "367人推荐炕锅羊肉"}
+            "amap": {"score": "4.5", "list": "2025高德状元榜·美食｜城西区综合分4.67", "rank": "", "location": "彭家寨新村综合办公楼一楼18号商铺"},
+            "dianping": {"score": "4.4", "price": "90元/人", "list": "2026必吃榜·新上榜", "years": "收录10年", "reviews": ""}
           },
           "routeRelation": "酒店同在海湖新区；比老城三家更适合入住后直接就餐",
           "risk": "国庆榜单店可能排队，超过30分钟就切益鑫或伊然轩",
@@ -3610,9 +3613,8 @@ window.TRIP_DATA = {
           "category": "清真手抓羊肉",
           "feature": "适合 4 人分食，是本餐首选",
           "classicDishes": [
-            "手抓羊肉，优先胸茬与肋条",
-            "羊肉汤",
-            "青海面食"
+            "手抓羊肉",
+            "羊肉汤"
           ],
           "base": {
             "location": "花园北街白玉巷 5 号",
@@ -3623,7 +3625,8 @@ window.TRIP_DATA = {
           "platforms": {
             "amap": {
               "score": "4.4",
-              "list": "2025高德状元榜·美食"
+              "list": "2025高德状元榜·美食",
+              "location": "花园北街白玉巷5号"
             },
             "dianping": {}
           },
@@ -3651,11 +3654,7 @@ window.TRIP_DATA = {
           "name": "清真·伊然轩青海特色美食",
           "category": "炕锅羊排 / 青海菜",
           "feature": "想吃炕锅而非纯手抓时选它",
-          "classicDishes": [
-            "炕锅羊排",
-            "土豆、洋葱与饼",
-            "时蔬"
-          ],
+          "classicDishes": [],
           "base": {
             "location": "大众街杨家一巷内约 100 米",
             "duration": "60—80 分钟",
@@ -3665,7 +3664,8 @@ window.TRIP_DATA = {
           "platforms": {
             "amap": {
               "score": "4.0",
-              "list": "2025 高德西宁美食榜 4.74 综合分"
+              "list": "2025高德状元榜·美食｜综合分4.74",
+              "location": "大众街杨家一巷往里100米"
             },
             "dianping": {}
           },
@@ -3874,9 +3874,9 @@ window.TRIP_DATA = {
           "rankable": true,
           "category": "手工面片 / 清真简餐",
           "feature": "市区最后一餐份量容易控制，榜单证据强，也比多人桌餐更容易按时离店",
-          "classicDishes": ["宋迪克特色手工面片", "精品牛腩", "小凉菜"],
+          "classicDishes": ["特色手工面片（大众点评90人推荐）"],
           "base": {"location": "黄河路与兴海路交叉口向北50米（木桥花园旁）", "duration": "35—50分钟", "price": "大众点评参考25元/人", "hours": "Trip.com展示11:00起营业；电话13897238333"},
-          "platforms": {"amap": {}, "dianping": {"score": "4.3", "price": "25元/人", "list": "2026必吃榜·新上榜", "years": "收录11年", "reviews": "90人推荐特色手工面片"}},
+          "platforms": {"amap": {}, "dianping": {"score": "4.3", "price": "25元/人", "list": "2026必吃榜·新上榜", "years": "收录11年", "reviews": "", "location": "待补大众点评或高德分店地址截图"}},
           "routeRelation": "在西宁市区吃完再去机场；上午活动结束后按导航控制离店时间",
           "risk": "榜单店可能排队；11:45仍未落座就切下一家或附近快餐",
           "condition": "上午活动结束后能在11:00左右到店，排队不超过15分钟",
@@ -3894,9 +3894,9 @@ window.TRIP_DATA = {
           "rankable": true,
           "category": "牛杂汤 / 清真小吃",
           "feature": "想吃热汤又不想再吃大份羊肉时的高证据备选",
-          "classicDishes": ["牛杂汤（点评65人推荐）", "馍或面食"],
+          "classicDishes": ["牛杂汤（大众点评65人推荐）"],
           "base": {"location": "海一大厦附近；按同名分店导航", "duration": "30—45分钟", "price": "大众点评参考28元/人", "hours": "未取得可靠2026时段；电话18997216771"},
-          "platforms": {"amap": {"score": "3.9", "list": "2025高德状元榜·美食"}, "dianping": {"score": "4.4", "price": "28元/人", "list": "2026必吃榜·连续3年", "years": "收录16年", "reviews": "65人推荐牛杂汤"}},
+          "platforms": {"amap": {"score": "3.9", "list": "2025高德状元榜·美食", "location": "海一大厦附近"}, "dianping": {"score": "4.4", "price": "28元/人", "list": "2026必吃榜·连续3年", "years": "收录16年", "reviews": ""}},
           "routeRelation": "市区就餐后去机场；具体绕行由当天导航决定",
           "risk": "营业时段未可靠核到，不作为唯一方案",
           "condition": "宋迪克排队、大家接受牛杂，且地图显示营业",
@@ -3948,9 +3948,8 @@ window.TRIP_DATA = {
           "category": "清真手抓羊肉",
           "feature": "手抓正餐选项，前晚没吃且愿意缩短参观时考虑",
           "classicDishes": [
-            "手抓羊肉，优先胸茬与肋条",
-            "羊肉汤",
-            "青海面食"
+            "手抓羊肉",
+            "羊肉汤"
           ],
           "base": {
             "location": "花园北街白玉巷 5 号",
@@ -3961,7 +3960,8 @@ window.TRIP_DATA = {
           "platforms": {
             "amap": {
               "score": "4.4",
-              "list": "2025 高德指南收录"
+              "list": "2025高德状元榜·美食",
+              "location": "花园北街白玉巷5号"
             },
             "dianping": {
               "score": "未获取",
@@ -4046,7 +4046,7 @@ window.TRIP_DATA = {
             "detail": "先看是否能接单、出餐；无合适热食启用独立备用餐，不把未核营业的弱候选当可靠兜底。"
           }
         ],
-        "order": "首选益鑫：四人先点约1.5—2斤手抓共享，再配旗花面片、酸菜粉条或蔬菜，不按店员口头建议盲目加量。益鑫排队超过15分钟切泉儿头；上午若改省博，则直接去唐道祁记。"
+        "order": "先完成高德／大众点评资料补全，再由你选择首选与备选；没有取得两平台分店数据的餐厅不进入排序。"
       }
     }
   ],
@@ -4317,3 +4317,41 @@ window.TRIP_DATA = {
     }
   ]
 };
+
+// 餐饮决策只使用高德与大众点评。旧来源仍可能存在于历史候选原稿中，
+// 但加载工作台前会被移出运行数据，不参与展示、排序或任何数值判断。
+(() => {
+  const meals = Array.isArray(window.TRIP_DATA?.meals) ? window.TRIP_DATA.meals : [];
+  const platformFields = ["score", "reviews", "list", "rank", "years", "price", "hours", "location"];
+  const hasPlatformData = (platform) => platform && platformFields.some((field) => platform[field]);
+  const isAllowedSource = (source) => {
+    const value = `${source?.label || ""} ${source?.url || ""}`.toLowerCase();
+    return value.includes("高德") || value.includes("amap.com") || value.includes("大众点评") || value.includes("dianping.com");
+  };
+
+  meals.forEach((meal) => {
+    meal.selected = { primary: "", backup2: "", backup3: "" };
+    meal.sources = (meal.sources || []).filter(isAllowedSource);
+
+    (meal.candidates || []).forEach((candidate) => {
+      const amap = candidate.platforms?.amap || {};
+      const dianping = candidate.platforms?.dianping || {};
+      const hasAmap = hasPlatformData(amap);
+      const hasDianping = hasPlatformData(dianping);
+
+      candidate.platforms = { amap, dianping };
+      candidate.sources = (candidate.sources || []).filter(isAllowedSource);
+      candidate.rankable = hasAmap || hasDianping;
+      candidate.sourceTier = hasAmap && hasDianping ? "高德 + 大众点评" : hasAmap ? "高德" : hasDianping ? "大众点评" : "待补高德／大众点评";
+      candidate.evidenceStatus = hasAmap || hasDianping
+        ? "仅使用高德与大众点评已显示字段；缺项保持未获取"
+        : "未取得高德或大众点评具体分店数据，暂不参与排序";
+      candidate.base = {
+        ...(candidate.base || {}),
+        location: dianping.location || amap.location || "",
+        price: dianping.price || amap.price || "",
+        hours: dianping.hours || amap.hours || ""
+      };
+    });
+  });
+})();

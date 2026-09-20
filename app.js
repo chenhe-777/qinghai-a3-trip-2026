@@ -13,6 +13,16 @@
     "'": "&#039;"
   }[char]));
   const showValue = (value, fallback = "未获取") => escapeHtml(value || fallback);
+  const diningPlatformFields = ["score", "reviews", "list", "rank", "years", "price", "hours", "location"];
+  const hasDiningPlatformData = (candidate) => [candidate?.platforms?.amap, candidate?.platforms?.dianping]
+    .some((platform) => platform && diningPlatformFields.some((field) => platform[field]));
+  const filterDiningSources = (sources) => asArray(sources).filter((source) => {
+    const value = `${source?.label || ""} ${source?.url || ""}`.toLowerCase();
+    return value.includes("高德") || value.includes("amap.com") || value.includes("大众点评") || value.includes("dianping.com");
+  });
+  const platformValue = (candidate, field) => candidate?.platforms?.dianping?.[field]
+    || candidate?.platforms?.amap?.[field]
+    || "";
   const formatMoney = (value) => Number.isFinite(value)
     ? `¥${new Intl.NumberFormat("zh-CN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value)}`
     : "未获取";
@@ -48,7 +58,9 @@
   };
 
   data.meals.forEach((meal) => {
-    const validIds = new Set(asArray(meal.candidates).filter((candidate) => candidate.rankable !== false).map((candidate) => candidate.id));
+    const validIds = new Set(asArray(meal.candidates)
+      .filter((candidate) => candidate.rankable !== false && hasDiningPlatformData(candidate))
+      .map((candidate) => candidate.id));
     const savedSelections = stored.mealSelectionVersion === mealSelectionVersion
       ? (stored.mealSelections?.[meal.id] || {})
       : {};
@@ -289,6 +301,9 @@
     const base = candidate.base || {};
     const platforms = candidate.platforms || {};
     const classicDishes = asArray(candidate.classicDishes);
+    const location = platformValue(candidate, "location");
+    const price = platformValue(candidate, "price");
+    const hours = platformValue(candidate, "hours");
     return `
       <article class="restaurant-option${rank ? " is-ranked" : ""}">
         <header class="restaurant-summary">
@@ -298,10 +313,10 @@
           <p class="dish-line"><b>建议菜：</b>${classicDishes.length ? classicDishes.map(showValue).join("、") : "待核"}</p>
         </header>
         <dl class="restaurant-basics">
-          <div><dt>位置</dt><dd>${showValue(base.location)}</dd></div>
+          <div><dt>位置</dt><dd>${showValue(location)}</dd></div>
           <div><dt>用时</dt><dd>${showValue(base.duration)}</dd></div>
-          <div><dt>人均</dt><dd>${showValue(base.price)}</dd></div>
-          <div><dt>营业</dt><dd>${showValue(base.hours)}</dd></div>
+          <div><dt>人均</dt><dd>${showValue(price)}</dd></div>
+          <div><dt>营业</dt><dd>${showValue(hours)}</dd></div>
         </dl>
         <details class="restaurant-details">
           <summary>展开路线关系、风险与平台数据</summary>
@@ -313,7 +328,7 @@
           </div>
           ${renderPlatform("高德", platforms.amap)}
           ${renderPlatform("大众点评", platforms.dianping)}
-          ${renderSources(candidate.sources, "门店与推荐来源")}
+          ${renderSources(filterDiningSources(candidate.sources), "门店与推荐来源")}
         </details>
         <p class="restaurant-status${candidate.rankable === false ? " is-visible" : ""}">${candidate.rankable === false ? "资料不足，先保留研究候选；补齐门店或营业信息后再排序。" : ""}</p>
         <div class="rank-actions" aria-label="餐厅排序">
@@ -338,10 +353,13 @@
 
   const renderMealModule = (meal) => {
     const candidates=meal.safetyLocked?[]:asArray(meal.candidates);
-    return `<section class="decision-module meal-module"><div class="meal-heading"><h4>${showValue(meal.label)}</h4><span>${candidates.length?candidates.length+' 个选项':''}</span></div><p class="module-intro">${showValue(meal.readerNote || meal.note)}</p>
+    const verifiedCandidates=candidates.filter(hasDiningPlatformData);
+    const missingCandidates=candidates.filter((candidate)=>!hasDiningPlatformData(candidate));
+    return `<section class="decision-module meal-module"><div class="meal-heading"><h4>${showValue(meal.label)}</h4><span>${verifiedCandidates.length?verifiedCandidates.length+' 个可比较选项':''}</span></div><p class="module-intro">${showValue(meal.readerNote || meal.note)}</p>
       ${meal.strategy?`<details class="dining-plan"><summary>携带与购买建议</summary><p>${showValue(meal.strategy.detail)}</p></details>`:''}${renderDiningPlan(meal.diningPlan)}
-      ${candidates.length?`${renderMealRanking(meal)}<details class="meal-options" data-meal-id="${escapeHtml(meal.id)}"><summary>展开比较餐厅 · 选择首选与备选</summary><div class="restaurant-grid">${candidates.map((c,i)=>renderRestaurant(meal,c,i)).join('')}</div></details>`:''}
-      ${renderSources(meal.sources,'本餐推荐来源')}</section>`;
+      ${verifiedCandidates.length?`${renderMealRanking(meal)}<details class="meal-options" data-meal-id="${escapeHtml(meal.id)}"><summary>展开比较餐厅 · 选择首选与备选</summary><div class="restaurant-grid">${verifiedCandidates.map((c,i)=>renderRestaurant(meal,c,i)).join('')}</div></details>`:''}
+      ${missingCandidates.length?`<details class="dining-plan evidence-gap"><summary>待补高德／大众点评资料 · ${missingCandidates.length} 家</summary><p>以下餐厅暂不显示旧平台的人均、营业时间或地址，也不能进入首选排序：</p><ul>${missingCandidates.map((candidate)=>`<li>${showValue(candidate.name)}</li>`).join('')}</ul></details>`:''}
+      ${renderSources(filterDiningSources(meal.sources),'本餐推荐来源')}</section>`;
   };
 
   const parseStartTime = (time) => {
