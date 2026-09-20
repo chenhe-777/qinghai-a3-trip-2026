@@ -10,6 +10,9 @@
   --sun-soft: #f3d2b6;
   --lichen: #78836c;
   --line: #d8cdb9;
+  --line-strong: #b8aa91;
+  --sand-soft: #efe7d8;
+  --ochre: #ad6339;
   --warning: #8b4b24;
   --warning-bg: #f9e7ca;
   --success: #375e49;
@@ -722,6 +725,7 @@ footer {
   margin: 10px 0 6px;
   font-family: var(--serif);
   font-size: 18px;
+  font-size: 13px;
   line-height: 1.35;
 }
 
@@ -2409,4 +2413,419 @@ footer p b {
  .activity-card { padding:16px; }
  .poem-text { font-size:20px; }
  .day-plan-header { padding:16px 0 4px; }
+}
+
+/* 2026-09-20 · 视觉修整：高原路书编辑感，减少嵌套线框并统一信息基线。 */
+.compact-hero {
+  color: var(--ink);
+  padding: 30px 4px 25px;
+  border-bottom: 1px solid rgba(216, 205, 185, 0.92);
+}
+
+.compact-hero::before,
+.compact-hero::after {
+  display: none;
+}
+
+.compact-hero .eyebrow {
+  margin-bottom: 4px;
+  color: #a94f2b;
+}
+
+.compact-hero h1 {
+  color: var(--lake-dark);
+  font-size: clamp(34px, 3.2vw, 46px);
+  letter-spacing: -0.025em;
+  text-shadow: none;
+}
+
+.compact-hero > p {
+  max-width: 470px;
+  padding: 4px 0 4px 28px;
+  color: var(--ink-soft);
+  border-left: 1px solid var(--line);
+  line-height: 1.75;
+  text-align: right;
+}
+
+.navigation-rail {
+  padding: 7px;
+  border-color: rgba(184, 170, 145, 0.72);
+  box-shadow: 0 8px 22px rgba(34, 43, 38, 0.07);
+}
+
+.day-tabs button {
+  min-height: 82px;
+  padding: 10px 12px 9px;
+}
+
+.day-tabs b {
+  display: -webkit-box;
+  min-height: 2.7em;
+  overflow: hidden;
+  line-height: 1.35;
+  text-overflow: clip;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.workspace-section {
+  border-color: rgba(184, 170, 145, 0.72);
+  background: rgba(255, 253, 247, 0.9);
+  box-shadow: 0 18px 42px rgba(34, 43, 38, 0.075);
+}
+
+.day-plan-header {
+  display: block;
+}
+
+.day-plan-header h2 {
+  max-width: none;
+  font-size: clamp(34px, 3.7vw, 46px);
+  line-height: 1.12;
+}
+
+.timeline {
+  margin-top: 34px;
+}
+
+.timeline::before {
+  top: 18px;
+  bottom: 16px;
+  left: 112px;
+  width: 2px;
+  background: linear-gradient(#c67a4d, #8ba7a2 72%, rgba(139, 167, 162, 0.15));
+}
+
+.timeline-event,
+.preflight-card {
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 24px;
+}
+
+.timeline-time {
+  padding: 17px 18px 0 0;
+}
+
+.timeline-time::after {
+  top: 22px;
+  right: -9px;
+}
+
+.activity-card,
+.preflight-body {
+  border: 1px solid rgba(197, 184, 160, 0.78);
+  box-shadow: 0 10px 28px rgba(45, 52, 47, 0.055);
+}
+
+.activity-card {
+  border-top-width: 1px;
+  border-left: 4px solid var(--lake);
+}
+
+.type-meal .activity-card {
+  border-top-color: rgba(197, 184, 160, 0.78);
+  border-left-color: var(--sun);
+}
+
+.type-scenic .activity-card {
+  border-top-color: rgba(197, 184, 160, 0.78);
+  border-left-color: var(--lichen);
+}
+
+.type-key .activity-card {
+  border-top-color: rgba(197, 184, 160, 0.78);
+  border-left-color: var(--ink);
+}
+
+.meal-module {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.meal-options {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top-color: rgba(216, 205, 185, 0.78);
+}
+
+.restaurant-grid {
+  grid-auto-rows: auto;
+  gap: 14px;
+  align-items: stretch;
+  margin-top: 16px;
+}
+
+.restaurant-option {
+  display: grid;
+  grid-row: span 5;
+  grid-template-rows: subgrid;
+  gap: 0;
+  height: 100%;
+  padding: 18px;
+  border-color: rgba(197, 184, 160, 0.82);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(45, 52, 47, 0.035);
+}
+
+.restaurant-option.is-ranked {
+  border-color: rgba(31, 95, 105, 0.62);
+  box-shadow: inset 0 3px var(--lake), 0 6px 18px rgba(45, 52, 47, 0.04);
+}
+
+.restaurant-summary {
+  min-width: 0;
+  padding-bottom: 14px;
+}
+
+.restaurant-number {
+  display: inline-flex;
+  width: max-content;
+  margin-bottom: 10px;
+}
+
+.restaurant-option h5 {
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.restaurant-feature,
+.dish-line {
+  font-size: 11px;
+  line-height: 1.62;
+}
+
+.restaurant-basics {
+  gap: 0;
+  align-self: stretch;
+  margin: 0;
+  padding: 8px 0;
+  border-top: 1px solid rgba(216, 205, 185, 0.74);
+}
+
+.restaurant-basics > div {
+  grid-template-columns: 50px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(216, 205, 185, 0.42);
+}
+
+.restaurant-basics > div:last-child {
+  border-bottom: 0;
+}
+
+.restaurant-basics dt {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.restaurant-basics dd {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.restaurant-details {
+  align-self: start;
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top-color: rgba(216, 205, 185, 0.72);
+}
+
+.restaurant-details summary {
+  line-height: 1.55;
+}
+
+.restaurant-status {
+  min-height: 0;
+  margin: 10px 0 0;
+  color: var(--ink-soft);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.restaurant-status:not(.is-visible) {
+  margin: 0;
+}
+
+.rank-actions {
+  align-self: end;
+  margin-top: 14px;
+}
+
+.rank-actions button {
+  min-height: 34px;
+}
+
+.day-tabs {
+  scrollbar-width: none;
+}
+
+.day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.route-reference > summary,
+.dining-plan > summary,
+.experience-guide details > summary,
+.source-drawer > summary,
+.restaurant-details > summary,
+.meal-options > summary,
+.booking-guidance > summary,
+.museum-alternatives > summary,
+.budget-breakdown > summary,
+.responsibility-group > summary {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  line-height: 1.45;
+}
+
+.route-reference > summary::before,
+.dining-plan > summary::before,
+.experience-guide details > summary::before,
+.source-drawer > summary::before,
+.restaurant-details > summary::before,
+.meal-options > summary::before,
+.booking-guidance > summary::before,
+.museum-alternatives > summary::before,
+.budget-breakdown > summary::before,
+.responsibility-group > summary::before {
+  margin-right: 7px;
+  color: var(--lake);
+  content: "›";
+  font-size: 16px;
+  line-height: 1;
+  transform: rotate(0deg);
+  transition: transform 160ms ease;
+}
+
+.route-reference[open] > summary::before,
+.dining-plan[open] > summary::before,
+.experience-guide details[open] > summary::before,
+.source-drawer[open] > summary::before,
+.restaurant-details[open] > summary::before,
+.meal-options[open] > summary::before,
+.booking-guidance[open] > summary::before,
+.museum-alternatives[open] > summary::before,
+.budget-breakdown[open] > summary::before,
+.responsibility-group[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.check-item {
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  padding: 13px 14px;
+}
+
+.check-item input {
+  width: 17px;
+  height: 17px;
+}
+
+.check-item b {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.check-item small {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.check-item p {
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.source-drawer summary,
+.restaurant-details summary {
+  font-size: 11px;
+}
+
+@supports not (grid-template-rows: subgrid) {
+  .restaurant-option {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .restaurant-summary {
+    min-height: 175px;
+  }
+
+  .restaurant-details {
+    margin-top: auto;
+  }
+}
+
+@media (max-width: 980px) {
+  .day-tabs button {
+    min-width: 172px;
+  }
+
+  .restaurant-option {
+    grid-row: span 5;
+  }
+}
+
+@media (max-width: 700px) {
+  .compact-hero {
+    padding: 20px 2px 18px;
+  }
+
+  .compact-hero h1 {
+    font-size: 31px;
+  }
+
+  .compact-hero > p {
+    margin-top: 12px;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+    text-align: left;
+  }
+
+  .day-tabs button {
+    min-width: 158px;
+    min-height: 78px;
+  }
+
+  .timeline::before {
+    left: 8px;
+  }
+
+  .timeline-event,
+  .preflight-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    padding-left: 28px;
+  }
+
+  .timeline-time {
+    padding: 0;
+  }
+
+  .timeline-time::after {
+    top: 4px;
+    right: auto;
+    left: -28px;
+  }
+
+  .restaurant-option {
+    grid-row: auto;
+    grid-template-rows: auto;
+  }
+
+  .restaurant-status:not(.is-visible) {
+    display: none;
+  }
+
+  .day-plan-header h2 {
+    font-size: 34px;
+    line-height: 1.14;
+  }
 }

@@ -286,10 +286,12 @@
     const classicDishes = asArray(candidate.classicDishes);
     return `
       <article class="restaurant-option${rank ? " is-ranked" : ""}">
-        <div class="restaurant-number">${rank ? escapeHtml(rankLabels[rank]) : `选项 ${index + 1}`}</div>
-        <h5>${showValue(candidate.name)}</h5>
-        <p class="restaurant-feature">${showValue(candidate.category, "餐饮类别待核")} · ${showValue(candidate.feature, "特色待核")}</p>
-        ${classicDishes.length ? `<p class="dish-line"><b>建议菜：</b>${classicDishes.map(showValue).join("、")}</p>` : ""}
+        <header class="restaurant-summary">
+          <div class="restaurant-number">${rank ? escapeHtml(rankLabels[rank]) : `选项 ${index + 1}`}</div>
+          <h5>${showValue(candidate.name)}</h5>
+          <p class="restaurant-feature">${showValue(candidate.category, "餐饮类别待核")} · ${showValue(candidate.feature, "特色待核")}</p>
+          <p class="dish-line"><b>建议菜：</b>${classicDishes.length ? classicDishes.map(showValue).join("、") : "待核"}</p>
+        </header>
         <dl class="restaurant-basics">
           <div><dt>位置</dt><dd>${showValue(base.location)}</dd></div>
           <div><dt>用时</dt><dd>${showValue(base.duration)}</dd></div>
@@ -308,7 +310,7 @@
           ${renderPlatform("大众点评", platforms.dianping)}
           ${renderSources(candidate.sources, "门店与推荐来源")}
         </details>
-        ${candidate.rankable === false ? '<p class="ranking-empty">资料不足，先保留研究候选；补齐门店或营业信息后再排序。</p>' : ""}
+        <p class="restaurant-status${candidate.rankable === false ? " is-visible" : ""}">${candidate.rankable === false ? "资料不足，先保留研究候选；补齐门店或营业信息后再排序。" : ""}</p>
         <div class="rank-actions" aria-label="餐厅排序">
           ${Object.entries(rankLabels).map(([rankKey, rankLabel]) => `<button type="button" data-action="rank-meal" data-meal-id="${escapeHtml(meal.id)}" data-candidate-id="${escapeHtml(candidate.id)}" data-rank="${rankKey}" aria-pressed="${rank === rankKey}" ${candidate.rankable === false ? "disabled" : ""}>${escapeHtml(rankLabel)}</button>`).join("")}
         </div>
@@ -559,10 +561,6 @@
     <article class="timeline-event type-meal is-synthetic">
       <div class="timeline-time"><span>${showValue(event.time)}</span><small>${String(index + 1).padStart(2, "0")}</small></div>
       <div class="activity-card">
-        <header class="activity-heading">
-          <div><span class="type-badge">用餐</span><h3>${showValue(event.action)}</h3></div>
-          <p>时间随航班或前后节点调整</p>
-        </header>
         ${renderMealModule(event.meal)}
       </div>
     </article>
