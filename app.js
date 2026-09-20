@@ -24,6 +24,7 @@
   }
 
   const storageKey = `travel-planner:${data.trip.id || "trip"}:chronological-v1`;
+  const mealSelectionVersion = data.trip.mealSelectionVersion || "v1";
   const defaultMealSelections = Object.fromEntries(data.meals.map((meal) => [meal.id, {
     primary: meal.selected?.primary || "",
     backup2: meal.selected?.backup2 || "",
@@ -48,12 +49,16 @@
 
   data.meals.forEach((meal) => {
     const validIds = new Set(asArray(meal.candidates).filter((candidate) => candidate.rankable !== false).map((candidate) => candidate.id));
-    const selection = { ...defaultMealSelections[meal.id], ...(stored.mealSelections?.[meal.id] || {}) };
+    const savedSelections = stored.mealSelectionVersion === mealSelectionVersion
+      ? (stored.mealSelections?.[meal.id] || {})
+      : {};
+    const selection = { ...defaultMealSelections[meal.id], ...savedSelections };
     Object.keys(selection).forEach((rank) => {
       if (!validIds.has(selection[rank])) selection[rank] = "";
     });
     state.mealSelections[meal.id] = selection;
   });
+  state.mealSelectionVersion = mealSelectionVersion;
 
   const saveState = () => {
     localStorage.setItem(storageKey, JSON.stringify(state));
