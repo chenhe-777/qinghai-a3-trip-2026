@@ -445,7 +445,7 @@
       kind: "activity",
       item,
       sourceIndex: index,
-      sort: parseStartTime(item.time),
+      sort: Number.isFinite(item.sortHint) ? item.sortHint : parseStartTime(item.time),
       meals: []
     }));
 
@@ -479,16 +479,27 @@
 
   const renderReviewItem = (check) => `<article class="prep-review-item">${renderUserCheck(check)}<label class="review-control">审查需求 <select data-action="review-preparation" data-check-id="${escapeHtml(check.id)}" aria-label="审查：${escapeHtml(check.title)}">${[['','未审查'],['owned','已有够用'],['buy','需要采购'],['skip','本次不带']].map(([value,label])=>`<option value="${value}" ${(state.preparationReview[check.id]||'')===value?'selected':''}>${label}</option>`).join('')}</select></label><small>勾选表示已落实；需求选择不会自动勾选。</small></article>`;
 
+  const renderFoodPlan = (plan) => {
+    if (!plan) return "";
+    return `<section class="prep-section food-plan" aria-labelledby="food-plan-title">
+      <div class="food-plan-heading"><div><p class="micro-label">ROAD FOOD</p><h3 id="food-plan-title">${showValue(plan.title)}</h3></div><p>${showValue(plan.summary)}</p></div>
+      <div class="food-day-grid">${asArray(plan.days).map(day=>`<article><h4>${showValue(day.label)}</h4><p><b>默认：</b>${showValue(day.default)}</p><p><b>有热食时：</b>${showValue(day.replace)}</p></article>`).join('')}</div>
+      <div class="food-table-wrap"><table class="food-table"><thead><tr><th>准备项</th><th>本方两人</th><th>全车四人</th><th>怎么装</th></tr></thead><tbody>${asArray(plan.shopping).map(item=>`<tr><th>${showValue(item.label)}</th><td>${showValue(item.twoPeople)}</td><td>${showValue(item.fourPeople)}</td><td>${showValue(item.note)}</td></tr>`).join('')}</tbody></table></div>
+      <p class="food-avoid"><b>不要这样带：</b>${showValue(plan.avoid)}</p>
+    </section>`;
+  };
+
   const renderResponsibilities = () => {
     const container=document.querySelector('#responsibilities');
     const packed=new Set(asArray(data.trip.packingGroups).flatMap(g=>asArray(g.items).map(i=>i.id)));
     const actions=data.checks.filter(c=>c.owner==='user'&&!c.done&&!packed.has(c.id));
-    const tickets=actions.filter(c=>['check-chaka','check-erlangjian','check-museum-ticket'].includes(c.id));
+    const tickets=actions.filter(c=>['check-erlangjian','check-museum-ticket'].includes(c.id));
     const purchases=actions.filter(c=>!tickets.includes(c));
     container.innerHTML=`<header class="prep-heading"><p class="micro-label">BEFORE DEPARTURE</p><h2 id="responsibility-title">行前准备 · 在这里审查</h2><p>按本方两人准备。物品先选“已有／需购／不带”，备齐后再勾选；门票购妥后再勾。</p></header>
-      <section class="prep-section"><h3>特别记下的三件事</h3><div class="check-list">${purchases.map(renderUserCheck).join('')}</div></section>
+      <section class="prep-section"><h3>需要你落实</h3><div class="check-list">${purchases.map(renderUserCheck).join('')}</div></section>
+      ${renderFoodPlan(data.trip.foodPlan)}
       ${asArray(data.trip.packingGroups).map(g=>`<section class="prep-section"><h3>${showValue(g.title)}</h3><div class="prep-grid">${asArray(g.items).map(i=>renderReviewItem(data.checks.find(c=>c.id===i.id)||{id:i.id,title:i.title,when:g.title,verify:i.detail})).join('')}</div></section>`).join('')}
-      <section class="prep-section"><h3>门票与预约 · 实际办理</h3><div class="check-list">${tickets.map(renderUserCheck).join('')}</div>${data.places.filter(p=>['chaka','qinghai-erlangjian','tibetan-culture'].includes(p.id)).map(p=>`<details class="booking-guidance"><summary>${showValue(p.name)} · 查看购票依据</summary><p>${showValue(p.booking?.when)}</p><p>${showValue(p.booking?.entry)}</p><p>${showValue(p.booking?.price)}</p>${renderSources(p.sources,'购票资料')}</details>`).join('')}</section>
+      <section class="prep-section"><h3>门票与预约 · 实际办理</h3><div class="check-list">${tickets.map(renderUserCheck).join('')}</div>${data.places.filter(p=>['qinghai-erlangjian','tibetan-culture'].includes(p.id)).map(p=>`<details class="booking-guidance"><summary>${showValue(p.name)} · 查看购票依据</summary><p>${showValue(p.booking?.when)}</p><p>${showValue(p.booking?.entry)}</p><p>${showValue(p.booking?.price)}</p>${renderSources(p.sources,'购票资料')}</details>`).join('')}</section>
       <details class="responsibility-group"><summary><b>资料补充 · 你方便时统一补</b></summary><div class="responsibility-body">${asArray(data.trip.materialGaps).map(i=>`<article class="manual-confirmation"><h3>${showValue(i.title)}</h3><p>${showValue(i.detail)}</p></article>`).join('')}</div></details>`;
   };
 

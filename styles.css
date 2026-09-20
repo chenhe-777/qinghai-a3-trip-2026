@@ -2378,6 +2378,21 @@ footer p b {
 .review-control { display:flex; align-items:center; gap:14px; font-size:13px; padding-left:28px; }
 .review-control select { font:inherit; min-height:38px; border:1px solid var(--line); border-radius:6px; padding:4px 10px; background:var(--paper); color:var(--ink); max-width:100%; }
 .prep-review-item > small { display:block; margin:8px 0 0 28px; font-size:12px; color:var(--ink-soft); }
+.food-plan { padding:20px; border:1px solid var(--line); border-radius:12px; background:var(--paper-strong); }
+.food-plan-heading { display:grid; grid-template-columns:minmax(190px,.8fr) minmax(280px,1.7fr); gap:24px; align-items:start; }
+.food-plan-heading h3 { font-family:var(--serif); font-size:22px; margin:4px 0 0; }
+.food-plan-heading > p { margin:0; line-height:1.75; color:var(--ink-soft); }
+.food-day-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:18px 0; }
+.food-day-grid article { padding:14px 16px; border:1px solid var(--line); border-radius:9px; background:var(--paper); }
+.food-day-grid h4 { margin:0 0 9px; font-size:15px; }
+.food-day-grid p { margin:6px 0; font-size:13px; line-height:1.65; }
+.food-table-wrap { overflow-x:auto; }
+.food-table { width:100%; border-collapse:collapse; min-width:650px; font-size:13px; }
+.food-table th,.food-table td { padding:11px 12px; border-top:1px solid var(--line); text-align:left; vertical-align:top; }
+.food-table thead th { color:var(--ink-soft); font-size:12px; letter-spacing:.04em; }
+.food-table tbody th { width:16%; }
+.food-table td:nth-child(2),.food-table td:nth-child(3) { white-space:nowrap; font-weight:700; color:var(--lake-dark); }
+.food-avoid { margin:14px 0 0; padding:12px 14px; background:rgba(173,99,57,.08); border-left:3px solid var(--ochre); font-size:13px; line-height:1.7; }
 @media(max-width:700px) {
  .topbar { flex-wrap:wrap; gap:10px; padding:10px 16px; }
  .brand small { display:none; }
@@ -2389,6 +2404,8 @@ footer p b {
  .compact-hero h1 { font-size:26px; }
  .compact-hero > p { margin-top:10px; }
  .prep-grid { grid-template-columns:1fr; }
+ .food-plan { padding:16px 14px; }
+ .food-plan-heading,.food-day-grid { grid-template-columns:1fr; gap:10px; }
  .activity-card { padding:16px; }
  .poem-text { font-size:20px; }
  .day-plan-header { padding:16px 0 4px; }
