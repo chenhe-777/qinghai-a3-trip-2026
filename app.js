@@ -13,6 +13,13 @@
     "'": "&#039;"
   }[char]));
   const showValue = (value, fallback = "未获取") => escapeHtml(value || fallback);
+  const compactText = (value, max = 76) => {
+    const text = String(value || "").replace(/\s+/g, " ").trim();
+    if (!text) return "";
+    const firstSentence = text.split(/[。；]/)[0];
+    const result = firstSentence.length <= max ? firstSentence : `${firstSentence.slice(0, max - 1)}…`;
+    return escapeHtml(result);
+  };
   const diningPlatformFields = ["score", "reviews", "list", "rank", "years", "price", "hours", "location"];
   const hasDiningPlatformData = (candidate) => [candidate?.platforms?.amap, candidate?.platforms?.dianping]
     .some((platform) => platform && diningPlatformFields.some((field) => platform[field]));
@@ -94,6 +101,7 @@
   };
 
   const renderMode = () => {
+    document.body.dataset.mode = data.trip.defaultMode || "planning";
     document.querySelectorAll("[data-stage]").forEach((item) => {
       item.classList.toggle("is-active", item.dataset.stage === "choice");
     });
@@ -238,10 +246,11 @@
     const stops = asArray(route.order).length
       ? asArray(route.order)
       : asArray(route.placeIds).map(id => data.places.find(p=>p.id===id)?.name).filter(Boolean);
-    return `<section class="compact-overview"><p class="today-route">${stops.map(showValue).join(' <span aria-hidden="true">→</span> ')}</p>
-      ${hotel ? `<p class="provenance">今晚住：${showValue(hotel.primary?.name)}</p>` : ''}
-      ${day.id === 'day-6' ? '<p class="fixed-note">14:00 曹家堡机场T3还车 · 20:00 GJ8166返杭</p>' : ''}
-      <details class="route-reference"><summary>查看路线关系图</summary>${renderRouteMap(route)}</details></section>`;
+    return `<section class="compact-overview">
+      <div class="overview-heading"><span>今日路线</span><h3>${showValue(route.name)}</h3></div>
+      <div class="route-stop-row">${stops.map((stop, index) => `<span><i>${String(index + 1).padStart(2, "0")}</i>${showValue(stop)}</span>`).join("")}</div>
+      <div class="overview-foot">${hotel ? `<span>住 · ${showValue(hotel.primary?.name)}</span>` : ""}${day.id === "day-6" ? "<span>14:00 还车 · 20:00 返杭</span>" : ""}<details class="route-reference"><summary>路线图</summary>${renderRouteMap(route)}</details></div>
+    </section>`;
   };
 
   const renderPlacePhoto = (place) => {
@@ -264,14 +273,19 @@
     </section>`;
   };
 
-  const renderPlaceModule = (place) => `<section id="place-${escapeHtml(place.id)}" class="decision-module scenic-module${place.image?.src?'':' without-photo'}"><div class="module-copy">
-    <p class="module-label">本段怎么玩</p><h4>${showValue(place.name)}</h4><p class="module-intro">${showValue(place.why)}</p>
-    <div class="choice-stack">${asArray(place.highlights).map((item,index)=>`<div><span>${String(index+1).padStart(2,'0')}</span><p>${showValue(item)}</p></div>`).join('')}</div>
-    <dl class="module-facts"><div><dt>建议停留</dt><dd>${showValue(place.duration)}</dd></div><div><dt>在路线中的作用</dt><dd>${showValue(place.role)}</dd></div></dl>
-    <div class="caution-line"><b>景点注意</b><p>${showValue(place.limits)}</p></div>
-    ${place.experience?renderExperience(place):''}
-    ${place.booking?`<details class="booking-guidance"><summary>门票与预约 · 入口、票种与办理时间</summary><dl class="module-facts"><div><dt>何时办理</dt><dd>${showValue(place.booking.when)}</dd></div><div><dt>入口</dt><dd>${showValue(place.booking.entry)}</dd></div><div><dt>票种</dt><dd>${showValue(place.booking.price)}</dd></div></dl><a href="#responsibilities">到行前准备办理</a></details>`:''}
-    ${renderSources(place.sources,'景点资料与来源')}</div>${place.image?.src?renderPlacePhoto(place):''}</section>`;
+  const renderPlaceModule = (place) => `<section id="place-${escapeHtml(place.id)}" class="place-card${place.image?.src ? "" : " without-photo"}">
+    ${place.image?.src ? renderPlacePhoto(place) : ""}
+    <div class="place-card-body">
+      <header class="place-card-header"><div><span>景点</span><h4>${showValue(place.name)}</h4></div><b>${showValue(place.duration)}</b></header>
+      <p class="place-deck">${compactText(place.why, 88)}</p>
+      <div class="highlight-chips">${asArray(place.highlights).slice(0, 3).map((item) => `<span>${showValue(item)}</span>`).join("")}</div>
+      <details class="card-more"><summary>展开本段</summary>
+        <div class="card-more-body"><p><b>现场提醒</b>${showValue(place.limits)}</p></div>
+        ${place.experience ? renderExperience(place) : ""}
+        ${place.booking ? `<details class="booking-guidance"><summary>门票与预约</summary><dl class="module-facts"><div><dt>何时办理</dt><dd>${showValue(place.booking.when)}</dd></div><div><dt>入口</dt><dd>${showValue(place.booking.entry)}</dd></div><div><dt>票种</dt><dd>${showValue(place.booking.price)}</dd></div></dl><a href="#responsibilities">到行前准备办理</a></details>` : ""}
+      </details>
+    </div>
+  </section>`;
 
 
   const rankLabels = { primary: "首选", backup2: "备选 2", backup3: "备选 3" };
@@ -280,20 +294,25 @@
   const renderPlatform = (name, platform = {}) => {
     const values = [platform.score, platform.reviews, platform.list, platform.rank, platform.years, platform.price, platform.hours];
     if (!values.some(Boolean)) return "";
+    const rows = [
+      ["评分", platform.score], ["评价", platform.reviews], ["榜单", platform.list],
+      ["排名", platform.rank], ["收录", platform.years], ["人均", platform.price], ["营业", platform.hours]
+    ].filter(([, value]) => value);
     return `
       <div class="platform-card">
         <b>${escapeHtml(name)}</b>
-        <dl>
-          <div><dt>评分</dt><dd>${showValue(platform.score, "未显示")}</dd></div>
-          <div><dt>评价</dt><dd>${showValue(platform.reviews, "未显示")}</dd></div>
-          <div><dt>榜单</dt><dd>${showValue(platform.list, "未显示")}</dd></div>
-          <div><dt>排名</dt><dd>${showValue(platform.rank, "未显示")}</dd></div>
-          <div><dt>收录</dt><dd>${showValue(platform.years, "未显示")}</dd></div>
-          <div><dt>平台人均</dt><dd>${showValue(platform.price, "未显示")}</dd></div>
-          <div><dt>平台营业</dt><dd>${showValue(platform.hours, "未显示")}</dd></div>
-        </dl>
+        <dl>${rows.map(([label, value]) => `<div><dt>${label}</dt><dd>${showValue(value)}</dd></div>`).join("")}</dl>
       </div>
     `;
+  };
+
+  const renderScorePills = (candidate) => {
+    const amap = candidate.platforms?.amap || {};
+    const dianping = candidate.platforms?.dianping || {};
+    return `<div class="score-pills">
+      ${amap.score ? `<span><i>高德</i><b>${showValue(amap.score)}</b><small>${showValue(amap.reviews, "评价量未显示")}</small></span>` : ""}
+      ${dianping.score ? `<span><i>点评</i><b>${showValue(dianping.score)}</b><small>${showValue(dianping.reviews, "评价量未显示")}</small></span>` : ""}
+    </div>`;
   };
 
   const renderRestaurant = (meal, candidate, index) => {
@@ -301,36 +320,33 @@
     const base = candidate.base || {};
     const platforms = candidate.platforms || {};
     const classicDishes = asArray(candidate.classicDishes);
-    const location = platformValue(candidate, "location");
+    const location = base.location || platformValue(candidate, "location");
     const price = platformValue(candidate, "price");
     const hours = platformValue(candidate, "hours");
     return `
-      <article class="restaurant-option${rank ? " is-ranked" : ""}">
+      <article class="restaurant-option${rank ? ` is-ranked rank-${rank}` : ""}">
         <header class="restaurant-summary">
           <div class="restaurant-number">${rank ? escapeHtml(rankLabels[rank]) : `选项 ${index + 1}`}</div>
           <h5>${showValue(candidate.name)}</h5>
-          <p class="restaurant-feature">${showValue(candidate.category, "餐饮类别待核")} · ${showValue(candidate.feature, "特色待核")}</p>
-          <p class="dish-line"><b>建议菜：</b>${classicDishes.length ? classicDishes.map(showValue).join("、") : "待核"}</p>
+          <p class="restaurant-feature">${showValue(candidate.category, "餐饮类别待核")}</p>
         </header>
+        ${renderScorePills(candidate)}
+        <p class="dish-line"><b>点：</b>${classicDishes.length ? classicDishes.slice(0, 4).map(showValue).join("、") : "到店看招牌"}</p>
         <dl class="restaurant-basics">
           <div><dt>位置</dt><dd>${showValue(location)}</dd></div>
-          <div><dt>用时</dt><dd>${showValue(base.duration)}</dd></div>
           <div><dt>人均</dt><dd>${showValue(price)}</dd></div>
           <div><dt>营业</dt><dd>${showValue(hours)}</dd></div>
         </dl>
         <details class="restaurant-details">
-          <summary>展开路线关系、风险与平台数据</summary>
+          <summary>查看榜单与现场切换</summary>
           <div class="restaurant-logic">
-            <p><b>为什么顺路：</b>${showValue(candidate.routeRelation)}</p>
-            <p><b>风险：</b>${showValue(candidate.risk)}</p>
-            <p><b>何时启用：</b>${showValue(candidate.condition)}</p>
-            <p><b>餐次去重：</b>${showValue(candidate.repetition)}</p>
+            <p><b>为什么选：</b>${showValue(candidate.routeRelation)}</p>
+            <p><b>切换条件：</b>${showValue(candidate.condition)}</p>
           </div>
           ${renderPlatform("高德", platforms.amap)}
           ${renderPlatform("大众点评", platforms.dianping)}
-          ${renderSources(filterDiningSources(candidate.sources), "门店与推荐来源")}
         </details>
-        <p class="restaurant-status${candidate.rankable === false ? " is-visible" : ""}">${candidate.rankable === false ? "资料不足，先保留研究候选；补齐门店或营业信息后再排序。" : ""}</p>
+        <p class="restaurant-status${candidate.rankable === false ? " is-visible" : ""}">${candidate.rankable === false ? "未满足双平台评分门槛，不参加正式排序。" : ""}</p>
         <div class="rank-actions" aria-label="餐厅排序">
           ${Object.entries(rankLabels).map(([rankKey, rankLabel]) => `<button type="button" data-action="rank-meal" data-meal-id="${escapeHtml(meal.id)}" data-candidate-id="${escapeHtml(candidate.id)}" data-rank="${rankKey}" aria-pressed="${rank === rankKey}" ${candidate.rankable === false ? "disabled" : ""}>${escapeHtml(rankLabel)}</button>`).join("")}
         </div>
@@ -353,13 +369,15 @@
 
   const renderMealModule = (meal) => {
     const candidates=meal.safetyLocked?[]:asArray(meal.candidates);
-    const verifiedCandidates=candidates.filter(hasDiningPlatformData);
-    const missingCandidates=candidates.filter((candidate)=>!hasDiningPlatformData(candidate));
-    return `<section class="decision-module meal-module"><div class="meal-heading"><h4>${showValue(meal.label)}</h4><span>${verifiedCandidates.length?verifiedCandidates.length+' 个可比较选项':''}</span></div><p class="module-intro">${showValue(meal.readerNote || meal.note)}</p>
-      ${meal.strategy?`<details class="dining-plan"><summary>携带与购买建议</summary><p>${showValue(meal.strategy.detail)}</p></details>`:''}${renderDiningPlan(meal.diningPlan)}
-      ${verifiedCandidates.length?`${renderMealRanking(meal)}<details class="meal-options" data-meal-id="${escapeHtml(meal.id)}"><summary>展开比较餐厅 · 选择首选与备选</summary><div class="restaurant-grid">${verifiedCandidates.map((c,i)=>renderRestaurant(meal,c,i)).join('')}</div></details>`:''}
-      ${missingCandidates.length?`<details class="dining-plan evidence-gap"><summary>待补高德／大众点评资料 · ${missingCandidates.length} 家</summary><p>以下餐厅暂不显示旧平台的人均、营业时间或地址，也不能进入首选排序：</p><ul>${missingCandidates.map((candidate)=>`<li>${showValue(candidate.name)}</li>`).join('')}</ul></details>`:''}
-      ${renderSources(filterDiningSources(meal.sources),'本餐推荐来源')}</section>`;
+    const verifiedCandidates=candidates.filter((candidate)=>candidate.rankable !== false && hasDiningPlatformData(candidate));
+    const missingCandidates=candidates.filter((candidate)=>candidate.rankable === false || !hasDiningPlatformData(candidate));
+    const rankOrder = { primary: 0, backup2: 1, backup3: 2 };
+    const orderedCandidates = [...verifiedCandidates].sort((a, b) => (rankOrder[candidateRank(meal, a.id)] ?? 9) - (rankOrder[candidateRank(meal, b.id)] ?? 9));
+    return `<section class="decision-module meal-module"><div class="meal-heading"><div><span>用餐</span><h4>${showValue(meal.label)}</h4></div><b>${orderedCandidates.length ? `${orderedCandidates.length} 家` : "已安排"}</b></div>
+      ${orderedCandidates.length ? `<div class="restaurant-grid" data-meal-id="${escapeHtml(meal.id)}">${orderedCandidates.map((candidate, index) => renderRestaurant(meal, candidate, index)).join("")}</div>` : `<p class="meal-note">${compactText(meal.readerNote || meal.note, 100)}</p>`}
+      ${meal.strategy || meal.diningPlan ? `<details class="meal-guide"><summary>点单与备用方案</summary>${meal.strategy ? `<p>${showValue(meal.strategy.detail)}</p>` : ""}${renderDiningPlan(meal.diningPlan)}</details>` : ""}
+      ${missingCandidates.length ? `<details class="meal-guide evidence-gap"><summary>未评级线索 · ${missingCandidates.length} 家</summary><ul>${missingCandidates.map((candidate) => `<li>${showValue(candidate.name)}</li>`).join("")}</ul></details>` : ""}
+    </section>`;
   };
 
   const parseStartTime = (time) => {
@@ -532,6 +550,7 @@
 
   const activityType = (event) => {
     const text = `${event.item?.action || ""} ${event.action || ""}`;
+    if (event.meals?.length && event.places?.length) return "mixed";
     if (event.kind === "meal" || event.meals?.length) return "meal";
     if (event.places?.length) return "scenic";
     if (/取车|还车|验车/.test(text)) return "key";
@@ -539,7 +558,7 @@
     return "activity";
   };
 
-  const typeLabels = { meal: "用餐", scenic: "游玩", key: "关键节点", drive: "行车", activity: "安排" };
+  const typeLabels = { meal: "用餐", scenic: "游玩", mixed: "逛吃", key: "关键节点", drive: "行车", activity: "安排" };
 
   const renderFallback = (fallback) => `
     <div class="fallback-box">
@@ -564,28 +583,29 @@
 
   const renderActivityContent = (event, index) => {
     const item=event.item, type=activityType(event), hasModules=event.places.length||event.meals.length;
-    return `<article class="timeline-event type-${type}"><div class="timeline-time"><span>${showValue(item.time)}</span></div><div class="activity-card">
-      ${hasModules?'':`<header class="activity-heading"><h3>${showValue(item.action)}</h3></header>`}
-      ${event.places.map(renderPlaceModule).join('')}
-      ${event.optionalPlaces.length?`<details class="museum-alternatives"><summary>其他博物馆 · 替换选择</summary><p>上午选一馆即可；以下不是额外叠加。</p>${event.optionalPlaces.map(renderPlaceModule).join('')}</details>`:''}
-      ${event.meals.map(renderMealModule).join('')}
-      ${hasModules?'':`<details class="dining-plan"><summary>安排详情</summary><p>${showValue(item.navigation,item.action)}</p><p>${showValue(item.deadline)}</p></details>`}
-    </div></article>`;
+    const title = event.places[0]?.name || event.meals[0]?.label || item.action;
+    return `<article class="timeline-event type-${type}"><details class="journey-card" ${index === 0 && type === "key" ? "open" : ""}>
+      <summary><span class="step-number">${String(index + 1).padStart(2, "0")}</span><time>${showValue(item.time)}</time><div><small>${showValue(typeLabels[type])}</small><h3>${showValue(title)}</h3></div><i>展开</i></summary>
+      <div class="journey-card-body">
+        ${hasModules ? "" : `<div class="route-essentials"><span>${showValue(item.from)}</span><b>${showValue(item.transport)}</b><span>${showValue(item.to)}</span></div><p class="journey-note">${showValue(item.navigation, item.action)}</p>${item.deadline ? `<p class="deadline-note">${showValue(item.deadline)}</p>` : ""}`}
+        ${event.places.map(renderPlaceModule).join("")}
+        ${event.optionalPlaces.length ? `<details class="museum-alternatives"><summary>替换景点</summary>${event.optionalPlaces.map(renderPlaceModule).join("")}</details>` : ""}
+        ${event.meals.map(renderMealModule).join("")}
+        ${asArray(event.fallbacks).map(renderFallback).join("")}
+      </div>
+    </details></article>`;
   };
 
   const renderActivityEvent = (event,index) => {
     const type=activityType(event);
-    if (!event.places.length&&!event.meals.length&&['drive','key'].includes(type)) return '';
+    if (!event.places.length&&!event.meals.length&&type==='drive') return '';
     if (!event.places.length&&!event.meals.length&&/加满油|补满油|检查车辆|寄存|采购次日/.test(event.item.action)) return '';
     return renderActivityContent(event,index);
   };
 
   const renderSyntheticMealEvent = (event, index) => `
     <article class="timeline-event type-meal is-synthetic">
-      <div class="timeline-time"><span>${showValue(event.time)}</span><small>${String(index + 1).padStart(2, "0")}</small></div>
-      <div class="activity-card">
-        ${renderMealModule(event.meal)}
-      </div>
+      <details class="journey-card"><summary><span class="step-number">${String(index + 1).padStart(2, "0")}</span><time>${showValue(event.time)}</time><div><small>用餐</small><h3>${showValue(event.meal.label)}</h3></div><i>展开</i></summary><div class="journey-card-body">${renderMealModule(event.meal)}</div></details>
     </article>
   `;
 

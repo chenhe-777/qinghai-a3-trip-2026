@@ -2282,6 +2282,647 @@ footer p b {
   }
 }
 
+/* 2026-09-22 · execution cards
+   The public guide now follows the compact Beijing field-guide pattern:
+   one stage per card, decisions first, evidence and contingencies folded away. */
+body[data-mode="execution"] .rank-actions {
+  display: none;
+}
+
+.compact-overview {
+  margin: 0 0 28px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 253, 247, 0.78);
+  box-shadow: 0 14px 34px rgba(29, 47, 40, 0.07);
+}
+
+.overview-heading {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  color: #fff9eb;
+  background: var(--lake-dark);
+}
+
+.overview-heading span,
+.meal-heading span,
+.place-card-header span {
+  color: #e8bd69;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.overview-heading h3 {
+  margin: 0;
+  font: 700 clamp(20px, 2.3vw, 31px)/1.22 var(--serif);
+}
+
+.route-stop-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.route-stop-row > span {
+  min-width: 0;
+  padding: 16px 18px;
+  border-right: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.route-stop-row i {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--sun);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: .12em;
+}
+
+.overview-foot {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 18px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.overview-foot .route-reference {
+  margin-left: auto;
+}
+
+.timeline {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+}
+
+.timeline::before {
+  display: none;
+}
+
+.timeline-event,
+.preflight-card {
+  display: block;
+  padding: 0;
+}
+
+.journey-card {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 253, 247, 0.88);
+  box-shadow: 0 10px 26px rgba(32, 47, 41, 0.06);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.journey-card:hover {
+  border-color: color-mix(in srgb, var(--lake) 48%, var(--line));
+  box-shadow: 0 15px 36px rgba(32, 47, 41, 0.1);
+}
+
+.journey-card > summary {
+  display: grid;
+  grid-template-columns: 46px 124px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 88px;
+  padding: 14px 20px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.journey-card > summary::-webkit-details-marker,
+.card-more > summary::-webkit-details-marker,
+.meal-guide > summary::-webkit-details-marker {
+  display: none;
+}
+
+.journey-card .step-number {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #fff9eb;
+  background: var(--lake-dark);
+  font: 900 11px var(--sans);
+}
+
+.journey-card time {
+  color: var(--sun);
+  font: 800 14px/1.3 var(--serif);
+}
+
+.journey-card > summary small {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--lichen);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.journey-card > summary h3 {
+  margin: 0;
+  font: 700 clamp(19px, 2vw, 27px)/1.2 var(--serif);
+}
+
+.journey-card > summary i {
+  color: var(--sun);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.journey-card[open] {
+  border-color: var(--lake-dark);
+}
+
+.journey-card[open] > summary {
+  color: #fff9eb;
+  background: var(--lake-dark);
+}
+
+.journey-card[open] .step-number {
+  color: var(--lake-dark);
+  background: #e8bd69;
+}
+
+.journey-card[open] > summary small {
+  color: rgba(255, 249, 235, .65);
+}
+
+.journey-card[open] > summary i::before {
+  content: "收起";
+  font-size: 10px;
+}
+
+.journey-card[open] > summary i {
+  font-size: 0;
+}
+
+.journey-card-body {
+  padding: 20px;
+  border-top: 1px solid rgba(216, 205, 185, .65);
+}
+
+.route-essentials {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 17px 18px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.route-essentials b {
+  padding: 5px 11px;
+  color: #fff9eb;
+  background: var(--lake-dark);
+  border-radius: 999px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.route-essentials span:last-child {
+  text-align: right;
+}
+
+.journey-note,
+.deadline-note {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.deadline-note {
+  padding-left: 12px;
+  border-left: 3px solid var(--sun);
+}
+
+.place-card {
+  display: grid;
+  grid-template-columns: minmax(250px, .9fr) minmax(0, 1.35fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper-strong);
+}
+
+.place-card.without-photo {
+  grid-template-columns: 1fr;
+}
+
+.place-photo {
+  min-height: 100%;
+  margin: 0;
+  border-right: 1px solid var(--line);
+}
+
+.place-photo-frame,
+.place-photo-frame img {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+}
+
+.place-photo-frame img {
+  display: block;
+  object-fit: cover;
+}
+
+.place-photo figcaption {
+  display: none;
+}
+
+.place-card-body {
+  min-width: 0;
+  padding: 22px;
+}
+
+.place-card-header,
+.meal-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.place-card-header h4,
+.meal-heading h4 {
+  margin: 4px 0 0;
+  font: 700 clamp(24px, 2.6vw, 36px)/1.15 var(--serif);
+}
+
+.place-card-header > b,
+.meal-heading > b {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  color: var(--lake-dark);
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  font-size: 11px;
+}
+
+.place-deck {
+  margin: 15px 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.highlight-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.highlight-chips span {
+  padding: 6px 9px;
+  color: var(--lake-dark);
+  border: 1px solid color-mix(in srgb, var(--lake) 24%, var(--line));
+  background: rgba(31, 95, 105, .06);
+  font-size: 11px;
+}
+
+.card-more,
+.meal-guide {
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.card-more > summary,
+.meal-guide > summary {
+  padding: 13px 0 0;
+  color: var(--sun);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .05em;
+  list-style: none;
+}
+
+.card-more-body,
+.meal-guide > p,
+.meal-guide > ul {
+  margin: 13px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.card-more-body p {
+  margin: 0;
+}
+
+.card-more-body b {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+
+.meal-module {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.restaurant-option {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  padding: 18px;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--lake);
+  background: var(--paper-strong);
+  box-shadow: none;
+}
+
+.restaurant-option.rank-primary {
+  grid-column: 1 / -1;
+  border-top-color: var(--sun);
+  box-shadow: 0 14px 30px rgba(139, 75, 36, .08);
+}
+
+.restaurant-number {
+  width: fit-content;
+  margin-bottom: 12px;
+  padding: 5px 8px;
+  color: #fff9eb;
+  background: var(--lake-dark);
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.rank-primary .restaurant-number {
+  background: var(--sun);
+}
+
+.restaurant-option h5 {
+  margin: 0;
+  font: 700 clamp(20px, 2vw, 28px)/1.22 var(--serif);
+}
+
+.restaurant-feature {
+  margin: 6px 0 0;
+  color: var(--lichen);
+  font-size: 12px;
+}
+
+.score-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 12px;
+}
+
+.score-pills span {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 1px 8px;
+  min-width: 118px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.score-pills i {
+  color: var(--lichen);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.score-pills b {
+  color: var(--sun);
+  font: 800 18px/1 var(--serif);
+}
+
+.score-pills small {
+  grid-column: 1 / -1;
+  color: var(--ink-soft);
+  font-size: 9px;
+}
+
+.dish-line {
+  margin: 0 0 13px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.restaurant-basics {
+  display: grid;
+  grid-template-columns: 1.5fr .7fr .9fr;
+  margin: auto 0 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.restaurant-basics > div {
+  min-width: 0;
+  padding: 10px 9px;
+  border-right: 1px solid var(--line);
+}
+
+.restaurant-basics > div:last-child {
+  border-right: 0;
+}
+
+.restaurant-basics dt {
+  color: var(--lichen);
+  font-size: 9px;
+}
+
+.restaurant-basics dd {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 3px 0 0;
+  color: var(--ink);
+  font-size: 11px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.restaurant-details {
+  margin-top: 12px;
+  border: 0;
+}
+
+.restaurant-details > summary {
+  color: var(--sun);
+  font-size: 10px;
+}
+
+.restaurant-logic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.platform-card {
+  margin-top: 10px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.platform-card dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.platform-card dl > div {
+  min-width: 0;
+}
+
+.fallback-box {
+  margin-top: 16px;
+}
+
+@media (max-width: 760px) {
+  .overview-heading {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 16px;
+  }
+
+  .route-stop-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .route-stop-row > span {
+    min-width: 0;
+  }
+
+  .overview-foot {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .overview-foot .route-reference {
+    margin-left: 0;
+  }
+
+  .journey-card > summary {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 10px;
+    min-height: 82px;
+    padding: 12px;
+  }
+
+  .journey-card .step-number {
+    grid-row: 1 / 3;
+    width: 32px;
+    height: 38px;
+  }
+
+  .journey-card time {
+    grid-column: 2;
+    font-size: 11px;
+  }
+
+  .journey-card > summary > div {
+    grid-column: 2;
+  }
+
+  .journey-card > summary i {
+    grid-column: 3;
+    grid-row: 1 / 3;
+  }
+
+  .journey-card > summary h3 {
+    font-size: 18px;
+  }
+
+  .journey-card-body {
+    padding: 12px;
+  }
+
+  .route-essentials {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .route-essentials b {
+    width: fit-content;
+  }
+
+  .route-essentials span:last-child {
+    text-align: left;
+  }
+
+  .place-card {
+    grid-template-columns: 1fr;
+  }
+
+  .place-photo {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .place-photo-frame,
+  .place-photo-frame img {
+    min-height: 190px;
+    max-height: 240px;
+  }
+
+  .place-card-body {
+    padding: 16px;
+  }
+
+  .place-card-header h4,
+  .meal-heading h4 {
+    font-size: 25px;
+  }
+
+  .restaurant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-option.rank-primary {
+    grid-column: auto;
+  }
+
+  .restaurant-basics,
+  .restaurant-logic,
+  .platform-card dl {
+    grid-template-columns: 1fr;
+  }
+
+  .restaurant-basics > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .restaurant-basics > div:last-child {
+    border-bottom: 0;
+  }
+}
+
 .evidence-gap ul {
   margin: 0.7rem 0 0;
   padding-left: 1.25rem;
