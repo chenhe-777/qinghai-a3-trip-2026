@@ -249,6 +249,10 @@
     return `<section class="compact-overview">
       <div class="overview-heading"><span>今日路线</span><h3>${showValue(route.name)}</h3></div>
       <div class="route-stop-row">${stops.map((stop, index) => `<span><i>${String(index + 1).padStart(2, "0")}</i>${showValue(stop)}</span>`).join("")}</div>
+      <div class="overview-brief">
+        ${route.totalTime ? `<p><b>执行节奏</b>${showValue(route.totalTime)}</p>` : ""}
+        ${route.tradeoff ? `<p><b>取舍原则</b>${showValue(route.tradeoff)}</p>` : ""}
+      </div>
       <div class="overview-foot">${hotel ? `<span>住 · ${showValue(hotel.primary?.name)}</span>` : ""}${day.id === "day-6" ? "<span>14:00 还车 · 20:00 返杭</span>" : ""}<details class="route-reference"><summary>路线图</summary>${renderRouteMap(route)}</details></div>
     </section>`;
   };
@@ -387,7 +391,7 @@
 
   const mealSlot = (meal) => {
     if (meal.label.includes("早餐")) return "breakfast";
-    if (meal.label.includes("午餐")) return "lunch";
+    if (meal.label.includes("午餐") || meal.label.includes("正餐")) return "lunch";
     return "dinner";
   };
 
@@ -436,13 +440,22 @@
   const assignPlaces = (day, route) => {
     const timeline = asArray(day.timeline);
     const assignments = new Map();
-    asArray(route?.placeIds).map((id) => data.places.find((place) => place.id === id)).filter(Boolean).forEach((place) => {
+    const assigned = new Set();
+
+    timeline.forEach((item, index) => {
+      const places = asArray(item.placeIds).map((id) => data.places.find((place) => place.id === id)).filter(Boolean);
+      if (!places.length) return;
+      assignments.set(index, places);
+      places.forEach((place) => assigned.add(place.id));
+    });
+
+    asArray(route?.placeIds).map((id) => data.places.find((place) => place.id === id)).filter((place) => place && !assigned.has(place.id)).forEach((place) => {
       const tokens = meaningfulTokens(place.name);
       let bestIndex = -1;
       let bestScore = 0;
       timeline.forEach((item, index) => {
         const text = activityText(item);
-        let score = asArray(item.placeIds).includes(place.id) ? 10000 : tokens.reduce((total, token) => total + (text.includes(token) ? token.length : 0), 0);
+        let score = tokens.reduce((total, token) => total + (text.includes(token) ? token.length : 0), 0);
         if (/游览|观景|日落|湖岸|外观|短停/.test(item.action || "")) score += 3;
         if (score > bestScore) {
           bestIndex = index;
@@ -489,7 +502,18 @@
       meals: []
     }));
 
-    data.meals.filter((meal) => meal.dayId === day.id).forEach((meal) => {
+    const mealsForDay = data.meals.filter((meal) => meal.dayId === day.id);
+    const assignedMealIds = new Set();
+    events.forEach((event) => {
+      asArray(event.item.mealIds).forEach((mealId) => {
+        const meal = mealsForDay.find((candidate) => candidate.id === mealId);
+        if (!meal || assignedMealIds.has(meal.id)) return;
+        event.meals.push(meal);
+        assignedMealIds.add(meal.id);
+      });
+    });
+
+    mealsForDay.filter((meal) => !assignedMealIds.has(meal.id)).forEach((meal) => {
       const scored = timeline.map((item, index) => ({ index, score: mealStepScore(meal, item) })).sort((a, b) => b.score - a.score);
       if (scored[0]?.score > 0) {
         events[scored[0].index].meals.push(meal);
@@ -550,6 +574,7 @@
 
   const activityType = (event) => {
     const text = `${event.item?.action || ""} ${event.action || ""}`;
+    if (event.item?.kind) return event.item.kind;
     if (event.meals?.length && event.places?.length) return "mixed";
     if (event.kind === "meal" || event.meals?.length) return "meal";
     if (event.places?.length) return "scenic";
@@ -558,7 +583,7 @@
     return "activity";
   };
 
-  const typeLabels = { meal: "用餐", scenic: "游玩", mixed: "逛吃", key: "关键节点", drive: "行车", activity: "安排" };
+  const typeLabels = { meal: "用餐", scenic: "游玩", mixed: "逛吃", key: "关键节点", drive: "行车", stay: "入住", prep: "准备", activity: "安排" };
 
   const renderFallback = (fallback) => `
     <div class="fallback-box">
@@ -582,12 +607,18 @@
   `;
 
   const renderActivityContent = (event, index) => {
-    const item=event.item, type=activityType(event), hasModules=event.places.length||event.meals.length;
-    const title = event.places[0]?.name || event.meals[0]?.label || item.action;
+    const item=event.item, type=activityType(event);
+    const title = item.title || event.places[0]?.name || event.meals[0]?.label || item.action;
     return `<article class="timeline-event type-${type}"><details class="journey-card" ${index === 0 && type === "key" ? "open" : ""}>
       <summary><span class="step-number">${String(index + 1).padStart(2, "0")}</span><time>${showValue(item.time)}</time><div><small>${showValue(typeLabels[type])}</small><h3>${showValue(title)}</h3></div><i>展开</i></summary>
       <div class="journey-card-body">
-        ${hasModules ? "" : `<div class="route-essentials"><span>${showValue(item.from)}</span><b>${showValue(item.transport)}</b><span>${showValue(item.to)}</span></div><p class="journey-note">${showValue(item.navigation, item.action)}</p>${item.deadline ? `<p class="deadline-note">${showValue(item.deadline)}</p>` : ""}`}
+        ${(item.from || item.to || item.transport) ? `<div class="route-essentials"><span>${showValue(item.from)}</span><b>${showValue(item.transport)}</b><span>${showValue(item.to)}</span></div>` : ""}
+        <div class="journey-facts">
+          ${item.doorToDoor ? `<p><b>时间依据</b>${showValue(item.doorToDoor)}</p>` : ""}
+          ${item.navigation ? `<p><b>到哪里</b>${showValue(item.navigation)}</p>` : ""}
+          ${item.deadline ? `<p><b>这一段结束前</b>${showValue(item.deadline)}</p>` : ""}
+          ${item.switchCondition ? `<p><b>现场切换</b>${showValue(item.switchCondition)}</p>` : ""}
+        </div>
         ${event.places.map(renderPlaceModule).join("")}
         ${event.optionalPlaces.length ? `<details class="museum-alternatives"><summary>替换景点</summary>${event.optionalPlaces.map(renderPlaceModule).join("")}</details>` : ""}
         ${event.meals.map(renderMealModule).join("")}
@@ -597,9 +628,6 @@
   };
 
   const renderActivityEvent = (event,index) => {
-    const type=activityType(event);
-    if (!event.places.length&&!event.meals.length&&type==='drive') return '';
-    if (!event.places.length&&!event.meals.length&&/加满油|补满油|检查车辆|寄存|采购次日/.test(event.item.action)) return '';
     return renderActivityContent(event,index);
   };
 

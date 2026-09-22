@@ -3488,3 +3488,162 @@ body[data-mode="execution"] .rank-actions {
     line-height: 1.14;
   }
 }
+
+/* 2026-09-22 · continuous roadbook timeline */
+.overview-brief {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.overview-brief p {
+  margin: 0;
+  padding: 14px 18px;
+  color: var(--ink-soft);
+  background: var(--paper-strong);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.overview-brief b,
+.journey-facts b {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--lake-dark);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .1em;
+}
+
+.journey-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 12px 0 0;
+  padding: 1px;
+  background: var(--line);
+}
+
+.journey-facts p {
+  min-width: 0;
+  margin: 0;
+  padding: 11px 12px;
+  color: var(--ink-soft);
+  background: var(--paper);
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.journey-facts + .place-card,
+.journey-facts + .decision-module,
+.journey-facts + .museum-alternatives {
+  margin-top: 16px;
+}
+
+.type-drive .journey-card {
+  border-left: 4px solid var(--lake);
+}
+
+.type-scenic .journey-card {
+  border-left: 4px solid var(--lichen);
+}
+
+.type-meal .journey-card {
+  border-left: 4px solid var(--sun);
+}
+
+.type-stay .journey-card,
+.type-prep .journey-card,
+.type-key .journey-card {
+  border-left: 4px solid var(--ink);
+}
+
+@media (max-width: 760px) {
+  .overview-brief,
+  .journey-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-card > summary,
+  .journey-card > summary > div,
+  .journey-card > summary h3 {
+    min-width: 0;
+  }
+
+  .journey-card > summary h3 {
+    overflow-wrap: anywhere;
+  }
+
+  .place-card-header,
+  .meal-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .place-card-header > div,
+  .meal-heading > div {
+    min-width: 0;
+  }
+
+  .place-card-header h4,
+  .meal-heading h4 {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .place-card-header > b,
+  .meal-heading > b {
+    width: fit-content;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 700px) {
+  .topbar,
+  .navigation-rail {
+    position: static;
+    top: auto;
+  }
+
+  html {
+    scroll-padding-top: 16px;
+  }
+
+  .day-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    overflow: visible;
+  }
+
+  .day-tabs button {
+    min-width: 0;
+    min-height: 62px;
+    padding: 8px 6px;
+  }
+
+  .day-tabs small,
+  .day-tabs span {
+    display: none;
+  }
+
+  .day-tabs b {
+    min-height: 0;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .overview-foot {
+    padding: 12px 14px;
+  }
+
+  .timeline {
+    margin-top: 22px;
+  }
+}
