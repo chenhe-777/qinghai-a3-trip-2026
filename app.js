@@ -69,7 +69,9 @@
       .filter((candidate) => candidate.rankable !== false && hasDiningPlatformData(candidate))
       .map((candidate) => candidate.id));
     const savedSelections = stored.mealSelectionVersion === mealSelectionVersion &&
-      (meal.id !== "meal-d6-breakfast" || stored.breakfastDefaultVersion === data.trip.breakfastDefaultVersion)
+      (meal.id !== "meal-d6-breakfast" || stored.breakfastDefaultVersion === data.trip.breakfastDefaultVersion) &&
+      (meal.id !== "meal-d5-dinner" || stored.d5DinnerDefaultVersion === data.trip.d5DinnerDefaultVersion)
+      && (meal.id !== "meal-d6-lunch" || stored.d6LunchDefaultVersion === data.trip.d6LunchDefaultVersion)
       ? (stored.mealSelections?.[meal.id] || {})
       : {};
     const selection = { ...defaultMealSelections[meal.id], ...savedSelections };
@@ -80,6 +82,8 @@
   });
   state.mealSelectionVersion = mealSelectionVersion;
   state.breakfastDefaultVersion = data.trip.breakfastDefaultVersion;
+  state.d5DinnerDefaultVersion = data.trip.d5DinnerDefaultVersion;
+  state.d6LunchDefaultVersion = data.trip.d6LunchDefaultVersion;
 
   const saveState = () => {
     localStorage.setItem(storageKey, JSON.stringify(state));
