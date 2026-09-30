@@ -68,7 +68,8 @@
     const validIds = new Set(asArray(meal.candidates)
       .filter((candidate) => candidate.rankable !== false && hasDiningPlatformData(candidate))
       .map((candidate) => candidate.id));
-    const savedSelections = stored.mealSelectionVersion === mealSelectionVersion
+    const savedSelections = stored.mealSelectionVersion === mealSelectionVersion &&
+      (meal.id !== "meal-d6-breakfast" || stored.breakfastDefaultVersion === data.trip.breakfastDefaultVersion)
       ? (stored.mealSelections?.[meal.id] || {})
       : {};
     const selection = { ...defaultMealSelections[meal.id], ...savedSelections };
@@ -78,6 +79,7 @@
     state.mealSelections[meal.id] = selection;
   });
   state.mealSelectionVersion = mealSelectionVersion;
+  state.breakfastDefaultVersion = data.trip.breakfastDefaultVersion;
 
   const saveState = () => {
     localStorage.setItem(storageKey, JSON.stringify(state));
