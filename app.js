@@ -70,6 +70,7 @@
       .map((candidate) => candidate.id));
     const savedSelections = stored.mealSelectionVersion === mealSelectionVersion &&
       (meal.id !== "meal-d6-breakfast" || stored.breakfastDefaultVersion === data.trip.breakfastDefaultVersion) &&
+      (meal.id !== "meal-d5-lunch" || stored.d5LunchDefaultVersion === data.trip.d5LunchDefaultVersion) &&
       (meal.id !== "meal-d5-dinner" || stored.d5DinnerDefaultVersion === data.trip.d5DinnerDefaultVersion)
       && (meal.id !== "meal-d6-lunch" || stored.d6LunchDefaultVersion === data.trip.d6LunchDefaultVersion)
       ? (stored.mealSelections?.[meal.id] || {})
@@ -82,6 +83,7 @@
   });
   state.mealSelectionVersion = mealSelectionVersion;
   state.breakfastDefaultVersion = data.trip.breakfastDefaultVersion;
+  state.d5LunchDefaultVersion = data.trip.d5LunchDefaultVersion;
   state.d5DinnerDefaultVersion = data.trip.d5DinnerDefaultVersion;
   state.d6LunchDefaultVersion = data.trip.d6LunchDefaultVersion;
 
