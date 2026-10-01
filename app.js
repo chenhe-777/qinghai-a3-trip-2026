@@ -66,7 +66,7 @@
 
   data.meals.forEach((meal) => {
     const validIds = new Set(asArray(meal.candidates)
-      .filter((candidate) => candidate.rankable !== false && hasDiningPlatformData(candidate))
+      .filter((candidate) => candidate.rankable !== false && (hasDiningPlatformData(candidate) || candidate.confirmedByUser))
       .map((candidate) => candidate.id));
     const savedSelections = stored.mealSelectionVersion === mealSelectionVersion &&
       (meal.id !== "meal-d6-breakfast" || stored.breakfastDefaultVersion === data.trip.breakfastDefaultVersion) &&
@@ -333,8 +333,8 @@
     const platforms = candidate.platforms || {};
     const classicDishes = asArray(candidate.classicDishes);
     const location = base.location || platformValue(candidate, "location");
-    const price = platformValue(candidate, "price");
-    const hours = platformValue(candidate, "hours");
+    const price = platformValue(candidate, "price") || base.price;
+    const hours = platformValue(candidate, "hours") || base.hours;
     return `
       <article class="restaurant-option${rank ? ` is-ranked rank-${rank}` : ""}">
         <header class="restaurant-summary">
@@ -345,9 +345,9 @@
         ${renderScorePills(candidate)}
         <p class="dish-line"><b>点：</b>${classicDishes.length ? classicDishes.slice(0, 4).map(showValue).join("、") : "到店看招牌"}</p>
         <dl class="restaurant-basics">
-          <div><dt>位置</dt><dd>${showValue(location)}</dd></div>
-          <div><dt>人均</dt><dd>${showValue(price)}</dd></div>
-          <div><dt>营业</dt><dd>${showValue(hours)}</dd></div>
+          ${location ? `<div><dt>位置</dt><dd>${showValue(location)}</dd></div>` : ""}
+          ${price ? `<div><dt>人均</dt><dd>${showValue(price)}</dd></div>` : ""}
+          ${hours ? `<div><dt>营业</dt><dd>${showValue(hours)}</dd></div>` : ""}
         </dl>
         <details class="restaurant-details">
           <summary>查看榜单与现场切换</summary>
@@ -358,7 +358,7 @@
           ${renderPlatform("高德", platforms.amap)}
           ${renderPlatform("大众点评", platforms.dianping)}
         </details>
-        <p class="restaurant-status${candidate.rankable === false ? " is-visible" : ""}">${candidate.rankable === false ? "未满足双平台评分门槛，不参加正式排序。" : ""}</p>
+        <p class="restaurant-status${candidate.rankable === false || (candidate.confirmedByUser && !hasDiningPlatformData(candidate)) ? " is-visible" : ""}">${candidate.rankable === false ? "未满足双平台评分门槛，不参加正式排序。" : candidate.confirmedByUser && !hasDiningPlatformData(candidate) ? "用户已选；高德和大众点评评分待补。" : ""}</p>
         <div class="rank-actions" aria-label="餐厅排序">
           ${Object.entries(rankLabels).map(([rankKey, rankLabel]) => `<button type="button" data-action="rank-meal" data-meal-id="${escapeHtml(meal.id)}" data-candidate-id="${escapeHtml(candidate.id)}" data-rank="${rankKey}" aria-pressed="${rank === rankKey}" ${candidate.rankable === false ? "disabled" : ""}>${escapeHtml(rankLabel)}</button>`).join("")}
         </div>
@@ -381,8 +381,8 @@
 
   const renderMealModule = (meal) => {
     const candidates=meal.safetyLocked?[]:asArray(meal.candidates);
-    const verifiedCandidates=candidates.filter((candidate)=>candidate.rankable !== false && hasDiningPlatformData(candidate));
-    const missingCandidates=candidates.filter((candidate)=>candidate.rankable === false || !hasDiningPlatformData(candidate));
+    const verifiedCandidates=candidates.filter((candidate)=>candidate.rankable !== false && (hasDiningPlatformData(candidate) || candidate.confirmedByUser));
+    const missingCandidates=candidates.filter((candidate)=>candidate.rankable === false || (!hasDiningPlatformData(candidate) && !candidate.confirmedByUser));
     const rankOrder = { primary: 0, backup2: 1, backup3: 2 };
     const orderedCandidates = [...verifiedCandidates].sort((a, b) => (rankOrder[candidateRank(meal, a.id)] ?? 9) - (rankOrder[candidateRank(meal, b.id)] ?? 9));
     return `<section class="decision-module meal-module"><div class="meal-heading"><div><span>用餐</span><h4>${showValue(meal.label)}</h4></div><b>${orderedCandidates.length ? `${orderedCandidates.length} 家` : "已安排"}</b></div>
