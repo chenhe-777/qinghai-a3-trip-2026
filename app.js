@@ -73,6 +73,7 @@
       (meal.id !== "meal-d5-lunch" || stored.d5LunchDefaultVersion === data.trip.d5LunchDefaultVersion) &&
       (meal.id !== "meal-d5-dinner" || stored.d5DinnerDefaultVersion === data.trip.d5DinnerDefaultVersion)
       && (meal.id !== "meal-d6-lunch" || stored.d6LunchDefaultVersion === data.trip.d6LunchDefaultVersion)
+      && (meal.id !== "meal-d6-dinner" || stored.d6DinnerDefaultVersion === data.trip.d6DinnerDefaultVersion)
       ? (stored.mealSelections?.[meal.id] || {})
       : {};
     const selection = { ...defaultMealSelections[meal.id], ...savedSelections };
@@ -86,6 +87,7 @@
   state.d5LunchDefaultVersion = data.trip.d5LunchDefaultVersion;
   state.d5DinnerDefaultVersion = data.trip.d5DinnerDefaultVersion;
   state.d6LunchDefaultVersion = data.trip.d6LunchDefaultVersion;
+  state.d6DinnerDefaultVersion = data.trip.d6DinnerDefaultVersion;
 
   const saveState = () => {
     localStorage.setItem(storageKey, JSON.stringify(state));
@@ -261,7 +263,7 @@
         ${route.totalTime ? `<p><b>执行节奏</b>${showValue(route.totalTime)}</p>` : ""}
         ${route.tradeoff ? `<p><b>取舍原则</b>${showValue(route.tradeoff)}</p>` : ""}
       </div>
-      <div class="overview-foot">${hotel ? `<span>住 · ${showValue(hotel.primary?.name)}</span>` : ""}${day.id === "day-6" ? "<span>14:00 还车 · 20:00 返杭</span>" : ""}<details class="route-reference"><summary>路线图</summary>${renderRouteMap(route)}</details></div>
+      <div class="overview-foot">${hotel ? `<span>住 · ${showValue(hotel.primary?.name)}</span>` : ""}${day.id === "day-6" ? "<span>离城后机场还车 · 20:00 返杭</span>" : ""}<details class="route-reference"><summary>路线图</summary>${renderRouteMap(route)}</details></div>
     </section>`;
   };
 
